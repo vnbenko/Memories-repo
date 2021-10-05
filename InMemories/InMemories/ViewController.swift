@@ -5,14 +5,12 @@ class ViewController: UIViewController {
     let photoButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "photoButton").withRenderingMode(.alwaysOriginal), for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
     let emailTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Email"
-        textField.translatesAutoresizingMaskIntoConstraints = false
         textField.backgroundColor = UIColor(white: 0, alpha: 0.03)
         textField.font = UIFont.systemFont(ofSize: 14)
         textField.borderStyle = .roundedRect
@@ -22,7 +20,6 @@ class ViewController: UIViewController {
     let userNameTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Username"
-        textField.translatesAutoresizingMaskIntoConstraints = false
         textField.backgroundColor = UIColor(white: 0, alpha: 0.03)
         textField.font = UIFont.systemFont(ofSize: 14)
         textField.borderStyle = .roundedRect
@@ -32,7 +29,6 @@ class ViewController: UIViewController {
     let passwordTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Password"
-        textField.translatesAutoresizingMaskIntoConstraints = false
         textField.backgroundColor = UIColor(white: 0, alpha: 0.03)
         textField.font = UIFont.systemFont(ofSize: 14)
         textField.borderStyle = .roundedRect
@@ -42,7 +38,7 @@ class ViewController: UIViewController {
     let signUpButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Sign Up", for: .normal)
-        button.backgroundColor = UIColor(red: 149/255, green: 204/255, blue: 244/255, alpha: 1)
+        button.backgroundColor = UIColor.rgb(149, 204, 244, 1)
         button.layer.cornerRadius = 5
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         button.setTitleColor(.white, for: .normal)
@@ -53,15 +49,15 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         view.addSubview(photoButton)
-        NSLayoutConstraint.activate([
-            photoButton.heightAnchor.constraint(equalToConstant: 140),
-            photoButton.widthAnchor.constraint(equalToConstant: 140),
-            photoButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            photoButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 40)
-        ])
+
+        photoButton.anchor(top: view.topAnchor, paddingTop: 40,
+                           left: nil, paddingLeft: 0,
+                           right: nil, paddingRight: 0,
+                           bottom: nil, paddingBottom: 0,
+                           width: 140, height: 140)
+        photoButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
         setupInputsFields()
-
     }
     
     fileprivate func setupInputsFields() {
@@ -72,20 +68,18 @@ class ViewController: UIViewController {
                                         passwordTextField,
                                         signUpButton])
         
-        stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.distribution = .fillEqually
         stackView.axis = .vertical
         stackView.spacing = 10
         
         view.addSubview(stackView)
-        
-        NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: photoButton.bottomAnchor, constant: 20),
-            stackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 40),
-            stackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -40),
-            stackView.heightAnchor.constraint(equalToConstant: 200)
-        ])
-    }
-    
+
+        stackView.anchor(top: photoButton.bottomAnchor, paddingTop: 20,
+                         left: view.leftAnchor, paddingLeft: 40,
+                         right: view.rightAnchor, paddingRight: 40,
+                         bottom: nil, paddingBottom: 0,
+                         width: 0, height: 200)
+    }    
 }
+
 
