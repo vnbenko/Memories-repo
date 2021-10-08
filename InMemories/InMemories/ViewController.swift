@@ -6,6 +6,8 @@ class ViewController: UIViewController {
     let photoButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "photoButton").withRenderingMode(.alwaysOriginal), for: .normal)
+        
+        button.addTarget(self, action: #selector(handlePhoto), for: .touchUpInside)
         return button
     }()
     
@@ -71,12 +73,11 @@ class ViewController: UIViewController {
     }
     
     fileprivate func setupInputsFields() {
-        
         let stackView = UIStackView(arrangedSubviews: [
-                                        emailTextField,
-                                        userNameTextField,
-                                        passwordTextField,
-                                        signUpButton])
+            emailTextField,
+            userNameTextField,
+            passwordTextField,
+            signUpButton])
         
         stackView.distribution = .fillEqually
         stackView.axis = .vertical
@@ -91,24 +92,72 @@ class ViewController: UIViewController {
                          width: 0, height: 200)
     }
     
+    @objc func handlePhoto() {
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        imagePicker.allowsEditing = true
+        present(imagePicker, animated: true, completion: nil)
+    }
+    
     @objc func handleSignUp() {
         guard let email = emailTextField.text, !email.isEmpty  else { return }
         guard let userName = userNameTextField.text, !userName.isEmpty else { return }
         guard let password = passwordTextField.text, !password.isEmpty else { return }
+        
+        //MARK: - Create a new user
         Auth.auth().createUser(withEmail: email, password: password) { (result, error) in
             if let error = error {
-                print("Failed to create user:", error)
+                print("Failed to create user: ", error)
                 return
             }
+            print("Successfully created user: ", result?.user.uid ?? "")
             
-            print("Successfully created user:",result?.user.uid ?? "")
+            //MARK: - Upload user's photo to the storage
+            guard let image = self.photoButton.imageView?.image else { return }
+            guard let uploadData = image.jpegData(compressionQuality: 0.3) else { return }
+            let fileName = UUID().uuidString
+            let storageReference = Storage.storage().reference().child("profile_images").child(fileName)
+            let metadata = StorageMetadata()
+            metadata.contentType = "image/jpeg"
+            
+            storageReference.putData(uploadData, metadata: metadata) { (metadata, error) in
+                if let error = error {
+                    print("Failed to upload profile image: ", error)
+                    return
+                }
+                print("Successfully uploaded profile image: ", metadata?.name ?? "")
+                
+                //MARK: - Get a link to a photo's URL
+                storageReference.downloadURL { (url, error) in
+                    if let error = error {
+                        print("Failed to get photo's URL: ", error)
+                        return
+                    }
+                    print("Successfully got photo's URL: ", url?.absoluteURL ?? "")
+                    
+                    //MARK: - Write user information to the database
+                    guard let uid = result?.user.uid else { return }
+                    let dictionaryValues = ["username:" : userName, "userPhoto:" : url?.absoluteString]
+                    let values = [uid : dictionaryValues]
+                    let urlString = "https://inmemories-d02b2-default-rtdb.europe-west1.firebasedatabase.app"
+                    let ref = Database.database(url : urlString).reference()
+                    
+                    ref.child("users").updateChildValues(values) { (error, reference) in
+                        if let error = error {
+                            print("Failed to save user info to db: ", error)
+                            return
+                        }
+                        print("Successfully saved user info to db: ", reference.url)
+                    }
+                }
+                
+            }
         }
     }
     
     @objc func handleTextInputChange() {
-        
         let isValid = emailTextField.text?.count ?? 0 > 0 && userNameTextField.text?.count ?? 0 > 0 &&
-            passwordTextField.text?.count ?? 0 > 0
+        passwordTextField.text?.count ?? 0 > 0
         
         if isValid {
             signUpButton.isEnabled = true
@@ -117,8 +166,25 @@ class ViewController: UIViewController {
             signUpButton.isEnabled = false
             signUpButton.backgroundColor = UIColor.rgb(149, 204, 244)
         }
-        
     }
 }
 
+extension ViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        if let editedImage = info[.editedImage] as? UIImage {
+            //without .withRenderingMode(.alwaysOriginal) we get a blue image instead of chosen photo
+            photoButton.setImage(editedImage.withRenderingMode(.alwaysOriginal), for: .normal)   
+        } else if let originalImage = info[.originalImage] as? UIImage {
+            photoButton.setImage(originalImage, for: .normal)
+        }
+        
+        photoButton.layer.cornerRadius = photoButton.frame.height / 2
+        photoButton.layer.masksToBounds = true
+        photoButton.layer.borderColor = UIColor.black.cgColor
+        photoButton.layer.borderWidth = 1
+        
+        dismiss(animated: true, completion: nil)
+    }
+}
 
