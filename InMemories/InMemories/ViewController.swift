@@ -137,7 +137,7 @@ class ViewController: UIViewController {
                     
                     //MARK: - Write user information to the database
                     guard let uid = result?.user.uid else { return }
-                    let dictionaryValues = ["username" : userName, "userPhoto" : url?.absoluteString]
+                    let dictionaryValues = ["userName" : userName, "userPhoto" : url?.absoluteString]
                     let values = [uid : dictionaryValues]
                     
                     let ref = Database.database(url : Constants.shared.urlString).reference()

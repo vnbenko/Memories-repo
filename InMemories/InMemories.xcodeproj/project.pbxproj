@@ -17,6 +17,7 @@
 		F5D540AD270CD8DE0077C389 /* UIColor + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5D540AC270CD8DE0077C389 /* UIColor + Extensions.swift */; };
 		F5D540AF270CE51B0077C389 /* UIView + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5D540AE270CE51B0077C389 /* UIView + Extensions.swift */; };
 		F5D9D53F2725A53F00A23ED2 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5D9D53E2725A53F00A23ED2 /* Constants.swift */; };
+		F5D9D5412725AC1A00A23ED2 /* UserProfileHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5D9D5402725AC1A00A23ED2 /* UserProfileHeader.swift */; };
 		F5FE66FB27258B1A009166A7 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5FE66FA27258B1A009166A7 /* MainTabBarController.swift */; };
 		F5FE66FD27258C02009166A7 /* UserProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5FE66FC27258C02009166A7 /* UserProfileController.swift */; };
 /* End PBXBuildFile section */
@@ -36,6 +37,7 @@
 		F5D540AC270CD8DE0077C389 /* UIColor + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor + Extensions.swift"; sourceTree = "<group>"; };
 		F5D540AE270CE51B0077C389 /* UIView + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView + Extensions.swift"; sourceTree = "<group>"; };
 		F5D9D53E2725A53F00A23ED2 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		F5D9D5402725AC1A00A23ED2 /* UserProfileHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileHeader.swift; sourceTree = "<group>"; };
 		F5FE66FA27258B1A009166A7 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		F5FE66FC27258C02009166A7 /* UserProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -92,7 +94,7 @@
 			children = (
 				F5767E15270CAE2200387576 /* AppDelegate.swift */,
 				F5FE66FA27258B1A009166A7 /* MainTabBarController.swift */,
-				F5FE66FC27258C02009166A7 /* UserProfileController.swift */,
+				F5D9D5422725AC2F00A23ED2 /* UserProfile */,
 				F5767E19270CAE2200387576 /* ViewController.swift */,
 				F5D9D53E2725A53F00A23ED2 /* Constants.swift */,
 				F5D540AB270CD8B30077C389 /* Utilities */,
@@ -112,6 +114,15 @@
 				F5D540AE270CE51B0077C389 /* UIView + Extensions.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		F5D9D5422725AC2F00A23ED2 /* UserProfile */ = {
+			isa = PBXGroup;
+			children = (
+				F5D9D5402725AC1A00A23ED2 /* UserProfileHeader.swift */,
+				F5FE66FC27258C02009166A7 /* UserProfileController.swift */,
+			);
+			path = UserProfile;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -214,6 +225,7 @@
 				F5D540AF270CE51B0077C389 /* UIView + Extensions.swift in Sources */,
 				F5767E1A270CAE2200387576 /* ViewController.swift in Sources */,
 				F5FE66FD27258C02009166A7 /* UserProfileController.swift in Sources */,
+				F5D9D5412725AC1A00A23ED2 /* UserProfileHeader.swift in Sources */,
 				F5FE66FB27258B1A009166A7 /* MainTabBarController.swift in Sources */,
 				F5D9D53F2725A53F00A23ED2 /* Constants.swift in Sources */,
 				F5D540AD270CD8DE0077C389 /* UIColor + Extensions.swift in Sources */,
