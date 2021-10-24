@@ -137,10 +137,10 @@ class ViewController: UIViewController {
                     
                     //MARK: - Write user information to the database
                     guard let uid = result?.user.uid else { return }
-                    let dictionaryValues = ["username:" : userName, "userPhoto:" : url?.absoluteString]
+                    let dictionaryValues = ["username" : userName, "userPhoto" : url?.absoluteString]
                     let values = [uid : dictionaryValues]
-                    let urlString = "https://inmemories-d02b2-default-rtdb.europe-west1.firebasedatabase.app"
-                    let ref = Database.database(url : urlString).reference()
+                    
+                    let ref = Database.database(url : Constants.shared.urlString).reference()
                     
                     ref.child("users").updateChildValues(values) { (error, reference) in
                         if let error = error {
