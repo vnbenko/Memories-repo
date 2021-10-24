@@ -1,4 +1,5 @@
 import UIKit
+import Firebase
 
 class LoginController: UIViewController {
     
@@ -31,6 +32,8 @@ class LoginController: UIViewController {
         textField.font = UIFont.systemFont(ofSize: 14)
         textField.borderStyle = .roundedRect
         
+        textField.addTarget(self, action: #selector(handleTextInputChange), for: .editingChanged)
+        
         return textField
     }()
     
@@ -40,6 +43,8 @@ class LoginController: UIViewController {
         textField.backgroundColor = UIColor(white: 0, alpha: 0.03)
         textField.font = UIFont.systemFont(ofSize: 14)
         textField.borderStyle = .roundedRect
+        
+        textField.addTarget(self, action: #selector(handleTextInputChange), for: .editingChanged)
         
         return textField
     }()
@@ -52,6 +57,7 @@ class LoginController: UIViewController {
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         button.setTitleColor(.white, for: .normal)
         
+        button.addTarget(self, action: #selector(handleLogIn), for: .touchUpInside)
         button.isEnabled = false
         return button
     }()
@@ -101,6 +107,36 @@ class LoginController: UIViewController {
         )
         
         setupInputsFields()
+    }
+    
+    @objc func handleTextInputChange() {
+        let isValid = emailTextField.text?.count ?? 0 > 0 && passwordTextField.text?.count ?? 0 > 0
+        
+        if isValid {
+            loginButton.isEnabled = true
+            loginButton.backgroundColor = UIColor.rgb(17, 154, 237)
+        } else {
+            loginButton.isEnabled = false
+            loginButton.backgroundColor = UIColor.rgb(149, 204, 244)
+        }
+    }
+    
+    @objc func handleLogIn() {
+        guard let email = emailTextField.text,
+        let password = passwordTextField.text else { return}
+        Auth.auth().signIn(withEmail: email, password: password) { data, error in
+            if let error = error {
+                print("Failed to sign in with email: ", error)
+                return
+            }
+            print("Successfully logged back in with user: ", data?.user.uid ?? "")
+            
+            guard let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController else { return }
+            
+            mainTabBarController.setupViewControllers()
+            
+            self.dismiss(animated: true, completion: nil)
+        }
     }
     
     fileprivate func setupInputsFields() {

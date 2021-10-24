@@ -192,6 +192,12 @@ class SignUpController: UIViewController {
                                 return
                             }
                             print("Successfully saved user info to db: ", reference.url)
+                            
+                            guard let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController else { return }
+                            
+                            mainTabBarController.setupViewControllers()
+                            
+                            self.dismiss(animated: true, completion: nil)
                         }
                 }
                 
