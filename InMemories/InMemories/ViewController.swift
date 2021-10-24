@@ -103,7 +103,7 @@ class ViewController: UIViewController {
         guard let userName = userNameTextField.text, !userName.isEmpty else { return }
         guard let password = passwordTextField.text, !password.isEmpty else { return }
         
-        //MARK: - Create a new user
+        //MARK: Create a new user
         Auth.auth().createUser(withEmail: email, password: password) { (result, error) in
             if let error = error {
                 print("Failed to create user: ", error)
@@ -111,7 +111,7 @@ class ViewController: UIViewController {
             }
             print("Successfully created user: ", result?.user.uid ?? "")
             
-            //MARK: - Upload user's photo to the storage
+            //MARK: Upload user's photo to the storage
             guard let image = self.photoButton.imageView?.image else { return }
             guard let uploadData = image.jpegData(compressionQuality: 0.3) else { return }
             let fileName = UUID().uuidString
@@ -126,7 +126,7 @@ class ViewController: UIViewController {
                 }
                 print("Successfully uploaded profile image: ", metadata?.name ?? "")
                 
-                //MARK: - Get a link to a photo's URL
+                //MARK: Get a link to a photo's URL
                 storageReference.downloadURL { (url, error) in
                     if let error = error {
                         print("Failed to get photo's URL: ", error)
@@ -134,7 +134,7 @@ class ViewController: UIViewController {
                     }
                     print("Successfully got photo's URL: ", url?.absoluteURL ?? "")
                     
-                    //MARK: - Write user information to the database
+                    //MARK: Write user information to the database
                     guard let uid = result?.user.uid else { return }
                     let dictionaryValues = ["userName" : userName, "userPhoto" : url?.absoluteString]
                     let values = [uid : dictionaryValues]
