@@ -96,7 +96,6 @@
 				F5FE66FA27258B1A009166A7 /* MainTabBarController.swift */,
 				F5D9D5422725AC2F00A23ED2 /* UserProfile */,
 				F5767E19270CAE2200387576 /* ViewController.swift */,
-				F5D9D53E2725A53F00A23ED2 /* Constants.swift */,
 				F5D540AB270CD8B30077C389 /* Utilities */,
 				F5767E1B270CAE2200387576 /* Main.storyboard */,
 				F5767E1E270CAE2400387576 /* Assets.xcassets */,
@@ -110,6 +109,7 @@
 		F5D540AB270CD8B30077C389 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				F5D9D53E2725A53F00A23ED2 /* Constants.swift */,
 				F5D540AC270CD8DE0077C389 /* UIColor + Extensions.swift */,
 				F5D540AE270CE51B0077C389 /* UIView + Extensions.swift */,
 			);

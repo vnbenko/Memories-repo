@@ -35,7 +35,7 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     fileprivate func fetchUser() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        Database.database(url: Constants.shared.urlString).reference().child("users").child(uid).observeSingleEvent(of: .value) { snapshot in
+        Database.database(url: Constants.shared.databaseUrlString).reference().child("users").child(uid).observeSingleEvent(of: .value) { snapshot in
             
             guard let dictionary = snapshot.value as? [String: Any] else { return }
             

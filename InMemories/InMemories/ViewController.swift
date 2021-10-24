@@ -5,8 +5,7 @@ class ViewController: UIViewController {
     
     let photoButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(#imageLiteral(resourceName: "photoButton").withRenderingMode(.alwaysOriginal), for: .normal)
-        
+        button.setImage(UIImage(imageLiteralResourceName: "photoButton").withRenderingMode(.alwaysOriginal), for: .normal)
         button.addTarget(self, action: #selector(handlePhoto), for: .touchUpInside)
         return button
     }()
@@ -140,7 +139,7 @@ class ViewController: UIViewController {
                     let dictionaryValues = ["userName" : userName, "userPhoto" : url?.absoluteString]
                     let values = [uid : dictionaryValues]
                     
-                    let ref = Database.database(url : Constants.shared.urlString).reference()
+                    let ref = Database.database(url : Constants.shared.databaseUrlString).reference()
                     
                     ref.child("users").updateChildValues(values) { (error, reference) in
                         if let error = error {
