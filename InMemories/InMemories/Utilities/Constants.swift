@@ -1,10 +1,3 @@
-//
-//  Constants.swift
-//  InMemories
-//
-//  Created by Meraki on 24.10.2021.
-//
-
 import Foundation
 
 class Constants {

@@ -1,10 +1,3 @@
-//
-//  UserProfileController.swift
-//  InMemories
-//
-//  Created by Meraki on 24.10.2021.
-//
-
 import UIKit
 import Firebase
 
@@ -66,18 +59,21 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     fileprivate func fetchUser() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        Database.database(url: Constants.shared.databaseUrlString).reference().child("users").child(uid).observeSingleEvent(of: .value) { snapshot in
-            
-            guard let dictionary = snapshot.value as? [String: Any] else { return }
-            
-            self.user = User(dictionary: dictionary)
-            self.navigationItem.title = self.user?.userName
-            
-            self.collectionView.reloadData()
-            
-        } withCancel: { error in
-            print("Failed to fetch user: ", error)
-        }
+        Database.database(url: Constants.shared.databaseUrlString).reference()
+            .child("users")
+            .child(uid)
+            .observeSingleEvent(of: .value) { snapshot in
+                
+                guard let dictionary = snapshot.value as? [String: Any] else { return }
+                
+                self.user = User(dictionary: dictionary)
+                self.navigationItem.title = self.user?.userName
+                
+                self.collectionView.reloadData()
+                
+            } withCancel: { error in
+                print("Failed to fetch user: ", error)
+            }
         
     }
     
@@ -95,7 +91,6 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
             } catch let error {
                 print("Failed to sign out: ", error)
             }
-            
         }
         
         let cancelAlert = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)

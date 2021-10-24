@@ -2,8 +2,12 @@ import UIKit
 
 extension UIView {
     
-    func anchor(top: NSLayoutYAxisAnchor?, paddingTop: CGFloat, left: NSLayoutXAxisAnchor?, paddingLeft: CGFloat, right: NSLayoutXAxisAnchor?, paddingRight: CGFloat, bottom: NSLayoutYAxisAnchor?, paddingBottom: CGFloat, width: CGFloat, height: CGFloat) {
-        
+    func anchor(top: NSLayoutYAxisAnchor?, paddingTop: CGFloat,
+                left: NSLayoutXAxisAnchor?, paddingLeft: CGFloat,
+                right: NSLayoutXAxisAnchor?, paddingRight: CGFloat,
+                bottom: NSLayoutYAxisAnchor?, paddingBottom: CGFloat,
+                width: CGFloat, height: CGFloat)
+    {        
         translatesAutoresizingMaskIntoConstraints = false
         
         if let top = top {

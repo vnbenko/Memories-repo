@@ -59,14 +59,18 @@ class SignUpController: UIViewController {
     let alreadyHaveAcountButton: UIButton = {
         let button = UIButton(type: .system)
         
-        let attributedTitle = NSMutableAttributedString(string: "Already have an acount?  ", attributes: [
-            .font : UIFont.systemFont(ofSize: 14),
-            .foregroundColor : UIColor.lightGray
-        ])
+        let attributedTitle = NSMutableAttributedString(
+            string: "Already have an acount?  ",
+            attributes: [
+                .font : UIFont.systemFont(ofSize: 14),
+                .foregroundColor : UIColor.lightGray
+            ])
         
-        attributedTitle.append(NSAttributedString(string: "Sign In.", attributes: [
-            .font : UIFont.boldSystemFont(ofSize: 14),
-            .foregroundColor : UIColor.rgb(17, 154, 237)]))
+        attributedTitle.append(NSAttributedString(
+            string: "Sign In.",
+            attributes: [
+                .font : UIFont.boldSystemFont(ofSize: 14),
+                .foregroundColor : UIColor.rgb(17, 154, 237)]))
         
         button.setAttributedTitle(attributedTitle, for: .normal)
         button.addTarget(self, action: #selector(handleAlreadyHaveAcount), for: .touchUpInside)
@@ -84,7 +88,8 @@ class SignUpController: UIViewController {
             left: view.leftAnchor, paddingLeft: 0,
             right: view.rightAnchor, paddingRight: 0,
             bottom: view.bottomAnchor, paddingBottom: 0,
-            width: 0, height: 50)
+            width: 0, height: 50
+        )
         
         view.addSubview(photoButton)
         photoButton.anchor(
@@ -92,7 +97,8 @@ class SignUpController: UIViewController {
             left: nil, paddingLeft: 0,
             right: nil, paddingRight: 0,
             bottom: nil, paddingBottom: 0,
-            width: 140, height: 140)
+            width: 140, height: 140
+        )
         photoButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
         setupInputsFields()
@@ -103,7 +109,8 @@ class SignUpController: UIViewController {
             emailTextField,
             userNameTextField,
             passwordTextField,
-            signUpButton])
+            signUpButton
+        ])
         
         stackView.distribution = .fillEqually
         stackView.axis = .vertical
@@ -111,11 +118,13 @@ class SignUpController: UIViewController {
         
         view.addSubview(stackView)
         
-        stackView.anchor(top: photoButton.bottomAnchor, paddingTop: 20,
-                         left: view.leftAnchor, paddingLeft: 40,
-                         right: view.rightAnchor, paddingRight: 40,
-                         bottom: nil, paddingBottom: 0,
-                         width: 0, height: 200)
+        stackView.anchor(
+            top: photoButton.bottomAnchor, paddingTop: 20,
+            left: view.leftAnchor, paddingLeft: 40,
+            right: view.rightAnchor, paddingRight: 40,
+            bottom: nil, paddingBottom: 0,
+            width: 0, height: 200
+        )
     }
     
     @objc func handlePhoto() {
@@ -142,7 +151,11 @@ class SignUpController: UIViewController {
             guard let image = self.photoButton.imageView?.image else { return }
             guard let uploadData = image.jpegData(compressionQuality: 0.3) else { return }
             let fileName = UUID().uuidString
-            let storageReference = Storage.storage().reference().child("profile_images").child(fileName)
+            
+            let storageReference = Storage.storage().reference()
+                .child("profile_images")
+                .child(fileName)
+            
             let metadata = StorageMetadata()
             metadata.contentType = "image/jpeg"
             
@@ -163,18 +176,23 @@ class SignUpController: UIViewController {
                     
                     //MARK: Write user information to the database
                     guard let uid = result?.user.uid else { return }
-                    let dictionaryValues = ["userName" : userName, "userPhoto" : url?.absoluteString]
+                    
+                    let dictionaryValues = [
+                        "userName" : userName,
+                        "userPhoto" : url?.absoluteString
+                    ]
+                    
                     let values = [uid : dictionaryValues]
                     
-                    let ref = Database.database(url : Constants.shared.databaseUrlString).reference()
-                    
-                    ref.child("users").updateChildValues(values) { (error, reference) in
-                        if let error = error {
-                            print("Failed to save user info to db: ", error)
-                            return
+                    Database.database(url : Constants.shared.databaseUrlString).reference()
+                        .child("users")
+                        .updateChildValues(values) { (error, reference) in
+                            if let error = error {
+                                print("Failed to save user info to db: ", error)
+                                return
+                            }
+                            print("Successfully saved user info to db: ", reference.url)
                         }
-                        print("Successfully saved user info to db: ", reference.url)
-                    }
                 }
                 
             }

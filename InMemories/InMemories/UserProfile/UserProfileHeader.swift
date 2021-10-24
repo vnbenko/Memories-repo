@@ -1,10 +1,3 @@
-//
-//  UserProfileHeader.swift
-//  InMemories
-//
-//  Created by Meraki on 24.10.2021.
-//
-
 import UIKit
 import Firebase
 
@@ -117,32 +110,59 @@ class UserProfileHeader: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-
+        
         addSubview(profileImageView)
-        profileImageView.anchor(top: topAnchor, paddingTop: 12, left: leftAnchor, paddingLeft: 12, right: nil, paddingRight: 0, bottom: nil, paddingBottom: 0, width: 80, height: 80)
+        profileImageView.anchor(
+            top: topAnchor, paddingTop: 12,
+            left: leftAnchor, paddingLeft: 12,
+            right: nil, paddingRight: 0,
+            bottom: nil, paddingBottom: 0,
+            width: 80, height: 80
+        )
+        
         profileImageView.layer.cornerRadius = 80 / 2
         profileImageView.clipsToBounds = true
         
         setupButtonToolbar()
         
         addSubview(usernameLabel)
-        usernameLabel.anchor(top: profileImageView.bottomAnchor, paddingTop: 4, left: leftAnchor, paddingLeft: 12, right: rightAnchor, paddingRight: 12, bottom: gridButton.topAnchor, paddingBottom: 0, width: 0, height: 0)
+        usernameLabel.anchor(
+            top: profileImageView.bottomAnchor, paddingTop: 4,
+            left: leftAnchor, paddingLeft: 12,
+            right: rightAnchor, paddingRight: 12,
+            bottom: gridButton.topAnchor, paddingBottom: 0,
+            width: 0, height: 0
+        )
         
         setupUserStatsView()
         
         addSubview(editProfileButton)
-        
-        editProfileButton.anchor(top: postsLabel.bottomAnchor, paddingTop: 2, left: postsLabel.leftAnchor, paddingLeft: 0, right: followingLabel.rightAnchor, paddingRight: 0, bottom: nil, paddingBottom: 0, width: 0, height: 34)
-    
+        editProfileButton.anchor(
+            top: postsLabel.bottomAnchor, paddingTop: 2,
+            left: postsLabel.leftAnchor, paddingLeft: 0,
+            right: followingLabel.rightAnchor, paddingRight: 0,
+            bottom: nil, paddingBottom: 0,
+            width: 0, height: 34
+        )
     }
     
     fileprivate func setupUserStatsView() {
-        let stackView = UIStackView(arrangedSubviews: [postsLabel, followersLabel, followingLabel])
-        stackView.distribution = .fillEqually
-       
-        addSubview(stackView)
+        let stackView = UIStackView(arrangedSubviews: [
+            postsLabel,
+            followersLabel,
+            followingLabel
+        ])
         
-        stackView.anchor(top: topAnchor, paddingTop: 12, left: profileImageView.rightAnchor, paddingLeft: 12, right: rightAnchor, paddingRight: 12, bottom: nil, paddingBottom: 0, width: 0, height: 50)
+        stackView.distribution = .fillEqually
+        
+        addSubview(stackView)
+        stackView.anchor(
+            top: topAnchor, paddingTop: 12,
+            left: profileImageView.rightAnchor, paddingLeft: 12,
+            right: rightAnchor, paddingRight: 12,
+            bottom: nil, paddingBottom: 0,
+            width: 0, height: 50
+        )
     }
     
     fileprivate func setupButtonToolbar() {
@@ -152,20 +172,41 @@ class UserProfileHeader: UICollectionViewCell {
         let bottomDividerView = UIView()
         bottomDividerView.backgroundColor = .lightGray
         
-        let stackView = UIStackView(arrangedSubviews: [gridButton, listButton, bookmarkButton])
+        let stackView = UIStackView(arrangedSubviews: [
+            gridButton,
+            listButton,
+            bookmarkButton
+        ])
         
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
         
         addSubview(stackView)
+        stackView.anchor(
+            top: nil, paddingTop: 0,
+            left: leftAnchor, paddingLeft: 0,
+            right: rightAnchor, paddingRight: 0,
+            bottom: bottomAnchor, paddingBottom: 0,
+            width: 0, height: 50
+        )
+        
         addSubview(topDividerView)
+        topDividerView.anchor(
+            top: stackView.topAnchor, paddingTop: 0,
+            left: leftAnchor, paddingLeft: 0,
+            right: rightAnchor, paddingRight: 0,
+            bottom: nil, paddingBottom: 0,
+            width: 0, height: 0.5
+        )
+        
         addSubview(bottomDividerView)
-        
-        stackView.anchor(top: nil, paddingTop: 0, left: leftAnchor, paddingLeft: 0, right: rightAnchor, paddingRight: 0, bottom: bottomAnchor, paddingBottom: 0, width: 0, height: 50)
-        
-        topDividerView.anchor(top: stackView.topAnchor, paddingTop: 0, left: leftAnchor, paddingLeft: 0, right: rightAnchor, paddingRight: 0, bottom: nil, paddingBottom: 0, width: 0, height: 0.5)
-        
-        bottomDividerView.anchor(top: stackView.bottomAnchor, paddingTop: 0, left: leftAnchor, paddingLeft: 0, right: rightAnchor, paddingRight: 0, bottom: nil, paddingBottom: 0, width: 0, height: 0.5)
+        bottomDividerView.anchor(
+            top: stackView.bottomAnchor, paddingTop: 0,
+            left: leftAnchor, paddingLeft: 0,
+            right: rightAnchor, paddingRight: 0,
+            bottom: nil, paddingBottom: 0,
+            width: 0, height: 0.5
+        )
     }
     
     fileprivate func setupProfileImage() {

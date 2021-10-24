@@ -1,10 +1,3 @@
-//
-//  LoginController.swift
-//  InMemories
-//
-//  Created by Meraki on 24.10.2021.
-//
-
 import UIKit
 
 class LoginController: UIViewController {
@@ -16,7 +9,14 @@ class LoginController: UIViewController {
         logoImageView.contentMode = .scaleAspectFill
         
         view.addSubview(logoImageView)
-        logoImageView.anchor(top: nil, paddingTop: 0, left: nil, paddingLeft: 0, right: nil, paddingRight: 0, bottom: nil, paddingBottom: 0, width: 200, height: 50)
+        
+        logoImageView.anchor(
+            top: nil, paddingTop: 0,
+            left: nil, paddingLeft: 0,
+            right: nil, paddingRight: 0,
+            bottom: nil, paddingBottom: 0,
+            width: 200, height: 50
+        )
         logoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         logoImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         
@@ -31,7 +31,6 @@ class LoginController: UIViewController {
         textField.font = UIFont.systemFont(ofSize: 14)
         textField.borderStyle = .roundedRect
         
-        //textField.addTarget(self, action: #selector(handleTextInputChange), for: .editingChanged)
         return textField
     }()
     
@@ -42,7 +41,6 @@ class LoginController: UIViewController {
         textField.font = UIFont.systemFont(ofSize: 14)
         textField.borderStyle = .roundedRect
         
-       //textField.addTarget(self, action: #selector(handleTextInputChange), for: .editingChanged)
         return textField
     }()
     
@@ -54,7 +52,6 @@ class LoginController: UIViewController {
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         button.setTitleColor(.white, for: .normal)
         
-        //button.addTarget(self, action: #selector(handleSignUp), for: .touchUpInside)
         button.isEnabled = false
         return button
     }()
@@ -69,7 +66,8 @@ class LoginController: UIViewController {
         
         attributedTitle.append(NSAttributedString(string: "Sign Up.", attributes: [
             .font : UIFont.boldSystemFont(ofSize: 14),
-            .foregroundColor : UIColor.rgb(17, 154, 237)]))
+            .foregroundColor : UIColor.rgb(17, 154, 237)
+        ]))
         
         button.setAttributedTitle(attributedTitle, for: .normal)
         button.addTarget(self, action: #selector(handleShowSignUp), for: .touchUpInside)
@@ -85,25 +83,46 @@ class LoginController: UIViewController {
         view.backgroundColor = .white
         
         view.addSubview(logoContainerView)
-        logoContainerView.anchor(top: view.topAnchor, paddingTop: 0, left: view.leftAnchor, paddingLeft: 0, right: view.rightAnchor, paddingRight: 0, bottom: nil, paddingBottom: 0, width: 0, height: 150)
+        logoContainerView.anchor(
+            top: view.topAnchor, paddingTop: 0,
+            left: view.leftAnchor, paddingLeft: 0,
+            right: view.rightAnchor, paddingRight: 0,
+            bottom: nil, paddingBottom: 0,
+            width: 0, height: 150
+        )
         
         view.addSubview(dontHaveAcountButton)
-        dontHaveAcountButton.anchor(top: nil, paddingTop: 0, left: view.leftAnchor, paddingLeft: 0, right: view.rightAnchor, paddingRight: 0, bottom: view.bottomAnchor, paddingBottom: 0, width: 0, height: 50)
+        dontHaveAcountButton.anchor(
+            top: nil, paddingTop: 0,
+            left: view.leftAnchor, paddingLeft: 0,
+            right: view.rightAnchor, paddingRight: 0,
+            bottom: view.bottomAnchor, paddingBottom: 0,
+            width: 0, height: 50
+        )
         
         setupInputsFields()
     }
     
     fileprivate func setupInputsFields() {
-      let stackView = UIStackView(arrangedSubviews: [emailTextField, passwordTextField, loginButton])
+        let stackView = UIStackView(arrangedSubviews: [
+            emailTextField,
+            passwordTextField,
+            loginButton
+        ])
         
         stackView.axis = .vertical
         stackView.spacing = 10
         stackView.distribution = .fillEqually
         
         view.addSubview(stackView)
-        stackView.anchor(top: logoContainerView.bottomAnchor, paddingTop: 40, left: view.leftAnchor, paddingLeft: 40, right: view.rightAnchor, paddingRight: 40, bottom: nil, paddingBottom: 0, width: 0, height: 140)
+        stackView.anchor(
+            top: logoContainerView.bottomAnchor, paddingTop: 40,
+            left: view.leftAnchor, paddingLeft: 40,
+            right: view.rightAnchor, paddingRight: 40,
+            bottom: nil, paddingBottom: 0,
+            width: 0, height: 140
+        )
     }
-    
     
     @objc func handleShowSignUp() {
         let signUpController = SignUpController()
