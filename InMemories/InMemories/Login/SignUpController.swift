@@ -56,18 +56,43 @@ class SignUpController: UIViewController {
         return button
     }()
     
+    let alreadyHaveAcountButton: UIButton = {
+        let button = UIButton(type: .system)
+        
+        let attributedTitle = NSMutableAttributedString(string: "Already have an acount?  ", attributes: [
+            .font : UIFont.systemFont(ofSize: 14),
+            .foregroundColor : UIColor.lightGray
+        ])
+        
+        attributedTitle.append(NSAttributedString(string: "Sign In.", attributes: [
+            .font : UIFont.boldSystemFont(ofSize: 14),
+            .foregroundColor : UIColor.rgb(17, 154, 237)]))
+        
+        button.setAttributedTitle(attributedTitle, for: .normal)
+        button.addTarget(self, action: #selector(handleAlreadyHaveAcount), for: .touchUpInside)
+        return button
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .white
         
-        view.addSubview(photoButton)
+        view.addSubview(alreadyHaveAcountButton)
+        alreadyHaveAcountButton.anchor(
+            top: nil, paddingTop: 0,
+            left: view.leftAnchor, paddingLeft: 0,
+            right: view.rightAnchor, paddingRight: 0,
+            bottom: view.bottomAnchor, paddingBottom: 0,
+            width: 0, height: 50)
         
-        photoButton.anchor(top: view.topAnchor, paddingTop: 40,
-                           left: nil, paddingLeft: 0,
-                           right: nil, paddingRight: 0,
-                           bottom: nil, paddingBottom: 0,
-                           width: 140, height: 140)
+        view.addSubview(photoButton)
+        photoButton.anchor(
+            top: view.topAnchor, paddingTop: 40,
+            left: nil, paddingLeft: 0,
+            right: nil, paddingRight: 0,
+            bottom: nil, paddingBottom: 0,
+            width: 140, height: 140)
         photoButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
         setupInputsFields()
@@ -168,6 +193,11 @@ class SignUpController: UIViewController {
             signUpButton.backgroundColor = UIColor.rgb(149, 204, 244)
         }
     }
+    
+    @objc func handleAlreadyHaveAcount() {
+        _ = navigationController?.popViewController(animated: true)
+    }
+    
 }
 
 extension SignUpController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -175,7 +205,7 @@ extension SignUpController: UIImagePickerControllerDelegate, UINavigationControl
         
         if let editedImage = info[.editedImage] as? UIImage {
             //without .withRenderingMode(.alwaysOriginal) we get a blue image instead of chosen photo
-            photoButton.setImage(editedImage.withRenderingMode(.alwaysOriginal), for: .normal)   
+            photoButton.setImage(editedImage.withRenderingMode(.alwaysOriginal), for: .normal)
         } else if let originalImage = info[.originalImage] as? UIImage {
             photoButton.setImage(originalImage, for: .normal)
         }
