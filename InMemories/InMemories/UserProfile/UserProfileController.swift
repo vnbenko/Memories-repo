@@ -23,6 +23,8 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         collectionView.register(UserProfileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerId")
         
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: cellId)
+        
+        setupLogOutButton()
     }
     
     //MARK: - Profile header settings
@@ -76,7 +78,30 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         } withCancel: { error in
             print("Failed to fetch user: ", error)
         }
-
-
+        
+    }
+    
+    fileprivate func setupLogOutButton() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "gear")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleLogOut))
+    }
+    
+    @objc func handleLogOut() {
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let logOutAlert = UIAlertAction(title: "Log Out", style: .destructive) { _ in
+            
+            do {
+                try Auth.auth().signOut()
+                
+            } catch let error {
+                print("Failed to sign out: ", error)
+            }
+            
+        }
+        
+        let cancelAlert = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(logOutAlert)
+        alertController.addAction(cancelAlert)
+        
+        present(alertController, animated: true, completion: nil)
     }
 }
