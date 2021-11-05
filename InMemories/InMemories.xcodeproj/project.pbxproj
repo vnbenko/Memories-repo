@@ -16,6 +16,7 @@
 		F5767E22270CAE2400387576 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5767E20270CAE2400387576 /* LaunchScreen.storyboard */; };
 		F59700AB273564DF0014A36A /* PhotoSelectorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59700AA273564DF0014A36A /* PhotoSelectorController.swift */; };
 		F59700AE273571B80014A36A /* PhotoSelectorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59700AD273571B80014A36A /* PhotoSelectorCell.swift */; };
+		F59700B0273578130014A36A /* PhotoSelectorHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59700AF273578130014A36A /* PhotoSelectorHeader.swift */; };
 		F5C0F6902725DF7500A58E4D /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5C0F68F2725DF7500A58E4D /* User.swift */; };
 		F5C0F6922725F16400A58E4D /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5C0F6912725F16400A58E4D /* LoginController.swift */; };
 		F5D540AD270CD8DE0077C389 /* UIColor + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5D540AC270CD8DE0077C389 /* UIColor + Extensions.swift */; };
@@ -40,6 +41,7 @@
 		F5767E23270CAE2400387576 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F59700AA273564DF0014A36A /* PhotoSelectorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectorController.swift; sourceTree = "<group>"; };
 		F59700AD273571B80014A36A /* PhotoSelectorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectorCell.swift; sourceTree = "<group>"; };
+		F59700AF273578130014A36A /* PhotoSelectorHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectorHeader.swift; sourceTree = "<group>"; };
 		F5C0F68F2725DF7500A58E4D /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		F5C0F6912725F16400A58E4D /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		F5D540AC270CD8DE0077C389 /* UIColor + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor + Extensions.swift"; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 			isa = PBXGroup;
 			children = (
 				F59700AA273564DF0014A36A /* PhotoSelectorController.swift */,
+				F59700AF273578130014A36A /* PhotoSelectorHeader.swift */,
 				F59700AD273571B80014A36A /* PhotoSelectorCell.swift */,
 			);
 			path = AddPhoto;
@@ -259,6 +262,7 @@
 				F5C0F6902725DF7500A58E4D /* User.swift in Sources */,
 				F5D9D53F2725A53F00A23ED2 /* Constants.swift in Sources */,
 				F5D540AD270CD8DE0077C389 /* UIColor + Extensions.swift in Sources */,
+				F59700B0273578130014A36A /* PhotoSelectorHeader.swift in Sources */,
 				F59700AB273564DF0014A36A /* PhotoSelectorController.swift in Sources */,
 				F5767E16270CAE2200387576 /* AppDelegate.swift in Sources */,
 				F5C0F6922725F16400A58E4D /* LoginController.swift in Sources */,

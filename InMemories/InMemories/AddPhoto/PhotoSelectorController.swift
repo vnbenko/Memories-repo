@@ -1,10 +1,3 @@
-//
-//  PhotoSelectorController.swift
-//  InMemories
-//
-//  Created by Meraki on 05.11.2021.
-//
-
 import UIKit
 import Photos
 
@@ -12,43 +5,79 @@ class PhotoSelectorController: UICollectionViewController, UICollectionViewDeleg
     
     let cellId = "cellId"
     let headerId = "headerId"
+    var selectedImage: UIImage?
+    var images = [UIImage]()
+    var assets = [PHAsset]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView.backgroundColor = .yellow
+        collectionView.backgroundColor = .white
         
         setupNavButtons()
         
         collectionView.register(PhotoSelectorCell.self, forCellWithReuseIdentifier: cellId)
         
-        collectionView.register(UICollectionViewCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
+        collectionView.register(PhotoSelectorHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
         
         fetchPhotos()
     }
     
-    var images = [UIImage]()
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
+    fileprivate func setupNavButtons() {
+        navigationController?.navigationBar.tintColor = .black
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Next", style: .plain, target: self, action: #selector(handleNext))
+        
+    }
+    
+    @objc func handleCancel() {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func handleNext() {
+        
+    }
+    
+    fileprivate func assetsFetchOptions() -> PHFetchOptions {
+        let fetchOptions = PHFetchOptions()
+        fetchOptions.fetchLimit = 15
+        let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
+        fetchOptions.sortDescriptors = [sortDescriptor]
+        return fetchOptions
+    }
     
     fileprivate func fetchPhotos() {
-        let fetchOptions = PHFetchOptions()
-        fetchOptions.fetchLimit = 10
-        let sortDescriptor = NSSortDescriptor(key: "creatingDate", ascending: false)
-        fetchOptions.sortDescriptors = [sortDescriptor]
+        let allPhotos = PHAsset.fetchAssets(with: .image, options: assetsFetchOptions())
         
-        let allPhotos = PHAsset.fetchAssets(with: .image, options: fetchOptions)
-        allPhotos.enumerateObjects { asset, count, stop in
-            let imageManager = PHImageManager.default()
-            let targetSize = CGSize(width: 350, height: 350)
-            let options = PHImageRequestOptions()
-            options.isSynchronous = true
-            imageManager.requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFit, options: options) { image, info in
-                if let image = image {
-                    self.images.append(image)
-                }
+        DispatchQueue.global(qos: .background).async {
+            
+            allPhotos.enumerateObjects { asset, count, stop in
+                let imageManager = PHImageManager.default()
+                let targetSize = CGSize(width: 200, height: 200)
+                let options = PHImageRequestOptions()
+                options.isSynchronous = true
                 
-                if count == allPhotos.count - 1 {
-                    self.collectionView.reloadData()
+                imageManager.requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFit, options: options) { image, info in
+                    if let image = image {
+                        self.images.append(image)
+                        self.assets.append(asset)
+                        
+                        if self.selectedImage == nil {
+                            self.selectedImage = image
+                        }
+                    }
+                    
+                    if count == allPhotos.count - 1 {
+                        DispatchQueue.main.async {
+                            self.collectionView?.reloadData()
+                        }
+                        
+                    }
+                    
                 }
-                
             }
         }
     }
@@ -63,8 +92,22 @@ class PhotoSelectorController: UICollectionViewController, UICollectionViewDeleg
     }
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath)
-        header.backgroundColor = .red
+        guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as? PhotoSelectorHeader else { return UICollectionReusableView() }
+        
+        header.photoImageView.image = selectedImage
+        
+        if let selectedImage = selectedImage {
+            if let index = self.images.firstIndex(of: selectedImage) {
+                let selectedAsset = self.assets[index]
+                
+                let imageManager = PHImageManager.default()
+                let targetSize = CGSize(width: 600, height: 600)
+                imageManager.requestImage(for: selectedAsset, targetSize: targetSize, contentMode: .aspectFit, options: nil) { image, info in
+                    header.photoImageView.image = image
+                }
+            }
+        }
+        
         return header
     }
     
@@ -91,22 +134,9 @@ class PhotoSelectorController: UICollectionViewController, UICollectionViewDeleg
         return cell
     }
     
-    override var prefersStatusBarHidden: Bool {
-        return true
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        self.selectedImage = images[indexPath.item]
+        self.collectionView.reloadData()
     }
     
-    fileprivate func setupNavButtons() {
-        navigationController?.navigationBar.tintColor = .black
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Next", style: .plain, target: self, action: #selector(handleNext))
-        
-    }
-    
-    @objc func handleCancel() {
-        dismiss(animated: true, completion: nil)
-    }
-    
-    @objc func handleNext() {
-        
-    }
 }
