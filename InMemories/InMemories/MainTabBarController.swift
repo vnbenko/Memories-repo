@@ -10,7 +10,7 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
             let layout = UICollectionViewFlowLayout()
             let photoSelectorController = PhotoSelectorController(collectionViewLayout: layout)
             let navVC = UINavigationController(rootViewController: photoSelectorController)
-            navVC.navigationBar.backgroundColor = .white
+            navVC.navigationBar.backgroundColor = UIColor.rgb(200, 200, 200)
             present(navVC, animated: true, completion: nil)
             return false
         }
