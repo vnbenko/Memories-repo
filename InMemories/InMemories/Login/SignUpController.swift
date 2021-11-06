@@ -169,10 +169,11 @@ class SignUpController: UIViewController {
                 //MARK: Get a link to a photo's URL
                 storageReference.downloadURL { (url, error) in
                     if let error = error {
-                        print("Failed to get photo's URL: ", error)
+                        print("Failed to get image's URL: ", error)
                         return
                     }
-                    print("Successfully got photo's URL: ", url?.absoluteURL ?? "")
+                    guard let imageURL = url?.absoluteString else { return }
+                    print("Successfully got image's URL: ", imageURL)
                     
                     //MARK: Write user information to the database
                     guard let uid = result?.user.uid else { return }
