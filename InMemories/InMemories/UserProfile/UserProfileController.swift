@@ -18,22 +18,41 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         
         setupLogOutButton()
         
-        fetchPosts()
+        //fetchPosts()
+        
+        fetchOrderedPost()
     }
     
     var posts = [Post]()
     
+    fileprivate func fetchOrderedPost() {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        let ref = Database.database(url: Constants.shared.databaseUrlString).reference().child("post_images").child(uid)
+        
+        ref.queryOrdered(byChild: "CreationDate").observe(.childAdded) { snapshot in
+            guard let dictionary = snapshot.value as? [String: Any] else { return }
+          
+            let post = Post(dictionary: dictionary)
+            self.posts.append(post)
+            
+            self.collectionView.reloadData()
+        } withCancel: { error in
+            print("Failed to fetch ordered posts: ", error)
+        }
+        
+        
+    }
     fileprivate func fetchPosts() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         let ref = Database.database(url: Constants.shared.databaseUrlString).reference().child("post_images").child(uid)
         ref.observe(.value) { snapshot in
-    
+            
             guard let dictionaries = snapshot.value as? [String: Any] else { return }
             dictionaries.forEach { (key: String, value: Any) in
                 //print("Key: \(key)\nValue: \(value)")
                 guard let dictionary = value as? [String: Any] else { return }
-            
+                
                 let post = Post(dictionary: dictionary)
                 self.posts.append(post)
                 
@@ -44,7 +63,7 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         } withCancel: { error in
             print("Failed to fetch post ", error)
         }
-
+        
     }
     
     //MARK: - Profile header settings

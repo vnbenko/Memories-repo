@@ -20,6 +20,7 @@
 		F59700B227366EA30014A36A /* SharePhotoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59700B127366EA30014A36A /* SharePhotoController.swift */; };
 		F59700B427368EF80014A36A /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59700B327368EF80014A36A /* Post.swift */; };
 		F59700B9273691760014A36A /* UserProfilePhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59700B8273691760014A36A /* UserProfilePhotoCell.swift */; };
+		F59700BB273696ED0014A36A /* CustomImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59700BA273696ED0014A36A /* CustomImageView.swift */; };
 		F5C0F6902725DF7500A58E4D /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5C0F68F2725DF7500A58E4D /* User.swift */; };
 		F5C0F6922725F16400A58E4D /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5C0F6912725F16400A58E4D /* LoginController.swift */; };
 		F5D540AD270CD8DE0077C389 /* UIColor + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5D540AC270CD8DE0077C389 /* UIColor + Extensions.swift */; };
@@ -48,6 +49,7 @@
 		F59700B127366EA30014A36A /* SharePhotoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharePhotoController.swift; sourceTree = "<group>"; };
 		F59700B327368EF80014A36A /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		F59700B8273691760014A36A /* UserProfilePhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UserProfilePhotoCell.swift; path = "/Users/vnbenko/Documents/GIT projects/inMemories-repo/InMemories/InMemories/UserProfile/UserProfilePhotoCell.swift"; sourceTree = "<absolute>"; };
+		F59700BA273696ED0014A36A /* CustomImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomImageView.swift; sourceTree = "<group>"; };
 		F5C0F68F2725DF7500A58E4D /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		F5C0F6912725F16400A58E4D /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		F5D540AC270CD8DE0077C389 /* UIColor + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor + Extensions.swift"; sourceTree = "<group>"; };
@@ -158,6 +160,7 @@
 				F5D9D53E2725A53F00A23ED2 /* Constants.swift */,
 				F5D540AC270CD8DE0077C389 /* UIColor + Extensions.swift */,
 				F5D540AE270CE51B0077C389 /* UIView + Extensions.swift */,
+				F59700BA273696ED0014A36A /* CustomImageView.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -285,6 +288,7 @@
 				F59700B0273578130014A36A /* PhotoSelectorHeader.swift in Sources */,
 				F59700AB273564DF0014A36A /* PhotoSelectorController.swift in Sources */,
 				F5767E16270CAE2200387576 /* AppDelegate.swift in Sources */,
+				F59700BB273696ED0014A36A /* CustomImageView.swift in Sources */,
 				F5C0F6922725F16400A58E4D /* LoginController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
