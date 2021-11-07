@@ -4,8 +4,8 @@ import Firebase
 class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
     
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
-        
         let index = viewControllers?.firstIndex(of: viewController)
+       
         if index == 2 {
             let layout = UICollectionViewFlowLayout()
             let photoSelectorController = PhotoSelectorController(collectionViewLayout: layout)
@@ -14,6 +14,7 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
             present(navVC, animated: true, completion: nil)
             return false
         }
+        
         return true
     }
     
@@ -31,7 +32,6 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
                 
                 self.present(navController, animated: true, completion: nil)
             }
-            
             return
         }
         
@@ -58,7 +58,6 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         userNavVC.tabBarItem.image = #imageLiteral(resourceName: "profile_unselected")
         userNavVC.tabBarItem.selectedImage = #imageLiteral(resourceName: "profile_selected")
         
-        
         viewControllers = [homeNavVC,
                            searchNavVC,
                            plusNavVC,
@@ -71,6 +70,7 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         for item in items {
             item.imageInsets = UIEdgeInsets(top: 4, left: 0, bottom: -4, right: 0)
         }
+        
     }
     
     fileprivate func templateNavController(selectedImage: UIImage, unselectedImage: UIImage, rootViewController: UIViewController = UIViewController()) -> UINavigationController {

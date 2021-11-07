@@ -1,7 +1,7 @@
 import UIKit
 import Photos
 
-class PhotoSelectorController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+class PhotoSelectorController: UICollectionViewController {
     
     let cellId = "cellId"
     let headerId = "headerId"
@@ -11,28 +11,20 @@ class PhotoSelectorController: UICollectionViewController, UICollectionViewDeleg
     var images = [UIImage]()
     var assets = [PHAsset]()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        collectionView.backgroundColor = .white
-        
-        setupNavButtons()
-        
-        collectionView.register(PhotoSelectorCell.self, forCellWithReuseIdentifier: cellId)
-        
-        collectionView.register(PhotoSelectorHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
-        
-        fetchPhotos()
-    }
-    
     override var prefersStatusBarHidden: Bool {
         return true
     }
     
-    fileprivate func setupNavButtons() {
-        navigationController?.navigationBar.tintColor = .black
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Next", style: .plain, target: self, action: #selector(handleNext))
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
+        collectionView.register(PhotoSelectorCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView.register(PhotoSelectorHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
+        
+        collectionView.backgroundColor = .white
+        
+        setupNavButtons()
+        fetchPhotos()
     }
     
     @objc func handleCancel() {
@@ -43,7 +35,12 @@ class PhotoSelectorController: UICollectionViewController, UICollectionViewDeleg
         let sharePhotoController = SharePhotoController()
         sharePhotoController.selectedImage = header?.photoImageView.image
         navigationController?.pushViewController(sharePhotoController, animated: true)
-        
+    }
+    
+    fileprivate func setupNavButtons() {
+        navigationController?.navigationBar.tintColor = .black
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Next", style: .plain, target: self, action: #selector(handleNext))
     }
     
     fileprivate func assetsFetchOptions() -> PHFetchOptions {
@@ -58,7 +55,6 @@ class PhotoSelectorController: UICollectionViewController, UICollectionViewDeleg
         let allPhotos = PHAsset.fetchAssets(with: .image, options: assetsFetchOptions())
         
         DispatchQueue.global(qos: .background).async {
-            
             allPhotos.enumerateObjects { asset, count, stop in
                 let imageManager = PHImageManager.default()
                 let targetSize = CGSize(width: 200, height: 200)
@@ -69,7 +65,6 @@ class PhotoSelectorController: UICollectionViewController, UICollectionViewDeleg
                     if let image = image {
                         self.images.append(image)
                         self.assets.append(asset)
-                        
                         if self.selectedImage == nil {
                             self.selectedImage = image
                         }
@@ -81,10 +76,33 @@ class PhotoSelectorController: UICollectionViewController, UICollectionViewDeleg
                         }
                         
                     }
-                    
                 }
             }
         }
+    }
+    
+}
+
+extension PhotoSelectorController: UICollectionViewDelegateFlowLayout {
+
+    //MARK: - Header settings
+    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as? PhotoSelectorHeader else { return UICollectionReusableView() }
+
+        self.header = header
+        header.photoImageView.image = selectedImage
+        
+        if let selectedImage = selectedImage {
+            if let index = self.images.firstIndex(of: selectedImage) {
+                let selectedAsset = self.assets[index]
+                let imageManager = PHImageManager.default()
+                let targetSize = CGSize(width: 600, height: 600)
+                imageManager.requestImage(for: selectedAsset, targetSize: targetSize, contentMode: .aspectFit, options: nil) { image, info in
+                    header.photoImageView.image = image
+                }
+            }
+        }
+        return header
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -96,43 +114,7 @@ class PhotoSelectorController: UICollectionViewController, UICollectionViewDeleg
         return CGSize(width: width, height: width)
     }
     
-
-    
-    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as? PhotoSelectorHeader else { return UICollectionReusableView() }
-        
-        self.header = header
-        
-        header.photoImageView.image = selectedImage
-        
-        if let selectedImage = selectedImage {
-            if let index = self.images.firstIndex(of: selectedImage) {
-                let selectedAsset = self.assets[index]
-                
-                let imageManager = PHImageManager.default()
-                let targetSize = CGSize(width: 600, height: 600)
-                imageManager.requestImage(for: selectedAsset, targetSize: targetSize, contentMode: .aspectFit, options: nil) { image, info in
-                    header.photoImageView.image = image
-                    
-                }
-            }
-        }
-        
-        return header
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = (view.frame.width - 3) / 4
-        return CGSize(width: width, height: width)
-    }
+    //MARK: - Grid cell settings
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return images.count
@@ -151,6 +133,19 @@ class PhotoSelectorController: UICollectionViewController, UICollectionViewDeleg
         //Ыcroll up when you have selected an image
         let indexPath = IndexPath(item: 0, section: 0)
         collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = (view.frame.width - 3) / 4
+        return CGSize(width: width, height: width)
     }
     
 }

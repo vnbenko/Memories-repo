@@ -1,9 +1,10 @@
 import UIKit
 import Firebase
 
-class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+class HomeController: UICollectionViewController {
     
     let cellId = "cellId"
+    var posts = [Post]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,27 +19,21 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     func setupNavigationItems() {
         let image = #imageLiteral(resourceName: "logo2")
         navigationItem.titleView = UIImageView(image: image)
-        
     }
-    
-    var posts = [Post]()
     
     fileprivate func fetchPosts() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         let ref = Database.database(url: Constants.shared.databaseUrlString).reference().child("post_images").child(uid)
+        
         ref.observe(.value) { snapshot in
-            
             guard let dictionaries = snapshot.value as? [String: Any] else { return }
+            
             dictionaries.forEach { (key: String, value: Any) in
-                //print("Key: \(key)\nValue: \(value)")
                 guard let dictionary = value as? [String: Any] else { return }
-                
                 let post = Post(dictionary: dictionary)
                 self.posts.append(post)
-                
             }
-            
             self.collectionView.reloadData()
             
         } withCancel: { error in
@@ -46,6 +41,10 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         }
         
     }
+    
+}
+
+extension HomeController: UICollectionViewDelegateFlowLayout {
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return posts.count

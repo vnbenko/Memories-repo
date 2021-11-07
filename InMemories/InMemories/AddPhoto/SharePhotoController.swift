@@ -29,6 +29,7 @@ class SharePhotoController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         view.backgroundColor = UIColor.rgb(240, 240, 240)
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Share", style: .plain, target: self, action: #selector(handleShare))
         
@@ -51,33 +52,33 @@ class SharePhotoController: UIViewController {
         metadata.contentType = "image/jpeg"
         
         storageReference.putData(uploadata, metadata: metadata) { metadata, error in
+            if let error = error {
+                self.navigationItem.rightBarButtonItem?.isEnabled = true
+                print("Failed to upload image: ", error)
+                return
+            }
+            
+            print("Successfully uploaded post image: ", metadata?.name ?? "")
+            
+            storageReference.downloadURL(completion: { url, error in
                 if let error = error {
-                    self.navigationItem.rightBarButtonItem?.isEnabled = true
                     print("Failed to upload image: ", error)
                     return
                 }
-                
-                print("Successfully uploaded post image: ", metadata?.name ?? "")
-                
-                storageReference.downloadURL(completion: { url, error in
-                    if let error = error {
-                        print("Failed to upload image: ", error)
-                        return
-                    }
-                    guard let imageUrl = url?.absoluteString else { return }
-                    print("Successfully got post image url: ", imageUrl)
-                    self.saveToDatabaseWithImageUrl(imageUrl: imageUrl)
-                })
-            }
+                guard let imageUrl = url?.absoluteString else { return }
+                print("Successfully got post image url: ", imageUrl)
+                self.saveToDatabaseWithImageUrl(imageUrl: imageUrl)
+            })
+        }
     }
     
     fileprivate func saveToDatabaseWithImageUrl(imageUrl: String) {
         guard let postImage = selectedImage else { return }
         guard let caption = textView.text else { return }
         guard let uid = Auth.auth().currentUser?.uid else { return }
-       
+        
         let userPostRef = Database.database(url: Constants.shared.databaseUrlString).reference().child("post_images").child(uid)
-       
+        
         let ref = userPostRef.childByAutoId()
         
         let values = [
@@ -94,7 +95,6 @@ class SharePhotoController: UIViewController {
                 print("Failed to save post to DB: ", error)
                 return
             }
-            
             print("Successfully saved post to DB")
             self.dismiss(animated: true, completion: nil)
         }

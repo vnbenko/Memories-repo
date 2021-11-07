@@ -3,14 +3,6 @@ import Firebase
 
 class UserProfileHeader: UICollectionViewCell {
     
-    var user: User? {
-        didSet {
-            guard let profileImageUrl = user?.userPhoto else { return }
-            profileImageView.loadImage(urlString: profileImageUrl)
-            usernameLabel.text = user?.userName
-        }
-    }
-    
     let profileImageView: CustomImageView = {
         let imageView = CustomImageView()
         return imageView
@@ -45,16 +37,13 @@ class UserProfileHeader: UICollectionViewCell {
     
     let postsLabel: UILabel = {
         let label = UILabel()
-        
         let attributedText = NSMutableAttributedString(string: "11\n", attributes: [
             .font : UIFont.boldSystemFont(ofSize: 14)
         ])
-        
         attributedText.append(NSAttributedString(string: "posts", attributes: [
             .foregroundColor : UIColor.lightGray,
             .font: UIFont.systemFont(ofSize: 14)
         ]))
-        
         label.attributedText = attributedText
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -63,18 +52,14 @@ class UserProfileHeader: UICollectionViewCell {
     
     let followersLabel: UILabel = {
         let label = UILabel()
-        
         let attributedText = NSMutableAttributedString(string: "5\n", attributes: [
             .font : UIFont.boldSystemFont(ofSize: 14)
         ])
-        
         attributedText.append(NSAttributedString(string: "followers", attributes: [
             .foregroundColor : UIColor.lightGray,
             .font: UIFont.systemFont(ofSize: 14)
         ]))
-        
         label.attributedText = attributedText
-        
         label.textAlignment = .center
         label.numberOfLines = 0
         return label
@@ -82,16 +67,13 @@ class UserProfileHeader: UICollectionViewCell {
     
     let followingLabel: UILabel = {
         let label = UILabel()
-        
         let attributedText = NSMutableAttributedString(string: "45\n", attributes: [
             .font : UIFont.boldSystemFont(ofSize: 14)
         ])
-        
         attributedText.append(NSAttributedString(string: "following", attributes: [
             .foregroundColor : UIColor.lightGray,
             .font: UIFont.systemFont(ofSize: 14)
         ]))
-        
         label.attributedText = attributedText
         label.numberOfLines = 0
         label.textAlignment = .center
@@ -109,10 +91,20 @@ class UserProfileHeader: UICollectionViewCell {
         return button
     }()
     
+    var user: User? {
+        didSet {
+            guard let profileImageUrl = user?.userPhoto else { return }
+            profileImageView.loadImage(urlString: profileImageUrl)
+            usernameLabel.text = user?.userName
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         addSubview(profileImageView)
+        profileImageView.layer.cornerRadius = 80 / 2
+        profileImageView.clipsToBounds = true
         profileImageView.anchor(
             top: topAnchor, paddingTop: 12,
             left: leftAnchor, paddingLeft: 12,
@@ -121,10 +113,8 @@ class UserProfileHeader: UICollectionViewCell {
             width: 80, height: 80
         )
         
-        profileImageView.layer.cornerRadius = 80 / 2
-        profileImageView.clipsToBounds = true
-        
         setupButtonToolbar()
+        setupUserStatsView()
         
         addSubview(usernameLabel)
         usernameLabel.anchor(
@@ -134,8 +124,6 @@ class UserProfileHeader: UICollectionViewCell {
             bottom: gridButton.topAnchor, paddingBottom: 0,
             width: 0, height: 0
         )
-        
-        setupUserStatsView()
         
         addSubview(editProfileButton)
         editProfileButton.anchor(
@@ -153,7 +141,6 @@ class UserProfileHeader: UICollectionViewCell {
             followersLabel,
             followingLabel
         ])
-        
         stackView.distribution = .fillEqually
         
         addSubview(stackView)
@@ -169,7 +156,7 @@ class UserProfileHeader: UICollectionViewCell {
     fileprivate func setupButtonToolbar() {
         let topDividerView = UIView()
         topDividerView.backgroundColor = .lightGray
-        
+       
         let bottomDividerView = UIView()
         bottomDividerView.backgroundColor = .lightGray
         

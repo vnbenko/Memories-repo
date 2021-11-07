@@ -124,19 +124,25 @@ class LoginController: UIViewController {
     @objc func handleLogIn() {
         guard let email = emailTextField.text,
         let password = passwordTextField.text else { return}
+       
         Auth.auth().signIn(withEmail: email, password: password) { data, error in
             if let error = error {
                 print("Failed to sign in with email: ", error)
                 return
             }
             print("Successfully logged back in with user: ", data?.user.uid ?? "")
-            
             guard let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController else { return }
             
             mainTabBarController.setupViewControllers()
             
             self.dismiss(animated: true, completion: nil)
         }
+    }
+    
+    @objc func handleShowSignUp() {
+        let signUpController = SignUpController()
+        navigationController?.pushViewController(signUpController, animated: true)
+        
     }
     
     fileprivate func setupInputsFields() {
@@ -158,11 +164,5 @@ class LoginController: UIViewController {
             bottom: nil, paddingBottom: 0,
             width: 0, height: 140
         )
-    }
-    
-    @objc func handleShowSignUp() {
-        let signUpController = SignUpController()
-        navigationController?.pushViewController(signUpController, animated: true)
-        
     }
 }

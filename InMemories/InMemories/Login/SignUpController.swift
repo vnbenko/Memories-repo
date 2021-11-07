@@ -6,6 +6,7 @@ class SignUpController: UIViewController {
     let photoButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(imageLiteralResourceName: "photoButton").withRenderingMode(.alwaysOriginal), for: .normal)
+        
         button.addTarget(self, action: #selector(handlePhoto), for: .touchUpInside)
         return button
     }()
@@ -81,7 +82,6 @@ class SignUpController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .white
-        
         view.addSubview(alreadyHaveAcountButton)
         alreadyHaveAcountButton.anchor(
             top: nil, paddingTop: 0,
@@ -102,29 +102,6 @@ class SignUpController: UIViewController {
         photoButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
         setupInputsFields()
-    }
-    
-    fileprivate func setupInputsFields() {
-        let stackView = UIStackView(arrangedSubviews: [
-            emailTextField,
-            userNameTextField,
-            passwordTextField,
-            signUpButton
-        ])
-        
-        stackView.distribution = .fillEqually
-        stackView.axis = .vertical
-        stackView.spacing = 10
-        
-        view.addSubview(stackView)
-        
-        stackView.anchor(
-            top: photoButton.bottomAnchor, paddingTop: 20,
-            left: view.leftAnchor, paddingLeft: 40,
-            right: view.rightAnchor, paddingRight: 40,
-            bottom: nil, paddingBottom: 0,
-            width: 0, height: 200
-        )
     }
     
     @objc func handlePhoto() {
@@ -200,8 +177,7 @@ class SignUpController: UIViewController {
                             
                             self.dismiss(animated: true, completion: nil)
                         }
-                }
-                
+                } 
             }
         }
     }
@@ -221,6 +197,28 @@ class SignUpController: UIViewController {
     
     @objc func handleAlreadyHaveAcount() {
         _ = navigationController?.popViewController(animated: true)
+    }
+    
+    fileprivate func setupInputsFields() {
+        let stackView = UIStackView(arrangedSubviews: [
+            emailTextField,
+            userNameTextField,
+            passwordTextField,
+            signUpButton
+        ])
+        
+        stackView.distribution = .fillEqually
+        stackView.axis = .vertical
+        stackView.spacing = 10
+        
+        view.addSubview(stackView)
+        stackView.anchor(
+            top: photoButton.bottomAnchor, paddingTop: 20,
+            left: view.leftAnchor, paddingLeft: 40,
+            right: view.rightAnchor, paddingRight: 40,
+            bottom: nil, paddingBottom: 0,
+            width: 0, height: 200
+        )
     }
     
 }

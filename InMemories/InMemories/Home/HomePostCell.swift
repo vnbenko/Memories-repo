@@ -1,20 +1,6 @@
-//
-//  HomePostCell.swift
-//  InMemories
-//
-//  Created by Meraki on 07.11.2021.
-//
-
 import UIKit
 
 class HomePostCell: UICollectionViewCell {
-    
-    var post: Post? {
-        didSet {
-            guard let imageUrl = post?.imageUrl else { return }
-            photoImageView.loadImage(urlString: imageUrl)
-        }
-    }
    
     let photoImageView: CustomImageView = {
         let imageView = CustomImageView()
@@ -22,6 +8,13 @@ class HomePostCell: UICollectionViewCell {
         imageView.clipsToBounds = true
         return imageView
     }()
+    
+    var post: Post? {
+        didSet {
+            guard let imageUrl = post?.imageUrl else { return }
+            photoImageView.loadImage(urlString: imageUrl)
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
