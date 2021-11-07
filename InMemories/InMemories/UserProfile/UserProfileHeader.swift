@@ -103,6 +103,12 @@ class UserProfileHeader: UICollectionViewCell {
         super.init(frame: frame)
         
         addSubview(profileImageView)
+        addSubview(usernameLabel)
+        addSubview(editProfileButton)
+        
+        setupButtonToolbar()
+        setupUserStatsView()
+        
         profileImageView.layer.cornerRadius = 80 / 2
         profileImageView.clipsToBounds = true
         profileImageView.anchor(
@@ -113,10 +119,6 @@ class UserProfileHeader: UICollectionViewCell {
             width: 80, height: 80
         )
         
-        setupButtonToolbar()
-        setupUserStatsView()
-        
-        addSubview(usernameLabel)
         usernameLabel.anchor(
             top: profileImageView.bottomAnchor, paddingTop: 4,
             left: leftAnchor, paddingLeft: 12,
@@ -124,8 +126,7 @@ class UserProfileHeader: UICollectionViewCell {
             bottom: gridButton.topAnchor, paddingBottom: 0,
             width: 0, height: 0
         )
-        
-        addSubview(editProfileButton)
+
         editProfileButton.anchor(
             top: postsLabel.bottomAnchor, paddingTop: 2,
             left: postsLabel.leftAnchor, paddingLeft: 0,
@@ -133,6 +134,7 @@ class UserProfileHeader: UICollectionViewCell {
             bottom: nil, paddingBottom: 0,
             width: 0, height: 34
         )
+
     }
     
     fileprivate func setupUserStatsView() {
