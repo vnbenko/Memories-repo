@@ -113,7 +113,7 @@ class SignUpController: UIViewController {
     
     @objc func handleSignUp() {
         guard let email = emailTextField.text, !email.isEmpty  else { return }
-        guard let userName = userNameTextField.text, !userName.isEmpty else { return }
+        guard let username = userNameTextField.text, !username.isEmpty else { return }
         guard let password = passwordTextField.text, !password.isEmpty else { return }
         
         //MARK: Create a new user
@@ -156,8 +156,8 @@ class SignUpController: UIViewController {
                     guard let uid = result?.user.uid else { return }
                     
                     let dictionaryValues = [
-                        "userName" : userName,
-                        "userPhoto" : url?.absoluteString
+                        "username" : username,
+                        "profileImage" : url?.absoluteString
                     ]
                     
                     let values = [uid : dictionaryValues]

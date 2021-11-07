@@ -9,7 +9,6 @@ class UserProfileController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         collectionView.register(UserProfileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerId")
         collectionView.register(UserProfilePhotoCell.self, forCellWithReuseIdentifier: cellId)
         
@@ -56,7 +55,7 @@ class UserProfileController: UICollectionViewController {
                 
                 guard let dictionary = snapshot.value as? [String: Any] else { return }
                 self.user = User(dictionary: dictionary)
-                self.navigationItem.title = self.user?.userName
+                self.navigationItem.title = self.user?.username
                 self.collectionView.reloadData()
                 
             } withCancel: { error in
@@ -67,15 +66,20 @@ class UserProfileController: UICollectionViewController {
     //MARK: - Fetch posts
     fileprivate func fetchOrderedPost() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
-        let ref = Database.database(url: Constants.shared.databaseUrlString).reference().child("post_images").child(uid)
         
-        ref.queryOrdered(byChild: "CreationDate").observe(.childAdded) { snapshot in
+        Database.database(url: Constants.shared.databaseUrlString).reference()
+            .child("post_images")
+            .child(uid)
+            .queryOrdered(byChild: "CreationDate")
+            .observe(.childAdded) { snapshot in
             guard let dictionary = snapshot.value as? [String: Any] else { return }
           
-            let post = Post(dictionary: dictionary)
+            guard let user = self.user else { return }
+            let post = Post(user: user, dictionary: dictionary)
             self.posts.append(post)
             
             self.collectionView.reloadData()
+            
         } withCancel: { error in
             print("Failed to fetch ordered posts: ", error)
         }

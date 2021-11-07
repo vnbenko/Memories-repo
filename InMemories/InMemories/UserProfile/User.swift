@@ -1,11 +1,12 @@
 import Foundation
 
 struct User {
-    let userName: String
-    let userPhoto: String
+    
+    let username: String
+    let profileImage: String
     
     init(dictionary: [String: Any]) {
-        self.userName = dictionary["userName"] as? String ?? ""
-        self.userPhoto = dictionary["userPhoto"] as? String ?? ""
+        self.username = dictionary["username"] as? String ?? ""
+        self.profileImage = dictionary["profileImage"] as? String ?? ""
     }
 }

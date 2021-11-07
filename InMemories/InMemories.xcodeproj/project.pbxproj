@@ -155,6 +155,7 @@
 			isa = PBXGroup;
 			children = (
 				F59700B327368EF80014A36A /* Post.swift */,
+				F5C0F68F2725DF7500A58E4D /* User.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -185,7 +186,6 @@
 				F5FE66FC27258C02009166A7 /* UserProfileController.swift */,
 				F5D9D5402725AC1A00A23ED2 /* UserProfileHeader.swift */,
 				F5438CD72737C575008B7784 /* UserProfilePhotoCell.swift */,
-				F5C0F68F2725DF7500A58E4D /* User.swift */,
 			);
 			path = UserProfile;
 			sourceTree = "<group>";

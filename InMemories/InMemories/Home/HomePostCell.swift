@@ -6,7 +6,6 @@ class HomePostCell: UICollectionViewCell {
         let imageView = CustomImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.backgroundColor = .red
         return imageView
     }()
     
@@ -57,16 +56,6 @@ class HomePostCell: UICollectionViewCell {
     
     let captionLabel: UILabel = {
         let label = UILabel()
-        let attributedText = NSMutableAttributedString(string: "Username", attributes: [
-            .font : UIFont.boldSystemFont(ofSize: 14)])
-        attributedText.append(NSAttributedString(string: " Some caption text for this comment", attributes: [.font : UIFont.systemFont(ofSize: 14)]))
-        attributedText.append(NSAttributedString(string: "\n\n", attributes: [
-            .font : UIFont.systemFont(ofSize: 4)]))
-        attributedText.append(NSAttributedString(string: "1 week ago", attributes: [
-            .font : UIFont.systemFont(ofSize: 14),
-            .foregroundColor : UIColor.lightGray
-        ]))
-        label.attributedText = attributedText
         label.numberOfLines = 0
         return label
     }()
@@ -75,6 +64,13 @@ class HomePostCell: UICollectionViewCell {
         didSet {
             guard let imageUrl = post?.imageUrl else { return }
             photoImageView.loadImage(urlString: imageUrl)
+
+            userNameLabel.text = post?.user.username
+            
+            guard let profileUserImageUrl = post?.user.profileImage else { return }
+            userProfileImageView.loadImage(urlString: profileUserImageUrl)
+
+            setupAttributedCaption()
         }
     }
     
@@ -116,6 +112,21 @@ class HomePostCell: UICollectionViewCell {
         
         addSubview(stackView)
         stackView.anchor(top: photoImageView.bottomAnchor, paddingTop: 0, left: leftAnchor, paddingLeft: 4, right: nil, paddingRight: 0, bottom: nil, paddingBottom: 0, width: 120, height: 50)
+    }
+    
+    fileprivate func setupAttributedCaption() {
+        
+        guard let post = self.post else { return }
+        let attributedText = NSMutableAttributedString(string: post.user.username, attributes: [
+            .font : UIFont.boldSystemFont(ofSize: 14)])
+        attributedText.append(NSAttributedString(string: " \(post.caption)", attributes: [.font : UIFont.systemFont(ofSize: 14)]))
+        attributedText.append(NSAttributedString(string: "\n\n", attributes: [
+            .font : UIFont.systemFont(ofSize: 4)]))
+        attributedText.append(NSAttributedString(string: "1 week ago", attributes: [
+            .font : UIFont.systemFont(ofSize: 14),
+            .foregroundColor : UIColor.lightGray
+        ]))
+        self.captionLabel.attributedText = attributedText
     }
     
     
