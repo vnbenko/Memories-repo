@@ -2,9 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Users/vnbenko/Documents/GIT projects/inMemories-repo/InMemories/InMemories/UserProfile/UserProfilePhotoCell.swift">
-   </FileRef>
-   <FileRef
       location = "group:InMemories.xcodeproj">
    </FileRef>
    <FileRef
