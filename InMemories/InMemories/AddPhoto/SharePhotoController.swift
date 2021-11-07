@@ -45,7 +45,7 @@ class SharePhotoController: UIViewController {
         let fileName = UUID().uuidString
         
         let storageReference = Storage.storage().reference()
-            .child("post_images")
+            .child("posts")
             .child(fileName)
         
         let metadata = StorageMetadata()
@@ -77,7 +77,7 @@ class SharePhotoController: UIViewController {
         guard let caption = textView.text else { return }
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        let userPostRef = Database.database(url: Constants.shared.databaseUrlString).reference().child("post_images").child(uid)
+        let userPostRef = Database.database(url: Constants.shared.databaseUrlString).reference().child("posts").child(uid)
         
         let ref = userPostRef.childByAutoId()
         

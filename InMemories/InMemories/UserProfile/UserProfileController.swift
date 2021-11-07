@@ -43,24 +43,17 @@ class UserProfileController: UICollectionViewController {
     fileprivate func setupLogOutButton() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "gear")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleLogOut))
     }
-        
+    
     //MARK: - Fetch user
     fileprivate func fetchUser() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        Database.database(url: Constants.shared.databaseUrlString).reference()
-            .child("users")
-            .child(uid)
-            .observeSingleEvent(of: .value) { snapshot in
-                
-                guard let dictionary = snapshot.value as? [String: Any] else { return }
-                self.user = User(dictionary: dictionary)
-                self.navigationItem.title = self.user?.username
-                self.collectionView.reloadData()
-                
-            } withCancel: { error in
-                print("Failed to fetch user: ", error)
-            }
+        Database.fetchUserWithUID(uid: uid) { user in
+            self.user = user
+            self.navigationItem.title = self.user?.username
+            
+            self.collectionView.reloadData()
+        }
     }
     
     //MARK: - Fetch posts
@@ -68,21 +61,21 @@ class UserProfileController: UICollectionViewController {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         Database.database(url: Constants.shared.databaseUrlString).reference()
-            .child("post_images")
+            .child("posts")
             .child(uid)
             .queryOrdered(byChild: "CreationDate")
             .observe(.childAdded) { snapshot in
-            guard let dictionary = snapshot.value as? [String: Any] else { return }
-          
-            guard let user = self.user else { return }
-            let post = Post(user: user, dictionary: dictionary)
-            self.posts.append(post)
-            
-            self.collectionView.reloadData()
-            
-        } withCancel: { error in
-            print("Failed to fetch ordered posts: ", error)
-        }
+                guard let dictionary = snapshot.value as? [String: Any] else { return }
+                
+                guard let user = self.user else { return }
+                let post = Post(user: user, dictionary: dictionary)
+                self.posts.append(post)
+                
+                self.collectionView.reloadData()
+                
+            } withCancel: { error in
+                print("Failed to fetch ordered posts: ", error)
+            }
     }
 }
 
@@ -123,5 +116,5 @@ extension UserProfileController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 1
     }
-
+    
 }
