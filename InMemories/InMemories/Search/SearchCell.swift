@@ -2,9 +2,8 @@ import UIKit
 
 class SearchCell: UICollectionViewCell {
     
-    let profileImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.backgroundColor = .red
+    let profileImageView: CustomImageView = {
+        let imageView = CustomImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         return imageView
@@ -16,6 +15,14 @@ class SearchCell: UICollectionViewCell {
         label.font = UIFont.boldSystemFont(ofSize: 14)
         return label
     }()
+    
+    var user: User? {
+        didSet {
+            userNameLabel.text = user?.username
+            guard let profileUserUrl = user?.profileImageUrl else { return }
+            profileImageView.loadImage(urlString: profileUserUrl)
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)

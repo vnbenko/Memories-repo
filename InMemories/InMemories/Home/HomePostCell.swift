@@ -67,7 +67,7 @@ class HomePostCell: UICollectionViewCell {
 
             userNameLabel.text = post?.user.username
             
-            guard let profileUserImageUrl = post?.user.profileImage else { return }
+            guard let profileUserImageUrl = post?.user.profileImageUrl else { return }
             userProfileImageView.loadImage(urlString: profileUserImageUrl)
 
             setupAttributedCaption()
