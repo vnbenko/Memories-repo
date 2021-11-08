@@ -59,6 +59,7 @@ class UserProfileController: UICollectionViewController {
             self.collectionView.reloadData()
             
             self.fetchOrderedPost()
+
         }
     }
     

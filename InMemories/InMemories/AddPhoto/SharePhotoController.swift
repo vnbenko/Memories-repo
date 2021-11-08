@@ -69,6 +69,7 @@ class SharePhotoController: UIViewController {
                 print("Successfully got post image url: ", imageUrl)
                 self.saveToDatabaseWithImageUrl(imageUrl: imageUrl)
             })
+
         }
     }
     
