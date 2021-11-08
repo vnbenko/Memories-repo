@@ -9,13 +9,31 @@ class HomeController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateFeed), name: SharePhotoController.updateFeedNotificationName, object: nil)
+        
         collectionView.backgroundColor = .white
         collectionView.register(HomePostCell.self, forCellWithReuseIdentifier: cellId)
         
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+        collectionView.refreshControl = refreshControl
         setupNavigationItems()
+        
+        fetchAllPosts()
+    }
+    
+    @objc func handleRefresh() {
+        posts.removeAll()
+        fetchAllPosts()
+    }
+    
+    @objc func handleUpdateFeed() {
+        handleRefresh()
+    }
+    
+    fileprivate func fetchAllPosts() {
         fetchPosts()
         fetchFollowingUserIds()
-
     }
     
     fileprivate func fetchFollowingUserIds() {
@@ -53,6 +71,9 @@ class HomeController: UICollectionViewController {
             .child("posts")
             .child(user.uid)
             .observeSingleEvent(of: .value) { snapshot in
+                
+                self.collectionView.refreshControl?.endRefreshing()
+                
                 guard let dictionaries = snapshot.value as? [String: Any] else { return }
                 
                 dictionaries.forEach { (key: String, value: Any) in
