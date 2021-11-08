@@ -56,6 +56,15 @@ class HomeController: UICollectionViewController {
     func setupNavigationItems() {
         let image = #imageLiteral(resourceName: "logo2")
         navigationItem.titleView = UIImageView(image: image)
+        
+        let camera = #imageLiteral(resourceName: "camera3").withRenderingMode(.alwaysOriginal)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: camera, style: .plain, target: self, action: #selector(handleCamera))
+    }
+    
+    @objc func handleCamera() {
+        let cameraController = CameraController()
+        cameraController.modalPresentationStyle = .fullScreen
+        present(cameraController, animated: true, completion: nil)
     }
     
     fileprivate func fetchPosts() {

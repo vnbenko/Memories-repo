@@ -22,6 +22,7 @@
 		F5767E1F270CAE2400387576 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F5767E1E270CAE2400387576 /* Assets.xcassets */; };
 		F5767E22270CAE2400387576 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5767E20270CAE2400387576 /* LaunchScreen.storyboard */; };
 		F5782A3127399F280020CD9A /* Date + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5782A3027399F280020CD9A /* Date + Extensions.swift */; };
+		F5782A342739BAB10020CD9A /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5782A332739BAB10020CD9A /* CameraController.swift */; };
 		F59700AB273564DF0014A36A /* PhotoSelectorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59700AA273564DF0014A36A /* PhotoSelectorController.swift */; };
 		F59700AE273571B80014A36A /* PhotoSelectorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59700AD273571B80014A36A /* PhotoSelectorCell.swift */; };
 		F59700B0273578130014A36A /* PhotoSelectorHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59700AF273578130014A36A /* PhotoSelectorHeader.swift */; };
@@ -57,6 +58,7 @@
 		F5767E21270CAE2400387576 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F5767E23270CAE2400387576 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F5782A3027399F280020CD9A /* Date + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date + Extensions.swift"; sourceTree = "<group>"; };
+		F5782A332739BAB10020CD9A /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
 		F59700AA273564DF0014A36A /* PhotoSelectorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectorController.swift; sourceTree = "<group>"; };
 		F59700AD273571B80014A36A /* PhotoSelectorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectorCell.swift; sourceTree = "<group>"; };
 		F59700AF273578130014A36A /* PhotoSelectorHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectorHeader.swift; sourceTree = "<group>"; };
@@ -142,6 +144,7 @@
 			children = (
 				F5767E15270CAE2200387576 /* AppDelegate.swift */,
 				F5FE66FA27258B1A009166A7 /* MainTabBarController.swift */,
+				F5782A322739BA9E0020CD9A /* Camera */,
 				F5438CE227381316008B7784 /* Search */,
 				F5438CDB2737C5E7008B7784 /* Home */,
 				F59700B527368F180014A36A /* Models */,
@@ -156,6 +159,14 @@
 				F5767E23270CAE2400387576 /* Info.plist */,
 			);
 			path = InMemories;
+			sourceTree = "<group>";
+		};
+		F5782A322739BA9E0020CD9A /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				F5782A332739BAB10020CD9A /* CameraController.swift */,
+			);
+			path = Camera;
 			sourceTree = "<group>";
 		};
 		F59700AC2735650E0014A36A /* AddPhoto */ = {
@@ -313,6 +324,7 @@
 				F59700AE273571B80014A36A /* PhotoSelectorCell.swift in Sources */,
 				F5767E1A270CAE2200387576 /* SignUpController.swift in Sources */,
 				F5FE66FD27258C02009166A7 /* UserProfileController.swift in Sources */,
+				F5782A342739BAB10020CD9A /* CameraController.swift in Sources */,
 				F59700B227366EA30014A36A /* SharePhotoController.swift in Sources */,
 				F5D9D5412725AC1A00A23ED2 /* UserProfileHeader.swift in Sources */,
 				F5438CE1273806F6008B7784 /* Firebase + Extensions.swift in Sources */,

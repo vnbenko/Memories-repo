@@ -131,7 +131,8 @@ class LoginController: UIViewController {
                 return
             }
             print("Successfully logged back in with user: ", data?.user.uid ?? "")
-            guard let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController else { return }
+//            guard let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController else { return }
+            guard let mainTabBarController = UIApplication.shared.windows.filter ({$0.isKeyWindow}).first?.rootViewController as? MainTabBarController else { return }
             
             mainTabBarController.setupViewControllers()
             
