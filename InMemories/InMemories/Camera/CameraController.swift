@@ -20,6 +20,10 @@ class CameraController: UIViewController  {
         return button
     }()
     
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -99,12 +103,13 @@ extension CameraController: AVCapturePhotoCaptureDelegate {
         let imageData = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer: photoSampleBuffer, previewPhotoSampleBuffer: previewPhotoSampleBuffer) else { return }
         
         let previewImage = UIImage(data: imageData)
+       
+        let containerView = PreviewPhotoContainerView()
+        containerView.previewImageView.image = previewImage
         
-        let previewImageView = UIImageView(image: previewImage)
-        previewImageView.contentMode = .scaleAspectFit
-        previewImageView.clipsToBounds = true
-        photoButton.isHidden = true
-        view.addSubview(previewImageView)
-        previewImageView.anchor(top: view.topAnchor, paddingTop: 0, left: view.leftAnchor, paddingLeft: 0, right: view.rightAnchor, paddingRight: 0, bottom: view.bottomAnchor, paddingBottom: 0, width: 0, height: 0)
+        view.addSubview(containerView)
+        containerView.anchor(top: view.topAnchor, paddingTop: 0, left: view.leftAnchor, paddingLeft: 0, right: view.rightAnchor, paddingRight: 0, bottom: view.bottomAnchor, paddingBottom: 0, width: 0, height: 0)
+        
+
     }
 }

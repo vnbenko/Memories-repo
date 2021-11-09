@@ -16,6 +16,7 @@
 		F5438CE42738133C008B7784 /* SearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5438CE32738133C008B7784 /* SearchController.swift */; };
 		F5438CE62738166C008B7784 /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5438CE52738166C008B7784 /* SearchCell.swift */; };
 		F54A7365270DE11E00CAE9F6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F54A7364270DE11E00CAE9F6 /* GoogleService-Info.plist */; };
+		F5640133273B040C003A4A9D /* PreviewPhotoContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5640132273B040B003A4A9D /* PreviewPhotoContainerView.swift */; };
 		F5767E16270CAE2200387576 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5767E15270CAE2200387576 /* AppDelegate.swift */; };
 		F5767E1A270CAE2200387576 /* SignUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5767E19270CAE2200387576 /* SignUpController.swift */; };
 		F5767E1D270CAE2200387576 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5767E1B270CAE2200387576 /* Main.storyboard */; };
@@ -50,6 +51,7 @@
 		F5438CE32738133C008B7784 /* SearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchController.swift; sourceTree = "<group>"; };
 		F5438CE52738166C008B7784 /* SearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCell.swift; sourceTree = "<group>"; };
 		F54A7364270DE11E00CAE9F6 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		F5640132273B040B003A4A9D /* PreviewPhotoContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewPhotoContainerView.swift; sourceTree = "<group>"; };
 		F5767E12270CAE2200387576 /* InMemories.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InMemories.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5767E15270CAE2200387576 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F5767E19270CAE2200387576 /* SignUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpController.swift; sourceTree = "<group>"; };
@@ -165,6 +167,7 @@
 			isa = PBXGroup;
 			children = (
 				F5782A332739BAB10020CD9A /* CameraController.swift */,
+				F5640132273B040B003A4A9D /* PreviewPhotoContainerView.swift */,
 			);
 			path = Camera;
 			sourceTree = "<group>";
@@ -329,6 +332,7 @@
 				F5D9D5412725AC1A00A23ED2 /* UserProfileHeader.swift in Sources */,
 				F5438CE1273806F6008B7784 /* Firebase + Extensions.swift in Sources */,
 				F5FE66FB27258B1A009166A7 /* MainTabBarController.swift in Sources */,
+				F5640133273B040C003A4A9D /* PreviewPhotoContainerView.swift in Sources */,
 				F5D9D53F2725A53F00A23ED2 /* Constants.swift in Sources */,
 				F5438CD82737C575008B7784 /* UserProfilePhotoCell.swift in Sources */,
 				F5438CE42738133C008B7784 /* SearchController.swift in Sources */,
