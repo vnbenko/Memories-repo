@@ -4,6 +4,10 @@ import AVFoundation
 class CameraController: UIViewController  {
     
     let output = AVCapturePhotoOutput()
+    let customAnimationPresenter = CustomAnimationPresenter()
+    let customAnimationDismisser = CustomAnimationDismisser()
+    
+    
     
     let photoButton: UIButton = {
         let button = UIButton(type: .system)
@@ -27,9 +31,15 @@ class CameraController: UIViewController  {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        transitioningDelegate = self
+        
         setupCaptureSession()
         setupHUD()
+        
+        
     }
+    
+    
     
     @objc func handleDismiss() {
         dismiss(animated: true, completion: nil)
@@ -113,3 +123,18 @@ extension CameraController: AVCapturePhotoCaptureDelegate {
 
     }
 }
+
+
+
+extension CameraController: UIViewControllerTransitioningDelegate {
+    
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return customAnimationPresenter
+    }
+    
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return customAnimationDismisser 
+    }
+}
+
+
