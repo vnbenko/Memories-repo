@@ -3,6 +3,8 @@ import Firebase
 
 class CommentsController: UICollectionViewController {
     
+    let cellId = "cellId"
+    
     let commentTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Enter Comment"
@@ -30,7 +32,7 @@ class CommentsController: UICollectionViewController {
         self.commentTextField.anchor(top: containerView.topAnchor, paddingTop: 0, left: containerView.leftAnchor, paddingLeft: 0, right: sendButton.leftAnchor, paddingRight: 0, bottom: containerView.bottomAnchor, paddingBottom: 0, width: 0, height: 0)
         return containerView
     }()
-
+    
     override var inputAccessoryView: UIView?{
         get {
             return containerView
@@ -43,16 +45,21 @@ class CommentsController: UICollectionViewController {
     
     var post: Post?
     
+    var comments = [Comment]()
+    
+    
+    //MARK: - Lifecycle funcs
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView.backgroundColor = .red
-        
         navigationItem.title = "Comments"
+        collectionView.register(CommentCell.self, forCellWithReuseIdentifier: cellId)
+        
+        fetchCommets()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
+        
         tabBarController?.tabBar.isHidden = true
     }
     
@@ -61,7 +68,7 @@ class CommentsController: UICollectionViewController {
         tabBarController?.tabBar.isHidden = false
     }
     
-    
+    //MARK: - Functions
     @objc func handleSend() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         let postId = self.post?.id ?? ""
@@ -76,12 +83,44 @@ class CommentsController: UICollectionViewController {
                     print("Failed to insert comment: ", error)
                     return
                 }
-                
                 print("Successfully inserted comment")
             }
         
     }
+    
+    fileprivate func fetchCommets() {
+        guard let postId = self.post?.id else { return }
+        Database.database(url: Constants.shared.databaseUrlString).reference()
+            .child("comments")
+            .child(postId)
+            .observe(.childAdded) { snapshot in
+                
+                guard let dictionary = snapshot.value as? [String: Any] else { return }
+                let comment = Comment(dictionary: dictionary)
+                self.comments.append(comment)
+                self.collectionView.reloadData()
 
+            } withCancel: { error in
+                print("Failed to observe comments: ", error)
+            }
+        
+        
+    }
     
+    //MARK: - Grid cell settings
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return comments.count
+    }
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? CommentCell else { return UICollectionViewCell() }
+        cell.comment = comments[indexPath.item]
+        return cell
+    }
     
+}
+
+extension CommentsController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: view.frame.width, height: 50)
+    }
 }
