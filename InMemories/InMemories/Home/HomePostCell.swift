@@ -1,5 +1,9 @@
 import UIKit
 
+protocol HomePostCellDelegate {
+    func didTapCommentButton(post: Post)
+}
+
 class HomePostCell: UICollectionViewCell {
    
     let userProfileImageView: CustomImageView = {
@@ -39,6 +43,8 @@ class HomePostCell: UICollectionViewCell {
     let commentButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(named: "comment")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        
+        button.addTarget(self, action: #selector(handleComments), for: .touchUpInside)
         return button
     }()
     
@@ -73,6 +79,8 @@ class HomePostCell: UICollectionViewCell {
             setupAttributedCaption()
         }
     }
+    
+    var delegate: HomePostCellDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -112,6 +120,11 @@ class HomePostCell: UICollectionViewCell {
         
         addSubview(stackView)
         stackView.anchor(top: photoImageView.bottomAnchor, paddingTop: 0, left: leftAnchor, paddingLeft: 4, right: nil, paddingRight: 0, bottom: nil, paddingBottom: 0, width: 120, height: 50)
+    }
+    
+    @objc func handleComments() {
+        guard let post = self.post else { return }
+        delegate?.didTapCommentButton(post: post)
     }
     
     fileprivate func setupAttributedCaption() {
