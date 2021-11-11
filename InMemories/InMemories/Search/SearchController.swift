@@ -24,7 +24,6 @@ class SearchController: UICollectionViewController {
         collectionView.alwaysBounceVertical = true
         collectionView.keyboardDismissMode = .onDrag
         
-        collectionView.backgroundColor = .white
         navigationController?.navigationBar.addSubview(searchBar)
         
         let navBar = navigationController?.navigationBar

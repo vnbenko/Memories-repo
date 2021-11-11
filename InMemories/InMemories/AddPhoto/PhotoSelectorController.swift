@@ -21,8 +21,6 @@ class PhotoSelectorController: UICollectionViewController {
         collectionView.register(PhotoSelectorCell.self, forCellWithReuseIdentifier: cellId)
         collectionView.register(PhotoSelectorHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
         
-        collectionView.backgroundColor = .white
-        
         setupNavButtons()
         fetchPhotos()
     }

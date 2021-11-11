@@ -107,7 +107,6 @@ class SharePhotoController: UIViewController {
     
     fileprivate func setupImageAndTextViews() {
         let containerView = UIView()
-        containerView.backgroundColor = .white
         view.addSubview(containerView)
         containerView.anchor(top: view.safeAreaLayoutGuide.topAnchor, paddingTop: 0, left: view.leftAnchor, paddingLeft: 0, right: view.rightAnchor, paddingRight: 0, bottom: nil, paddingBottom: 0, width: 0, height: 100)
         

@@ -7,7 +7,7 @@ class CommentsController: UICollectionViewController {
     
     let commentTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Enter Comment"
+        textField.placeholder = "Enter comment..."
         return textField
     }()
     
@@ -15,7 +15,6 @@ class CommentsController: UICollectionViewController {
     //lazy needs for commentTextFiels that's not in context of CommentsController
     lazy var containerView: UIView = {
         let containerView = UIView()
-        containerView.backgroundColor = .white
         containerView.frame = CGRect(x: 0, y: 0, width: 100, height: 50)
         
         let sendButton = UIButton(type: .system)
@@ -30,6 +29,11 @@ class CommentsController: UICollectionViewController {
         
         containerView.addSubview(self.commentTextField)
         self.commentTextField.anchor(top: containerView.topAnchor, paddingTop: 0, left: containerView.leftAnchor, paddingLeft: 0, right: sendButton.leftAnchor, paddingRight: 0, bottom: containerView.bottomAnchor, paddingBottom: 0, width: 0, height: 0)
+        
+        let lineSeparator = UIView()
+        lineSeparator.backgroundColor = UIColor.rgb(230, 230, 230)
+        containerView.addSubview(lineSeparator)
+        lineSeparator.anchor(top: containerView.topAnchor, paddingTop: 0, left: containerView.leftAnchor, paddingLeft: 0, right: containerView.rightAnchor, paddingRight: 0, bottom: nil, paddingBottom: 0, width: 0, height: 0.5)
         return containerView
     }()
     
@@ -53,6 +57,9 @@ class CommentsController: UICollectionViewController {
         super.viewDidLoad()
         navigationItem.title = "Comments"
         collectionView.register(CommentCell.self, forCellWithReuseIdentifier: cellId)
+        //hiding keyboard
+        collectionView.alwaysBounceVertical = true
+        collectionView.keyboardDismissMode = .interactive
         
         fetchCommets()
     }
@@ -96,9 +103,15 @@ class CommentsController: UICollectionViewController {
             .observe(.childAdded) { snapshot in
                 
                 guard let dictionary = snapshot.value as? [String: Any] else { return }
-                let comment = Comment(dictionary: dictionary)
-                self.comments.append(comment)
-                self.collectionView.reloadData()
+                
+                guard let uid = dictionary["uid"] as? String else { return }
+                
+                Database.fetchUserWithUID(uid: uid) { user in
+                    let comment = Comment(user: user, dictionary: dictionary)
+                    self.comments.append(comment)
+                    self.collectionView.reloadData()
+                }
+                
 
             } withCancel: { error in
                 print("Failed to observe comments: ", error)
@@ -121,6 +134,18 @@ class CommentsController: UICollectionViewController {
 
 extension CommentsController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width, height: 50)
+        
+        let frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 50)
+        let cell = CommentCell(frame: frame)
+        cell.comment = comments[indexPath.item]
+        cell.layoutIfNeeded()
+        let targetSize = CGSize(width: view.frame.width, height: 1000)
+        let estimatedSize = cell.systemLayoutSizeFitting(targetSize)
+        let height = max(40 + 8 + 8, estimatedSize.height)
+        return CGSize(width: view.frame.width, height: height)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
     }
 }

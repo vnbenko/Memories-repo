@@ -86,7 +86,6 @@ class LoginController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
         
         view.addSubview(logoContainerView)
         logoContainerView.anchor(
