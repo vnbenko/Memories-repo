@@ -1,6 +1,11 @@
 import UIKit
 import Firebase
 
+protocol UserProfileHeaderDelegate {
+    func didChangeToListView()
+    func didChangeToGridView()
+}
+
 class UserProfileHeader: UICollectionViewCell {
     
     let profileImageView: CustomImageView = {
@@ -11,6 +16,8 @@ class UserProfileHeader: UICollectionViewCell {
     let gridButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(named: "grid"), for: .normal)
+        
+        button.addTarget(self, action: #selector(handleChangeToGridView), for: .touchUpInside)
         return button
     }()
     
@@ -18,6 +25,8 @@ class UserProfileHeader: UICollectionViewCell {
         let button = UIButton(type: .system)
         button.setImage(UIImage(named: "list"), for: .normal)
         button.tintColor = UIColor(white: 0, alpha: 0.2)
+        
+        button.addTarget(self, action: #selector(handleChangeToListView), for: .touchUpInside)
         return button
     }()
     
@@ -104,8 +113,8 @@ class UserProfileHeader: UICollectionViewCell {
         }
     }
     
-    
-    
+    var delegate: UserProfileHeaderDelegate?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -141,6 +150,19 @@ class UserProfileHeader: UICollectionViewCell {
             bottom: nil, paddingBottom: 0,
             width: 0, height: 34
         )
+        
+    }
+    
+    @objc func handleChangeToListView() {
+        listButton.tintColor = .mainBlue()
+        gridButton.tintColor = UIColor(white: 0, alpha: 0.2)
+        delegate?.didChangeToListView()
+    }
+    
+    @objc func handleChangeToGridView() {
+        gridButton.tintColor = .mainBlue()
+        listButton.tintColor = UIColor(white: 0, alpha: 0.2)
+        delegate?.didChangeToGridView()
         
     }
     
@@ -184,7 +206,7 @@ class UserProfileHeader: UICollectionViewCell {
     
     fileprivate func setupFollowStyle() {
         self.editProfileFollowButton.setTitle("Follow", for: .normal)
-        self.editProfileFollowButton.backgroundColor = UIColor.rgb(17, 154, 237)
+        self.editProfileFollowButton.backgroundColor = .mainBlue()
         self.editProfileFollowButton.layer.borderColor = UIColor(white: 0, alpha: 0.2).cgColor
         self.editProfileFollowButton.setTitleColor(.white, for: .normal)
     }

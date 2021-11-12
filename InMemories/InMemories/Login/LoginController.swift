@@ -21,7 +21,7 @@ class LoginController: UIViewController {
         logoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         logoImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         
-        view.backgroundColor = UIColor.rgb(0, 120, 175)
+        view.backgroundColor = .rgb(0, 120, 175)
         return view
     }()
     
@@ -53,7 +53,7 @@ class LoginController: UIViewController {
     let loginButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("LogIn", for: .normal)
-        button.backgroundColor = UIColor.rgb(149, 204, 244, 1)
+        button.backgroundColor = .rgb(149, 204, 244, 1)
         button.layer.cornerRadius = 5
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         button.setTitleColor(.white, for: .normal)
@@ -73,7 +73,7 @@ class LoginController: UIViewController {
         
         attributedTitle.append(NSAttributedString(string: "Sign Up.", attributes: [
             .font : UIFont.boldSystemFont(ofSize: 14),
-            .foregroundColor : UIColor.rgb(17, 154, 237)
+            .foregroundColor : UIColor.mainBlue()
         ]))
         
         button.setAttributedTitle(attributedTitle, for: .normal)
@@ -117,10 +117,10 @@ class LoginController: UIViewController {
         
         if isValid {
             loginButton.isEnabled = true
-            loginButton.backgroundColor = UIColor.rgb(17, 154, 237)
+            loginButton.backgroundColor = .mainBlue()
         } else {
             loginButton.isEnabled = false
-            loginButton.backgroundColor = UIColor.rgb(149, 204, 244)
+            loginButton.backgroundColor = .rgb(149, 204, 244)
         }
     }
     

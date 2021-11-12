@@ -31,7 +31,7 @@ class CommentsController: UICollectionViewController {
         self.commentTextField.anchor(top: containerView.topAnchor, paddingTop: 0, left: containerView.leftAnchor, paddingLeft: 0, right: sendButton.leftAnchor, paddingRight: 0, bottom: containerView.bottomAnchor, paddingBottom: 0, width: 0, height: 0)
         
         let lineSeparator = UIView()
-        lineSeparator.backgroundColor = UIColor.rgb(230, 230, 230)
+        lineSeparator.backgroundColor = .rgb(230, 230, 230)
         containerView.addSubview(lineSeparator)
         lineSeparator.anchor(top: containerView.topAnchor, paddingTop: 0, left: containerView.leftAnchor, paddingLeft: 0, right: containerView.rightAnchor, paddingRight: 0, bottom: nil, paddingBottom: 0, width: 0, height: 0.5)
         return containerView

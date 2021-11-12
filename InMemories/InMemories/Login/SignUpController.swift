@@ -48,7 +48,7 @@ class SignUpController: UIViewController {
     let signUpButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Sign Up", for: .normal)
-        button.backgroundColor = UIColor.rgb(149, 204, 244, 1)
+        button.backgroundColor = .rgb(149, 204, 244, 1)
         button.layer.cornerRadius = 5
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         button.setTitleColor(.white, for: .normal)
@@ -72,7 +72,7 @@ class SignUpController: UIViewController {
             string: "Sign In.",
             attributes: [
                 .font : UIFont.boldSystemFont(ofSize: 14),
-                .foregroundColor : UIColor.rgb(17, 154, 237)]))
+                .foregroundColor : UIColor.mainBlue()]))
         
         button.setAttributedTitle(attributedTitle, for: .normal)
         button.addTarget(self, action: #selector(handleAlreadyHaveAcount), for: .touchUpInside)
@@ -190,10 +190,10 @@ class SignUpController: UIViewController {
         
         if isValid {
             signUpButton.isEnabled = true
-            signUpButton.backgroundColor = UIColor.rgb(17, 154, 237)
+            signUpButton.backgroundColor = .mainBlue()
         } else {
             signUpButton.isEnabled = false
-            signUpButton.backgroundColor = UIColor.rgb(149, 204, 244)
+            signUpButton.backgroundColor = .rgb(149, 204, 244)
         }
     }
     
