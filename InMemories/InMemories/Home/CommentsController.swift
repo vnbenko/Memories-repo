@@ -1,40 +1,19 @@
 import UIKit
 import Firebase
 
+
+
 class CommentsController: UICollectionViewController {
     
     let cellId = "cellId"
     
-    let commentTextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "Enter comment..."
-        return textField
-    }()
-    
     //implement comment textfield andsend button onto a accessoryView.
-    //lazy needs for commentTextFiels that's not in context of CommentsController
-    lazy var containerView: UIView = {
-        let containerView = UIView()
-        containerView.frame = CGRect(x: 0, y: 0, width: 100, height: 50)
-        
-        let sendButton = UIButton(type: .system)
-        sendButton.setTitle("Send", for: .normal)
-        sendButton.setTitleColor(.black, for: .normal)
-        sendButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
-        
-        sendButton.addTarget(self, action: #selector(handleSend), for: .touchUpInside)
-        containerView.addSubview(sendButton)
-        sendButton.anchor(top: containerView.topAnchor, paddingTop: 0, left: nil, paddingLeft: 0, right: containerView.rightAnchor, paddingRight: 12, bottom: containerView.bottomAnchor, paddingBottom: 0, width: 50, height: 0)
-        
-        
-        containerView.addSubview(self.commentTextField)
-        self.commentTextField.anchor(top: containerView.topAnchor, paddingTop: 0, left: containerView.leftAnchor, paddingLeft: 0, right: sendButton.leftAnchor, paddingRight: 0, bottom: containerView.bottomAnchor, paddingBottom: 0, width: 0, height: 0)
-        
-        let lineSeparator = UIView()
-        lineSeparator.backgroundColor = .rgb(230, 230, 230)
-        containerView.addSubview(lineSeparator)
-        lineSeparator.anchor(top: containerView.topAnchor, paddingTop: 0, left: containerView.leftAnchor, paddingLeft: 0, right: containerView.rightAnchor, paddingRight: 0, bottom: nil, paddingBottom: 0, width: 0, height: 0.5)
-        return containerView
+    //lazy needs for adress to view that's not in context
+    lazy var containerView: CommentInputAccessoryView = {
+        let frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 50)
+        let commentInputAccessoryView = CommentInputAccessoryView(frame: frame)
+        commentInputAccessoryView.delegate = self
+        return commentInputAccessoryView
     }()
     
     override var inputAccessoryView: UIView?{
@@ -46,10 +25,11 @@ class CommentsController: UICollectionViewController {
     override var canBecomeFirstResponder: Bool {
         return true
     }
-    
+
     var post: Post?
     
     var comments = [Comment]()
+
     
     
     //MARK: - Lifecycle funcs
@@ -77,21 +57,6 @@ class CommentsController: UICollectionViewController {
     
     //MARK: - Functions
     @objc func handleSend() {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        let postId = self.post?.id ?? ""
-        let values = ["text": commentTextField.text ?? "", "creationDate": Date().timeIntervalSince1970, "uid": uid] as [String: Any]
-        
-        Database.database(url: Constants.shared.databaseUrlString).reference()
-            .child("comments")
-            .child(postId)
-            .childByAutoId()
-            .updateChildValues(values) { error, reference in
-                if let error = error {
-                    print("Failed to insert comment: ", error)
-                    return
-                }
-                print("Successfully inserted comment")
-            }
         
     }
     
@@ -149,3 +114,27 @@ extension CommentsController: UICollectionViewDelegateFlowLayout {
         return 0
     }
 }
+
+extension CommentsController: CommentInputAccessoryViewDelegate {
+    func didTapSendButton(for comment: String) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        let postId = self.post?.id ?? ""
+        let values = ["text": comment, "creationDate": Date().timeIntervalSince1970, "uid": uid] as [String: Any]
+        
+        Database.database(url: Constants.shared.databaseUrlString).reference()
+            .child("comments")
+            .child(postId)
+            .childByAutoId()
+            .updateChildValues(values) { error, reference in
+                if let error = error {
+                    print("Failed to insert comment: ", error)
+                    return
+                }
+                print("Successfully inserted comment")
+                self.containerView.clearCommentTextField()
+            }
+    }
+    
+    
+}
+

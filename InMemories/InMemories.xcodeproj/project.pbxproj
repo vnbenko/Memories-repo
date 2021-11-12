@@ -24,6 +24,8 @@
 		F5767E22270CAE2400387576 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5767E20270CAE2400387576 /* LaunchScreen.storyboard */; };
 		F5782A3127399F280020CD9A /* Date + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5782A3027399F280020CD9A /* Date + Extensions.swift */; };
 		F5782A342739BAB10020CD9A /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5782A332739BAB10020CD9A /* CameraController.swift */; };
+		F586BC47273ECD100046D171 /* CommentInputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F586BC46273ECD100046D171 /* CommentInputAccessoryView.swift */; };
+		F586BC49273EDEBA0046D171 /* CommentInputTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F586BC48273EDEBA0046D171 /* CommentInputTextView.swift */; };
 		F58F1B1C273B0F4A00E0A0E4 /* CustomAnimationPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F58F1B1B273B0F4900E0A0E4 /* CustomAnimationPresenter.swift */; };
 		F58F1B1E273B130000E0A0E4 /* CustomAnimationDismisser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F58F1B1D273B130000E0A0E4 /* CustomAnimationDismisser.swift */; };
 		F59486CC273BBCBB005C05F7 /* CommentsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59486CB273BBCBA005C05F7 /* CommentsController.swift */; };
@@ -66,6 +68,8 @@
 		F5767E23270CAE2400387576 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F5782A3027399F280020CD9A /* Date + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date + Extensions.swift"; sourceTree = "<group>"; };
 		F5782A332739BAB10020CD9A /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
+		F586BC46273ECD100046D171 /* CommentInputAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentInputAccessoryView.swift; sourceTree = "<group>"; };
+		F586BC48273EDEBA0046D171 /* CommentInputTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentInputTextView.swift; sourceTree = "<group>"; };
 		F58F1B1B273B0F4900E0A0E4 /* CustomAnimationPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnimationPresenter.swift; sourceTree = "<group>"; };
 		F58F1B1D273B130000E0A0E4 /* CustomAnimationDismisser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnimationDismisser.swift; sourceTree = "<group>"; };
 		F59486CB273BBCBA005C05F7 /* CommentsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsController.swift; sourceTree = "<group>"; };
@@ -122,6 +126,8 @@
 				F5438CDC2737C7CD008B7784 /* HomePostCell.swift */,
 				F59486CB273BBCBA005C05F7 /* CommentsController.swift */,
 				F59486CD273BD52A005C05F7 /* CommentCell.swift */,
+				F586BC46273ECD100046D171 /* CommentInputAccessoryView.swift */,
+				F586BC48273EDEBA0046D171 /* CommentInputTextView.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -350,6 +356,7 @@
 				F5FE66FB27258B1A009166A7 /* MainTabBarController.swift in Sources */,
 				F5640133273B040C003A4A9D /* PreviewPhotoContainerView.swift in Sources */,
 				F5D9D53F2725A53F00A23ED2 /* Constants.swift in Sources */,
+				F586BC47273ECD100046D171 /* CommentInputAccessoryView.swift in Sources */,
 				F5438CD82737C575008B7784 /* UserProfilePhotoCell.swift in Sources */,
 				F5438CE42738133C008B7784 /* SearchController.swift in Sources */,
 				F59700B427368EF80014A36A /* Post.swift in Sources */,
@@ -359,6 +366,7 @@
 				F5438CDA2737C5E3008B7784 /* HomeController.swift in Sources */,
 				F5767E16270CAE2200387576 /* AppDelegate.swift in Sources */,
 				F5438CDD2737C7CD008B7784 /* HomePostCell.swift in Sources */,
+				F586BC49273EDEBA0046D171 /* CommentInputTextView.swift in Sources */,
 				F59486CE273BD52A005C05F7 /* CommentCell.swift in Sources */,
 				F59700BB273696ED0014A36A /* CustomImageView.swift in Sources */,
 				F59486D0273BDD25005C05F7 /* Comment.swift in Sources */,
