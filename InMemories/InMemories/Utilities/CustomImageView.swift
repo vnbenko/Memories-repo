@@ -7,14 +7,14 @@ class CustomImageView: UIImageView {
     
     func loadImage(urlString: String) {
         lastUrlUsedToLoadImage = urlString
-        
+
         self.image = nil
-        
+
         if let cachedImage = imageCache[urlString] {
             self.image = cachedImage
-            return 
+            return
         }
-        
+
         guard let url = URL(string: urlString) else { return }
         
         URLSession.shared.dataTask(with: url) { data, response, error in

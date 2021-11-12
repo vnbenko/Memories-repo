@@ -39,6 +39,7 @@ class SignUpController: UIViewController {
         textField.backgroundColor = UIColor(white: 0, alpha: 0.03)
         textField.font = UIFont.systemFont(ofSize: 14)
         textField.borderStyle = .roundedRect
+        textField.isSecureTextEntry = true
         
         textField.addTarget(self, action: #selector(handleTextInputChange), for: .editingChanged)
         return textField
@@ -81,6 +82,8 @@ class SignUpController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = .white
+        
         view.addSubview(alreadyHaveAcountButton)
         alreadyHaveAcountButton.anchor(
             top: nil, paddingTop: 0,
@@ -111,9 +114,9 @@ class SignUpController: UIViewController {
     }
     
     @objc func handleSignUp() {
-        guard let email = emailTextField.text, !email.isEmpty  else { return }
-        guard let username = userNameTextField.text, !username.isEmpty else { return }
-        guard let password = passwordTextField.text, !password.isEmpty else { return }
+        guard let email = emailTextField.text?.trimmingCharacters(in: .whitespaces), !email.isEmpty  else { return }
+        guard let username = userNameTextField.text?.trimmingCharacters(in: .whitespaces), !username.isEmpty else { return }
+        guard let password = passwordTextField.text?.trimmingCharacters(in: .whitespaces), !password.isEmpty else { return }
         
         //MARK: Create a new user
         Auth.auth().createUser(withEmail: email, password: password) { (result, error) in

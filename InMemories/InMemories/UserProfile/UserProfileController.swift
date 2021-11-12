@@ -32,6 +32,7 @@ class UserProfileController: UICollectionViewController {
                 try Auth.auth().signOut()
                 let loginVC = LoginController()
                 let navController = UINavigationController(rootViewController: loginVC)
+                navController.modalPresentationStyle = .fullScreen
                 self.present(navController, animated: true, completion: nil)
             } catch let error {
                 print("Failed to sign out: ", error)

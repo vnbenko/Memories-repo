@@ -43,6 +43,7 @@ class LoginController: UIViewController {
         textField.backgroundColor = UIColor(white: 0, alpha: 0.03)
         textField.font = UIFont.systemFont(ofSize: 14)
         textField.borderStyle = .roundedRect
+        textField.isSecureTextEntry = true
         
         textField.addTarget(self, action: #selector(handleTextInputChange), for: .editingChanged)
         
@@ -87,6 +88,8 @@ class LoginController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = .white
+        
         view.addSubview(logoContainerView)
         logoContainerView.anchor(
             top: view.topAnchor, paddingTop: 0,
@@ -97,6 +100,7 @@ class LoginController: UIViewController {
         )
         
         view.addSubview(dontHaveAcountButton)
+        
         dontHaveAcountButton.anchor(
             top: nil, paddingTop: 0,
             left: view.leftAnchor, paddingLeft: 0,
@@ -121,8 +125,8 @@ class LoginController: UIViewController {
     }
     
     @objc func handleLogIn() {
-        guard let email = emailTextField.text,
-        let password = passwordTextField.text else { return}
+        guard let email = emailTextField.text?.trimmingCharacters(in: .whitespaces),
+              let password = passwordTextField.text?.trimmingCharacters(in: .whitespaces) else { return}
        
         Auth.auth().signIn(withEmail: email, password: password) { data, error in
             if let error = error {
@@ -141,6 +145,7 @@ class LoginController: UIViewController {
     
     @objc func handleShowSignUp() {
         let signUpController = SignUpController()
+        signUpController.modalPresentationStyle = .fullScreen
         navigationController?.pushViewController(signUpController, animated: true)
         
     }
