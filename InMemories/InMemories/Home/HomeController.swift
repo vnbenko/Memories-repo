@@ -89,15 +89,29 @@ class HomeController: UICollectionViewController {
                     
                     var post = Post(user: user, dictionary: dictionary)
                     post.id = key
-                    self.posts.append(post)
+                    
+                    guard let uid = Auth.auth().currentUser?.uid else { return }
+                    Database.database(url: Constants.shared.databaseUrlString).reference()
+                        .child("likes")
+                        .child(key)
+                        .child(uid)
+                        .observeSingleEvent(of: .value) { snapshot in
+                            
+                            if let value = snapshot.value as? Int, value == 1 {
+                                post.isLiked = true
+                            } else {
+                                post.isLiked = false
+                            }
+                            self.posts.append(post)
+                            
+                            self.posts.sort { post1, post2 in
+                                return post1.creationDate.compare(post2.creationDate) == .orderedDescending
+                            }
+                            self.collectionView.reloadData()
+                        } withCancel: { error in
+                            print("Failed to fetch like for post: ", error)
+                        }
                 }
-                
-                self.posts.sort { post1, post2 in
-                    return post1.creationDate.compare(post2.creationDate) == .orderedDescending
-                }
-                
-                self.collectionView.reloadData()
-                
             } withCancel: { error in
                 print("Failed to fetch posts: ", error)
             }
@@ -130,10 +144,36 @@ extension HomeController: UICollectionViewDelegateFlowLayout {
 
 extension HomeController: HomePostCellDelegate {
     func didTapCommentButton(post: Post) {
-         let commentsController = CommentsController(collectionViewLayout: UICollectionViewFlowLayout())
+        let commentsController = CommentsController(collectionViewLayout: UICollectionViewFlowLayout())
         commentsController.post = post
         navigationController?.pushViewController(commentsController, animated: true)
     }
+    
+    func didTapLikeButton(cell: HomePostCell) {
+        guard let indexPath = collectionView.indexPath(for: cell) else { return }
+        var post = self.posts[indexPath.item]
+        
+        guard let postId = post.id else { return }
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        let values = [uid: post.isLiked == true ? 0 : 1]
+        Database.database(url: Constants.shared.databaseUrlString).reference()
+            .child("likes")
+            .child(postId)
+            .updateChildValues(values) { error, _ in
+                if let error = error {
+                    print("Failed to like post: ", error)
+                    return
+                }
+                values[uid] == 1 ? print("Successfully liked post") : print("Successfully unliked post")
+                 
+                post.isLiked = !post.isLiked
+                self.posts[indexPath.item] = post
+                self.collectionView.reloadItems(at: [indexPath])
+            }
+    }
+    
+    
     
     
 }

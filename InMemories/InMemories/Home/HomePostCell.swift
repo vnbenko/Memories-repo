@@ -2,6 +2,7 @@ import UIKit
 
 protocol HomePostCellDelegate {
     func didTapCommentButton(post: Post)
+    func didTapLikeButton(cell: HomePostCell)
 }
 
 class HomePostCell: UICollectionViewCell {
@@ -37,6 +38,8 @@ class HomePostCell: UICollectionViewCell {
     let likeButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(named: "like_unselected")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        
+        button.addTarget(self, action: #selector(handleLike), for: .touchUpInside)
         return button
     }()
     
@@ -70,7 +73,11 @@ class HomePostCell: UICollectionViewCell {
         didSet {
             guard let imageUrl = post?.imageUrl else { return }
             photoImageView.loadImage(urlString: imageUrl)
-
+            
+            let liked = #imageLiteral(resourceName: "like_selected").withRenderingMode(.alwaysOriginal)
+            let unliked = #imageLiteral(resourceName: "like_unselected").withRenderingMode(.alwaysOriginal)
+            likeButton.setImage(post?.isLiked == true ? liked : unliked, for: .normal)
+        
             userNameLabel.text = post?.user.username
             
             guard let profileUserImageUrl = post?.user.profileImageUrl else { return }
@@ -120,6 +127,10 @@ class HomePostCell: UICollectionViewCell {
         
         addSubview(stackView)
         stackView.anchor(top: photoImageView.bottomAnchor, paddingTop: 0, left: leftAnchor, paddingLeft: 4, right: nil, paddingRight: 0, bottom: nil, paddingBottom: 0, width: 120, height: 50)
+    }
+    
+    @objc func handleLike() {
+        delegate?.didTapLikeButton(cell: self)
     }
     
     @objc func handleComments() {

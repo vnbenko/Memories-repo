@@ -8,6 +8,7 @@ struct Post {
     let creationDate: Date
     
     var id: String?
+    var isLiked: Bool = false
     
     init(user: User, dictionary: [String: Any]) {
         self.user = user
