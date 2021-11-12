@@ -57,23 +57,24 @@ class UserProfileController: UICollectionViewController {
         let reference = Database.database(url: Constants.shared.databaseUrlString).reference()
             .child("posts")
             .child(uid)
-        var query = reference.queryOrderedByKey()
+      
+        var query = reference.queryOrdered(byChild: "creationDate")
         
         if posts.count > 0 {
-            let value = posts.last?.id
-            query = query.queryStarting(atValue: value)
+            let value = posts.last?.creationDate.timeIntervalSince1970
+            query = query.queryEnding(atValue: value)
         }
         
-        query.queryLimited(toFirst: 4)
-            .observeSingleEvent(of: .value) { snapshot in
+        query.queryLimited(toLast: 4).observeSingleEvent(of: .value) { snapshot in
             
                 guard var allObject = snapshot.children.allObjects as? [DataSnapshot] else { return }
                 
+            allObject.reverse()
                 if allObject.count < 4 {
                     self.isFinishedPaging = true
                 }
                 
-                if self.posts.count > 0 {
+                if self.posts.count > 0 && allObject.count > 0 {
                     allObject.removeFirst()
                 }
                 
