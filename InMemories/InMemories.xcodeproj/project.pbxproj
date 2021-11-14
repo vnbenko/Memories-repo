@@ -31,6 +31,7 @@
 		F59486CC273BBCBB005C05F7 /* CommentsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59486CB273BBCBA005C05F7 /* CommentsController.swift */; };
 		F59486CE273BD52A005C05F7 /* CommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59486CD273BD52A005C05F7 /* CommentCell.swift */; };
 		F59486D0273BDD25005C05F7 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59486CF273BDD25005C05F7 /* Comment.swift */; };
+		F5952BA2274104D700BC3326 /* LikeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5952BA1274104D700BC3326 /* LikeController.swift */; };
 		F59700AB273564DF0014A36A /* PhotoSelectorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59700AA273564DF0014A36A /* PhotoSelectorController.swift */; };
 		F59700AE273571B80014A36A /* PhotoSelectorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59700AD273571B80014A36A /* PhotoSelectorCell.swift */; };
 		F59700B0273578130014A36A /* PhotoSelectorHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59700AF273578130014A36A /* PhotoSelectorHeader.swift */; };
@@ -75,6 +76,7 @@
 		F59486CB273BBCBA005C05F7 /* CommentsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsController.swift; sourceTree = "<group>"; };
 		F59486CD273BD52A005C05F7 /* CommentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentCell.swift; sourceTree = "<group>"; };
 		F59486CF273BDD25005C05F7 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
+		F5952BA1274104D700BC3326 /* LikeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeController.swift; sourceTree = "<group>"; };
 		F59700AA273564DF0014A36A /* PhotoSelectorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectorController.swift; sourceTree = "<group>"; };
 		F59700AD273571B80014A36A /* PhotoSelectorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectorCell.swift; sourceTree = "<group>"; };
 		F59700AF273578130014A36A /* PhotoSelectorHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectorHeader.swift; sourceTree = "<group>"; };
@@ -164,13 +166,14 @@
 			children = (
 				F5767E15270CAE2200387576 /* AppDelegate.swift */,
 				F5FE66FA27258B1A009166A7 /* MainTabBarController.swift */,
-				F5782A322739BA9E0020CD9A /* Camera */,
-				F5438CE227381316008B7784 /* Search */,
-				F5438CDB2737C5E7008B7784 /* Home */,
-				F59700B527368F180014A36A /* Models */,
-				F59700AC2735650E0014A36A /* AddPhoto */,
 				F5C0F6932725F40C00A58E4D /* Login */,
+				F5782A322739BA9E0020CD9A /* Camera */,
+				F5438CDB2737C5E7008B7784 /* Home */,
+				F5438CE227381316008B7784 /* Search */,
+				F59700AC2735650E0014A36A /* AddPhoto */,
+				F5952BA02741048A00BC3326 /* Like */,
 				F5D9D5422725AC2F00A23ED2 /* UserProfile */,
+				F59700B527368F180014A36A /* Models */,
 				F5D540AB270CD8B30077C389 /* Utilities */,
 				F5767E1B270CAE2200387576 /* Main.storyboard */,
 				F5767E1E270CAE2400387576 /* Assets.xcassets */,
@@ -190,6 +193,14 @@
 				F58F1B1D273B130000E0A0E4 /* CustomAnimationDismisser.swift */,
 			);
 			path = Camera;
+			sourceTree = "<group>";
+		};
+		F5952BA02741048A00BC3326 /* Like */ = {
+			isa = PBXGroup;
+			children = (
+				F5952BA1274104D700BC3326 /* LikeController.swift */,
+			);
+			path = Like;
 			sourceTree = "<group>";
 		};
 		F59700AC2735650E0014A36A /* AddPhoto */ = {
@@ -216,8 +227,8 @@
 		F5C0F6932725F40C00A58E4D /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				F5767E19270CAE2200387576 /* SignUpController.swift */,
 				F5C0F6912725F16400A58E4D /* LoginController.swift */,
+				F5767E19270CAE2200387576 /* SignUpController.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -373,6 +384,7 @@
 				F58F1B1C273B0F4A00E0A0E4 /* CustomAnimationPresenter.swift in Sources */,
 				F58F1B1E273B130000E0A0E4 /* CustomAnimationDismisser.swift in Sources */,
 				F5C0F6922725F16400A58E4D /* LoginController.swift in Sources */,
+				F5952BA2274104D700BC3326 /* LikeController.swift in Sources */,
 				F5438CDF2737FFF3008B7784 /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

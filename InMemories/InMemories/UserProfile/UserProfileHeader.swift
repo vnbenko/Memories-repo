@@ -154,13 +154,13 @@ class UserProfileHeader: UICollectionViewCell {
     }
     
     @objc func handleChangeToListView() {
-        listButton.tintColor = .mainBlue()
+        listButton.tintColor = .customBlue()
         gridButton.tintColor = UIColor(white: 0, alpha: 0.2)
         delegate?.didChangeToListView()
     }
     
     @objc func handleChangeToGridView() {
-        gridButton.tintColor = .mainBlue()
+        gridButton.tintColor = .customBlue()
         listButton.tintColor = UIColor(white: 0, alpha: 0.2)
         delegate?.didChangeToGridView()
         
@@ -206,7 +206,7 @@ class UserProfileHeader: UICollectionViewCell {
     
     fileprivate func setupFollowStyle() {
         self.editProfileFollowButton.setTitle("Follow", for: .normal)
-        self.editProfileFollowButton.backgroundColor = .mainBlue()
+        self.editProfileFollowButton.backgroundColor = .customBlue()
         self.editProfileFollowButton.layer.borderColor = UIColor(white: 0, alpha: 0.2).cgColor
         self.editProfileFollowButton.setTitleColor(.white, for: .normal)
     }

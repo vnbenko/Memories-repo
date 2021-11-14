@@ -9,7 +9,7 @@ class SearchController: UICollectionViewController {
     lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.placeholder = "Enter search text"
-        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).backgroundColor = .rgb(230, 230, 230)
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).backgroundColor = .customGray()
         searchBar.delegate = self
         return searchBar
     }()

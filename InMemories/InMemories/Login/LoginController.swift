@@ -3,26 +3,17 @@ import Firebase
 
 class LoginController: UIViewController {
     
-    let logoContainerView: UIView = {
+    let logoBackgroundView: UIView = {
         let view = UIView()
-        
-        let logoImageView = UIImageView(image: UIImage(named: "Instagram_logo_white"))
-        logoImageView.contentMode = .scaleAspectFill
-        
-        view.addSubview(logoImageView)
-        
-        logoImageView.anchor(
-            top: nil, paddingTop: 0,
-            left: nil, paddingLeft: 0,
-            right: nil, paddingRight: 0,
-            bottom: nil, paddingBottom: 0,
-            width: 200, height: 50
-        )
-        logoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        logoImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        
-        view.backgroundColor = .rgb(0, 120, 175)
+        view.backgroundColor = .setRGBA(red: 0, green: 120, blue: 175)
         return view
+    }()
+    
+    let logoImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "Instagram_logo_white")
+        imageView.contentMode = .scaleAspectFill
+        return imageView
     }()
     
     let emailTextField: UITextField = {
@@ -30,10 +21,9 @@ class LoginController: UIViewController {
         textField.placeholder = "Email"
         textField.backgroundColor = UIColor(white: 0, alpha: 0.03)
         textField.font = UIFont.systemFont(ofSize: 14)
+        textField.autocapitalizationType = .none
         textField.borderStyle = .roundedRect
-        
-        textField.addTarget(self, action: #selector(handleTextInputChange), for: .editingChanged)
-        
+        textField.addTarget(self, action: #selector(handleSignInAppearance), for: .editingChanged)
         return textField
     }()
     
@@ -42,40 +32,47 @@ class LoginController: UIViewController {
         textField.placeholder = "Password"
         textField.backgroundColor = UIColor(white: 0, alpha: 0.03)
         textField.font = UIFont.systemFont(ofSize: 14)
-        textField.borderStyle = .roundedRect
+        textField.autocapitalizationType = .none
         textField.isSecureTextEntry = true
-        
-        textField.addTarget(self, action: #selector(handleTextInputChange), for: .editingChanged)
-        
+        textField.borderStyle = .roundedRect
+        textField.addTarget(self, action: #selector(handleSignInAppearance), for: .editingChanged)
         return textField
     }()
     
-    let loginButton: UIButton = {
+    let signInButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("LogIn", for: .normal)
-        button.backgroundColor = .rgb(149, 204, 244, 1)
+        button.setTitle("Sign in", for: .normal)
+        button.backgroundColor = .customLightBlue()
         button.layer.cornerRadius = 5
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         button.setTitleColor(.white, for: .normal)
-        
-        button.addTarget(self, action: #selector(handleLogIn), for: .touchUpInside)
+        button.addTarget(self, action: #selector(handleSignIn), for: .touchUpInside)
         button.isEnabled = false
         return button
     }()
     
-    let dontHaveAcountButton: UIButton = {
+    lazy var inputFieldsStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [
+            emailTextField,
+            passwordTextField,
+            signInButton
+        ])
+        stackView.axis = .vertical
+        stackView.spacing = 10
+        stackView.distribution = .fillEqually
+        return stackView
+    }()
+    
+    let signUpButton: UIButton = {
         let button = UIButton(type: .system)
-        
-        let attributedTitle = NSMutableAttributedString(string: "Don't have an acount?  ", attributes: [
+        let attributedTitle = NSMutableAttributedString(string: "Don't have an account?  ", attributes: [
             .font : UIFont.systemFont(ofSize: 14),
             .foregroundColor : UIColor.lightGray
         ])
-        
-        attributedTitle.append(NSAttributedString(string: "Sign Up.", attributes: [
+        attributedTitle.append(NSAttributedString(string: "Sign Up", attributes: [
             .font : UIFont.boldSystemFont(ofSize: 14),
-            .foregroundColor : UIColor.mainBlue()
+            .foregroundColor : UIColor.customBlue()
         ]))
-        
         button.setAttributedTitle(attributedTitle, for: .normal)
         button.addTarget(self, action: #selector(handleShowSignUp), for: .touchUpInside)
         return button
@@ -85,13 +82,56 @@ class LoginController: UIViewController {
         return .lightContent
     }
     
+    lazy var auth = Auth.auth()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUI()
+    }
+    
+    @objc func handleSignInAppearance() {
+        if emailTextField.hasText && passwordTextField.hasText {
+            signInButton.isEnabled = true
+            signInButton.backgroundColor = .customBlue()
+        } else {
+            signInButton.isEnabled = false
+            signInButton.backgroundColor = .customLightBlue()
+        }
+    }
+    
+    @objc func handleSignIn() {
+        guard let email = emailTextField.text?.trimmingCharacters(in: .whitespaces),
+              let password = passwordTextField.text?.trimmingCharacters(in: .whitespaces) else { return}
+
+        auth.signIn(withEmail: email, password: password) { data, error in
+            
+            if let error = error {
+                print("Failed to sign in with email: ", error)
+                return
+            }
+            
+            print("Successfully logged back in with user: ", data?.user.uid ?? "")
+
+            guard let mainTabBarController = UIApplication.shared.windows.filter ({$0.isKeyWindow}).first?.rootViewController as? MainTabBarController else { return }
+            mainTabBarController.showAllControllers()
+            self.dismiss(animated: true, completion: nil)
+        }
         
+    }
+    
+    @objc func handleShowSignUp() {
+        let signUpController = SignUpController()
+        navigationController?.pushViewController(signUpController, animated: true)
+    }
+    
+    private func setupUI() {
         view.backgroundColor = .white
-        
-        view.addSubview(logoContainerView)
-        logoContainerView.anchor(
+        view.addSubview(logoBackgroundView)
+        logoBackgroundView.addSubview(logoImageView)
+        view.addSubview(inputFieldsStackView)
+        view.addSubview(signUpButton)
+          
+        logoBackgroundView.anchor(
             top: view.topAnchor, paddingTop: 0,
             left: view.leftAnchor, paddingLeft: 0,
             right: view.rightAnchor, paddingRight: 0,
@@ -99,75 +139,29 @@ class LoginController: UIViewController {
             width: 0, height: 150
         )
         
-        view.addSubview(dontHaveAcountButton)
+        logoImageView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            logoImageView.centerXAnchor.constraint(equalTo: logoBackgroundView.centerXAnchor),
+            logoImageView.centerYAnchor.constraint(equalTo: logoBackgroundView.centerYAnchor),
+            logoImageView.widthAnchor.constraint(equalToConstant: 200),
+            logoImageView.heightAnchor.constraint(equalToConstant: 50)
+        ])
+  
+        inputFieldsStackView.anchor(
+            top: logoBackgroundView.bottomAnchor, paddingTop: 40,
+            left: view.leftAnchor, paddingLeft: 40,
+            right: view.rightAnchor, paddingRight: 40,
+            bottom: nil, paddingBottom: 0,
+            width: 0, height: 140
+        )
         
-        dontHaveAcountButton.anchor(
+        signUpButton.anchor(
             top: nil, paddingTop: 0,
             left: view.leftAnchor, paddingLeft: 0,
             right: view.rightAnchor, paddingRight: 0,
             bottom: view.bottomAnchor, paddingBottom: 0,
             width: 0, height: 50
         )
-        
-        setupInputsFields()
     }
     
-    @objc func handleTextInputChange() {
-        let isValid = emailTextField.text?.count ?? 0 > 0 && passwordTextField.text?.count ?? 0 > 0
-        
-        if isValid {
-            loginButton.isEnabled = true
-            loginButton.backgroundColor = .mainBlue()
-        } else {
-            loginButton.isEnabled = false
-            loginButton.backgroundColor = .rgb(149, 204, 244)
-        }
-    }
-    
-    @objc func handleLogIn() {
-        guard let email = emailTextField.text?.trimmingCharacters(in: .whitespaces),
-              let password = passwordTextField.text?.trimmingCharacters(in: .whitespaces) else { return}
-       
-        Auth.auth().signIn(withEmail: email, password: password) { data, error in
-            if let error = error {
-                print("Failed to sign in with email: ", error)
-                return
-            }
-            print("Successfully logged back in with user: ", data?.user.uid ?? "")
-//            guard let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController else { return }
-            guard let mainTabBarController = UIApplication.shared.windows.filter ({$0.isKeyWindow}).first?.rootViewController as? MainTabBarController else { return }
-            
-            mainTabBarController.setupViewControllers()
-            
-            self.dismiss(animated: true, completion: nil)
-        }
-    }
-    
-    @objc func handleShowSignUp() {
-        let signUpController = SignUpController()
-        signUpController.modalPresentationStyle = .fullScreen
-        navigationController?.pushViewController(signUpController, animated: true)
-        
-    }
-    
-    fileprivate func setupInputsFields() {
-        let stackView = UIStackView(arrangedSubviews: [
-            emailTextField,
-            passwordTextField,
-            loginButton
-        ])
-        
-        stackView.axis = .vertical
-        stackView.spacing = 10
-        stackView.distribution = .fillEqually
-        
-        view.addSubview(stackView)
-        stackView.anchor(
-            top: logoContainerView.bottomAnchor, paddingTop: 40,
-            left: view.leftAnchor, paddingLeft: 40,
-            right: view.rightAnchor, paddingRight: 40,
-            bottom: nil, paddingBottom: 0,
-            width: 0, height: 140
-        )
-    }
 }
