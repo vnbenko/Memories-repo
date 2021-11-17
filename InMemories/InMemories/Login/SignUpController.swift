@@ -5,7 +5,7 @@ class SignUpController: UIViewController {
     
     let photoButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(named: "photoButton")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        button.setImage(UIImage(named: "add_photo")?.withRenderingMode(.alwaysOriginal), for: .normal)
         button.addTarget(self, action: #selector(handlePhoto), for: .touchUpInside)
         return button
     }()
@@ -207,6 +207,7 @@ class SignUpController: UIViewController {
             width: 140, height: 140
         )
         photoButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        
         
         inputFieldsStackView.anchor(
             top: photoButton.bottomAnchor, paddingTop: 20,

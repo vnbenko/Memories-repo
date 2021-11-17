@@ -74,7 +74,7 @@ class HomePostCell: UICollectionViewCell {
             guard let imageUrl = post?.imageUrl else { return }
             photoImageView.loadImage(urlString: imageUrl)
             
-            let liked = #imageLiteral(resourceName: "like_selected").withRenderingMode(.alwaysOriginal)
+            let liked = #imageLiteral(resourceName: "like_selected_red").withRenderingMode(.alwaysOriginal)
             let unliked = #imageLiteral(resourceName: "like_unselected").withRenderingMode(.alwaysOriginal)
             likeButton.setImage(post?.isLiked == true ? liked : unliked, for: .normal)
         
@@ -121,7 +121,7 @@ class HomePostCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    fileprivate func setupActionButtons() {
+    private func setupActionButtons() {
         let stackView = UIStackView(arrangedSubviews: [likeButton, commentButton, sendMessageButton])
         stackView.distribution = .fillEqually
         
@@ -138,7 +138,7 @@ class HomePostCell: UICollectionViewCell {
         delegate?.didTapCommentButton(post: post)
     }
     
-    fileprivate func setupAttributedCaption() {
+    private func setupAttributedCaption() {
         
         guard let post = self.post else { return }
         let attributedText = NSMutableAttributedString(string: post.user.username, attributes: [

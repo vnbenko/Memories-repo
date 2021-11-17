@@ -19,7 +19,7 @@ class CameraController: UIViewController  {
     
     let dismissButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(named: "right_arrow_shadow")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        button.setImage(UIImage(named: "right_arrow")?.withRenderingMode(.alwaysOriginal), for: .normal)
         button.addTarget(self, action: #selector(handleDismiss), for: .touchUpInside)
         return button
     }()
@@ -57,7 +57,7 @@ class CameraController: UIViewController  {
 #endif
     }
     
-    fileprivate func setupHUD() {
+    private func setupHUD() {
         view.addSubview(photoButton)
         photoButton.anchor(
             top: nil, paddingTop: 0,
@@ -75,7 +75,7 @@ class CameraController: UIViewController  {
             bottom: nil, paddingBottom: 0, width: 50, height: 50)
     }
     
-    fileprivate func setupCaptureSession() {
+    private func setupCaptureSession() {
         let captureSession = AVCaptureSession()
         
         //1. setup inputs

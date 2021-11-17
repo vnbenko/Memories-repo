@@ -74,7 +74,7 @@ class SharePhotoController: UIViewController {
         }
     }
     
-    fileprivate func saveToDatabaseWithImageUrl(imageUrl: String) {
+    private func saveToDatabaseWithImageUrl(imageUrl: String) {
         guard let postImage = selectedImage else { return }
         guard let caption = textView.text else { return }
         guard let uid = Auth.auth().currentUser?.uid else { return }
@@ -105,7 +105,7 @@ class SharePhotoController: UIViewController {
         }
     }
     
-    fileprivate func setupImageAndTextViews() {
+    private func setupImageAndTextViews() {
         let containerView = UIView()
         view.addSubview(containerView)
         containerView.anchor(top: view.safeAreaLayoutGuide.topAnchor, paddingTop: 0, left: view.leftAnchor, paddingLeft: 0, right: view.rightAnchor, paddingRight: 0, bottom: nil, paddingBottom: 0, width: 0, height: 100)

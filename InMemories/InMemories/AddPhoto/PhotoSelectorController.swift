@@ -35,13 +35,13 @@ class PhotoSelectorController: UICollectionViewController {
         navigationController?.pushViewController(sharePhotoController, animated: true)
     }
     
-    fileprivate func setupNavButtons() {
+    private func setupNavButtons() {
         navigationController?.navigationBar.tintColor = .black
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Next", style: .plain, target: self, action: #selector(handleNext))
     }
     
-    fileprivate func assetsFetchOptions() -> PHFetchOptions {
+    private func assetsFetchOptions() -> PHFetchOptions {
         let fetchOptions = PHFetchOptions()
         fetchOptions.fetchLimit = 30
         let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
@@ -49,7 +49,7 @@ class PhotoSelectorController: UICollectionViewController {
         return fetchOptions
     }
     
-    fileprivate func fetchPhotos() {
+    private func fetchPhotos() {
         let allPhotos = PHAsset.fetchAssets(with: .image, options: assetsFetchOptions())
         
         DispatchQueue.global(qos: .background).async {

@@ -12,7 +12,7 @@ class PreviewPhotoContainerView: UIView {
     
     let saveButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(named: "save_shadow")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        button.setImage(UIImage(named: "save_photo")?.withRenderingMode(.alwaysOriginal), for: .normal)
         
         button.addTarget(self, action: #selector(handleSave), for: .touchUpInside)
         return button
@@ -20,7 +20,7 @@ class PreviewPhotoContainerView: UIView {
     
     let cancelButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(named: "cancel_shadow")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        button.setImage(UIImage(named: "cancel")?.withRenderingMode(.alwaysOriginal), for: .normal)
         
         button.addTarget(self, action: #selector(handleCancel), for: .touchUpInside)
         return button

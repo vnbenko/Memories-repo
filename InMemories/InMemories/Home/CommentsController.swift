@@ -60,7 +60,7 @@ class CommentsController: UICollectionViewController {
         
     }
     
-    fileprivate func fetchCommets() {
+    private func fetchCommets() {
         guard let postId = self.post?.id else { return }
         Database.database(url: Constants.shared.databaseUrlString).reference()
             .child("comments")

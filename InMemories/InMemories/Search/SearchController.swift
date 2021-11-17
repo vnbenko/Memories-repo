@@ -43,7 +43,7 @@ class SearchController: UICollectionViewController {
         searchBar.isHidden = false
     }
     
-    fileprivate func fetchUsers() {
+    private func fetchUsers() {
         Database.database(url: Constants.shared.databaseUrlString).reference()
             .child("users")
             .observeSingleEvent(of: .value) { snapshot in

@@ -39,7 +39,7 @@ class MainTabBarController: UITabBarController {
         //like
         let likeFlowLayout = UICollectionViewFlowLayout()
         let likeController = LikeController(collectionViewLayout: likeFlowLayout)
-        let likeNavController = createNavController(rootViewController: likeController, selectedImage: #imageLiteral(resourceName: "like_selected"), unselectedImage: #imageLiteral(resourceName: "like_unselected"))
+        let likeNavController = createNavController(rootViewController: likeController, selectedImage: #imageLiteral(resourceName: "like_selected_black"), unselectedImage: #imageLiteral(resourceName: "like_unselected"))
         
         //user profile
         let userProfileFlowLayout = UICollectionViewFlowLayout()

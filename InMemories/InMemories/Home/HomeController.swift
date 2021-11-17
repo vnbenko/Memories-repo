@@ -30,12 +30,12 @@ class HomeController: UICollectionViewController {
         handleRefresh()
     }
     
-    fileprivate func fetchAllPosts() {
+    private func fetchAllPosts() {
         fetchPosts()
         fetchFollowingUserIds()
     }
     
-    fileprivate func fetchFollowingUserIds() {
+    private func fetchFollowingUserIds() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         Database.database(url: Constants.shared.databaseUrlString).reference()
             .child("following")
@@ -53,8 +53,9 @@ class HomeController: UICollectionViewController {
     }
     
     func setupNavigationItems() {
-        let image = #imageLiteral(resourceName: "logo2")
+        let image = UIImage(named: "bar_logo")?.withRenderingMode(.alwaysOriginal)
         navigationItem.titleView = UIImageView(image: image)
+        
         
         let camera = #imageLiteral(resourceName: "camera3").withRenderingMode(.alwaysOriginal)
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: camera, style: .plain, target: self, action: #selector(handleCamera))
@@ -66,7 +67,7 @@ class HomeController: UICollectionViewController {
         present(cameraController, animated: true, completion: nil)
     }
     
-    fileprivate func fetchPosts() {
+    private func fetchPosts() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         Database.fetchUserWithUID(uid: uid) { user in
@@ -74,7 +75,7 @@ class HomeController: UICollectionViewController {
         }
     }
     
-    fileprivate func fetchPostsWithUser(user: User) {
+    private func fetchPostsWithUser(user: User) {
         Database.database(url: Constants.shared.databaseUrlString).reference()
             .child("posts")
             .child(user.uid)

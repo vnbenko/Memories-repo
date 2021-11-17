@@ -3,15 +3,17 @@ import Firebase
 
 class LoginController: UIViewController {
     
-    let logoBackgroundView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .setRGBA(red: 0, green: 120, blue: 175)
-        return view
+    
+    let logoBackgroundImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "background_logo")
+        imageView.contentMode = .scaleAspectFill
+        return imageView
     }()
     
     let logoImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "Instagram_logo_white")
+        imageView.image = UIImage(named: "main_logo")
         imageView.contentMode = .scaleAspectFill
         return imageView
     }()
@@ -126,12 +128,12 @@ class LoginController: UIViewController {
     
     private func setupUI() {
         view.backgroundColor = .white
-        view.addSubview(logoBackgroundView)
-        logoBackgroundView.addSubview(logoImageView)
+        view.addSubview(logoBackgroundImageView)
+        logoBackgroundImageView.addSubview(logoImageView)
         view.addSubview(inputFieldsStackView)
         view.addSubview(signUpButton)
           
-        logoBackgroundView.anchor(
+        logoBackgroundImageView.anchor(
             top: view.topAnchor, paddingTop: 0,
             left: view.leftAnchor, paddingLeft: 0,
             right: view.rightAnchor, paddingRight: 0,
@@ -139,16 +141,16 @@ class LoginController: UIViewController {
             width: 0, height: 150
         )
         
+        logoImageView.anchor(top: nil, paddingTop: 0, left: nil, paddingLeft: 0, right: nil, paddingRight: 0, bottom: logoBackgroundImageView.bottomAnchor, paddingBottom: 0, width: 0, height: 0)
         logoImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            logoImageView.centerXAnchor.constraint(equalTo: logoBackgroundView.centerXAnchor),
-            logoImageView.centerYAnchor.constraint(equalTo: logoBackgroundView.centerYAnchor),
+            logoImageView.centerXAnchor.constraint(equalTo: logoBackgroundImageView.centerXAnchor),
             logoImageView.widthAnchor.constraint(equalToConstant: 200),
-            logoImageView.heightAnchor.constraint(equalToConstant: 50)
+            logoImageView.heightAnchor.constraint(equalToConstant: 80)
         ])
   
         inputFieldsStackView.anchor(
-            top: logoBackgroundView.bottomAnchor, paddingTop: 40,
+            top: logoBackgroundImageView.bottomAnchor, paddingTop: 40,
             left: view.leftAnchor, paddingLeft: 40,
             right: view.rightAnchor, paddingRight: 40,
             bottom: nil, paddingBottom: 0,

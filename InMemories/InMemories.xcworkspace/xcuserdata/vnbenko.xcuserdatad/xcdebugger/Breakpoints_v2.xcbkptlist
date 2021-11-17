@@ -55,32 +55,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "A18C39DC-FF30-48CE-B95E-76365743C7E8"
-            shouldBeEnabled = "Yes"
+            uuid = "0F5BA00C-D5C8-42A4-9158-2A04C8D29533"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "InMemories/Login/SignUpController.swift"
+            filePath = "InMemories/UserProfile/UserProfileController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "159"
-            endingLineNumber = "159"
-            landmarkName = "handleSignUp()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "15590F85-E919-4975-8D10-1DB8EE50A9FF"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "InMemories/Login/SignUpController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "138"
-            endingLineNumber = "138"
-            landmarkName = "handleSignUp()"
+            startingLineNumber = "94"
+            endingLineNumber = "94"
+            landmarkName = "paginatePost()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

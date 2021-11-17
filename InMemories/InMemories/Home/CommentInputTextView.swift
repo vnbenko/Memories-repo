@@ -10,7 +10,7 @@ import UIKit
 class CommentInputTextView: UITextView {
     
     
-    fileprivate let placeholderLabel: UILabel = {
+    private let placeholderLabel: UILabel = {
         let label = UILabel()
         label.text = "Enter comment..."
         label.textColor = .lightGray

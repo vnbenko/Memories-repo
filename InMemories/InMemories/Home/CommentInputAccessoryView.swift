@@ -6,14 +6,14 @@ protocol CommentInputAccessoryViewDelegate {
 
 class CommentInputAccessoryView: UIView {
     
-    fileprivate let commentTextView: CommentInputTextView = {
+    private let commentTextView: CommentInputTextView = {
         let textView = CommentInputTextView()
         textView.isScrollEnabled = false
         textView.font = UIFont.systemFont(ofSize: 18)
         return textView
     }()
     
-    fileprivate let sendButton: UIButton = {
+    private let sendButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Send", for: .normal)
         button.setTitleColor(.black, for: .normal)
@@ -71,7 +71,7 @@ class CommentInputAccessoryView: UIView {
         commentTextView.showPlaceholderLabel()
     }
     
-    fileprivate func setupLineSeparatorView() {
+    private func setupLineSeparatorView() {
         let lineSeparator = UIView()
         lineSeparator.backgroundColor = .customGray()
         addSubview(lineSeparator)

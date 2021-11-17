@@ -15,7 +15,7 @@ class UserProfileController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(updatePosts), name: SharePhotoController.updateFeedNotificationName, object: nil)
         collectionView.register(UserProfileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
         collectionView.register(UserProfilePhotoCell.self, forCellWithReuseIdentifier: cellId)
         
@@ -25,7 +25,12 @@ class UserProfileController: UICollectionViewController {
         
     }
     
-    fileprivate func setupLogOutButton() {
+    @objc private func updatePosts() {
+        posts.removeAll()
+        fetchOrderedPost()
+    }
+    
+    private func setupLogOutButton() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "gear")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleLogOut))
     }
     
@@ -51,7 +56,7 @@ class UserProfileController: UICollectionViewController {
         present(alertController, animated: true, completion: nil)
     }
     
-    fileprivate func paginatePost() {
+    private func paginatePost() {
         guard let uid = self.user?.uid else { return }
         
         let reference = Database.database(url: Constants.shared.databaseUrlString).reference()
@@ -97,7 +102,7 @@ class UserProfileController: UICollectionViewController {
     
     
     //MARK: - Fetch user
-    fileprivate func fetchUser() {
+    @objc private func fetchUser() {
         let uid = userId ?? Auth.auth().currentUser?.uid ?? ""
         
         Database.fetchUserWithUID(uid: uid) { user in
@@ -112,22 +117,22 @@ class UserProfileController: UICollectionViewController {
     }
     
     //MARK: - Fetch posts
-    fileprivate func fetchOrderedPost() {
+    private func fetchOrderedPost() {
         guard let uid = self.user?.uid else { return }
-        
+
         Database.database(url: Constants.shared.databaseUrlString).reference()
             .child("posts")
             .child(uid)
             .queryOrdered(byChild: "creationDate")
             .observe(.childAdded) { snapshot in
                 guard let dictionary = snapshot.value as? [String: Any] else { return }
-                
+
                 guard let user = self.user else { return }
                 let post = Post(user: user, dictionary: dictionary)
                 self.posts.insert(post, at: 0)
-                
+
                 self.collectionView.reloadData()
-                
+
             } withCancel: { error in
                 print("Failed to fetch ordered posts: ", error)
             }
@@ -163,6 +168,7 @@ class UserProfileController: UICollectionViewController {
             return cell
         }
     }
+    
 }
 
 extension UserProfileController: UICollectionViewDelegateFlowLayout {

@@ -204,14 +204,14 @@ class UserProfileHeader: UICollectionViewCell {
         }
     }
     
-    fileprivate func setupFollowStyle() {
+    private func setupFollowStyle() {
         self.editProfileFollowButton.setTitle("Follow", for: .normal)
         self.editProfileFollowButton.backgroundColor = .customBlue()
         self.editProfileFollowButton.layer.borderColor = UIColor(white: 0, alpha: 0.2).cgColor
         self.editProfileFollowButton.setTitleColor(.white, for: .normal)
     }
     
-    fileprivate func setupEditFollowButton() {
+    private func setupEditFollowButton() {
         guard let currentLoggedInUserId = Auth.auth().currentUser?.uid,
               let userId = user?.uid else { return }
         
@@ -239,7 +239,7 @@ class UserProfileHeader: UICollectionViewCell {
         }
     }
     
-    fileprivate func setupUserStatsView() {
+    private func setupUserStatsView() {
         let stackView = UIStackView(arrangedSubviews: [
             postsLabel,
             followersLabel,
@@ -257,7 +257,7 @@ class UserProfileHeader: UICollectionViewCell {
         )
     }
     
-    fileprivate func setupButtonToolbar() {
+    private func setupButtonToolbar() {
         let topDividerView = UIView()
         topDividerView.backgroundColor = .lightGray
         
