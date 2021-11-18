@@ -43,7 +43,6 @@
 		F5D540AF270CE51B0077C389 /* UIView + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5D540AE270CE51B0077C389 /* UIView + Extensions.swift */; };
 		F5D9D53F2725A53F00A23ED2 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5D9D53E2725A53F00A23ED2 /* Constants.swift */; };
 		F5D9D5412725AC1A00A23ED2 /* UserProfileHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5D9D5402725AC1A00A23ED2 /* UserProfileHeader.swift */; };
-		F5E4F2BE2746743200596103 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5E4F2BD2746743200596103 /* LoginView.swift */; };
 		F5FE66FB27258B1A009166A7 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5FE66FA27258B1A009166A7 /* MainTabBarController.swift */; };
 		F5FE66FD27258C02009166A7 /* UserProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5FE66FC27258C02009166A7 /* UserProfileController.swift */; };
 /* End PBXBuildFile section */
@@ -89,7 +88,6 @@
 		F5D540AE270CE51B0077C389 /* UIView + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView + Extensions.swift"; sourceTree = "<group>"; };
 		F5D9D53E2725A53F00A23ED2 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		F5D9D5402725AC1A00A23ED2 /* UserProfileHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileHeader.swift; sourceTree = "<group>"; };
-		F5E4F2BD2746743200596103 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		F5FE66FA27258B1A009166A7 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		F5FE66FC27258C02009166A7 /* UserProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -231,7 +229,6 @@
 			children = (
 				F5C0F6912725F16400A58E4D /* LoginController.swift */,
 				F5767E19270CAE2200387576 /* SignUpController.swift */,
-				F5E4F2BD2746743200596103 /* LoginView.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -366,7 +363,6 @@
 				F59700B227366EA30014A36A /* SharePhotoController.swift in Sources */,
 				F5D9D5412725AC1A00A23ED2 /* UserProfileHeader.swift in Sources */,
 				F59486CC273BBCBB005C05F7 /* CommentsController.swift in Sources */,
-				F5E4F2BE2746743200596103 /* LoginView.swift in Sources */,
 				F5438CE1273806F6008B7784 /* Firebase + Extensions.swift in Sources */,
 				F5FE66FB27258B1A009166A7 /* MainTabBarController.swift in Sources */,
 				F5640133273B040C003A4A9D /* PreviewPhotoContainerView.swift in Sources */,

@@ -3,9 +3,11 @@ import Photos
 
 class PreviewPhotoContainerView: UIView {
     
+    static let showHUDNotificationName = NSNotification.Name("Show HUD")
+    
     let previewImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         return imageView
     }()
@@ -33,7 +35,7 @@ class PreviewPhotoContainerView: UIView {
         previewImageView.anchor(top: topAnchor, paddingTop: 0, left: leftAnchor, paddingLeft: 0, right: rightAnchor, paddingRight: 0, bottom: bottomAnchor, paddingBottom: 0, width: 0, height: 0)
         
         addSubview(cancelButton)
-        cancelButton.anchor(top: topAnchor, paddingTop: 12, left: leftAnchor, paddingLeft: 12, right: nil, paddingRight: 0, bottom: nil, paddingBottom: 0, width: 50, height: 50)
+        cancelButton.anchor(top: topAnchor, paddingTop: 24, left: leftAnchor, paddingLeft: 12, right: nil, paddingRight: 0, bottom: nil, paddingBottom: 0, width: 50, height: 50)
         
         addSubview(saveButton)
         saveButton.anchor(top: nil, paddingTop: 0, left: leftAnchor, paddingLeft: 12, right: nil, paddingRight: 0, bottom: bottomAnchor, paddingBottom: 12, width: 50, height: 50)
@@ -44,6 +46,7 @@ class PreviewPhotoContainerView: UIView {
     }
     
     @objc func handleCancel() {
+        NotificationCenter.default.post(name: PreviewPhotoContainerView.showHUDNotificationName, object: nil)
         self.removeFromSuperview()
     }
     

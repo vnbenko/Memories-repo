@@ -13,7 +13,6 @@ class CameraController: UIViewController  {
         let button = UIButton(type: .system)
         button.setImage(UIImage(named: "capture_photo")?.withRenderingMode(.alwaysOriginal), for: .normal)
         button.addTarget(self, action: #selector(handleCapturePhoto), for: .touchUpInside)
-        button.isHidden = false
         return button
     }()
     
@@ -31,12 +30,16 @@ class CameraController: UIViewController  {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NotificationCenter.default.addObserver(self, selector: #selector(showHUDButtons), name: PreviewPhotoContainerView.showHUDNotificationName, object: nil)
         transitioningDelegate = self
         
         setupCaptureSession()
         setupHUD()
-        
-        
+    }
+    
+    @objc func showHUDButtons() {
+        photoButton.isHidden = false
+        dismissButton.isHidden = false
     }
     
     
@@ -55,6 +58,8 @@ class CameraController: UIViewController  {
         
         output.capturePhoto(with: settings, delegate: self)
 #endif
+        photoButton.isHidden = true
+        dismissButton.isHidden = true
     }
     
     private func setupHUD() {
@@ -116,6 +121,7 @@ extension CameraController: AVCapturePhotoCaptureDelegate {
        
         let containerView = PreviewPhotoContainerView()
         containerView.previewImageView.image = previewImage
+
         
         view.addSubview(containerView)
         containerView.anchor(top: view.topAnchor, paddingTop: 0, left: view.leftAnchor, paddingLeft: 0, right: view.rightAnchor, paddingRight: 0, bottom: view.bottomAnchor, paddingBottom: 0, width: 0, height: 0)
