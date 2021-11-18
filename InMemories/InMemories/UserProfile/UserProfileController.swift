@@ -6,54 +6,42 @@ class UserProfileController: UICollectionViewController {
     let cellId = "cellId"
     let headerId = "headerId"
     let homePostCellId = "homePostCellId"
+    
     var user: User?
-    var userId: String?
     var posts = [Post]()
+    var userId: String?
     var isGridView = true
     var isFinishedPaging = false
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         NotificationCenter.default.addObserver(self, selector: #selector(updatePosts), name: SharePhotoController.updateFeedNotificationName, object: nil)
+        
         collectionView.register(UserProfileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
         collectionView.register(UserProfilePhotoCell.self, forCellWithReuseIdentifier: cellId)
-        
         collectionView.register(HomePostCell.self, forCellWithReuseIdentifier: homePostCellId)
+        
         setupLogOutButton()
+        
         fetchUser()
         
     }
     
-    @objc private func updatePosts() {
-        posts.removeAll()
-        fetchOrderedPost()
-    }
-    
-    private func setupLogOutButton() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "gear")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleLogOut))
-    }
-    
-    @objc func handleLogOut() {
-        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        let logOutAlert = UIAlertAction(title: "Log Out", style: .destructive) { _ in
+    //MARK: - Fetch user
+    @objc private func fetchUser() {
+        let uid = userId ?? Auth.auth().currentUser?.uid ?? ""
+        
+        Database.fetchUserWithUID(uid: uid) { user in
+            self.user = user
+            self.navigationItem.title = self.user?.username
             
-            do {
-                try Auth.auth().signOut()
-                let loginVC = LoginController()
-                let navController = UINavigationController(rootViewController: loginVC)
-                navController.modalPresentationStyle = .fullScreen
-                self.present(navController, animated: true, completion: nil)
-            } catch let error {
-                print("Failed to sign out: ", error)
-            }
+            self.collectionView.reloadData()
+            
+            self.paginatePost()
+            
         }
-        
-        let cancelAlert = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        alertController.addAction(logOutAlert)
-        alertController.addAction(cancelAlert)
-        
-        present(alertController, animated: true, completion: nil)
     }
     
     private func paginatePost() {
@@ -97,25 +85,8 @@ class UserProfileController: UICollectionViewController {
             } withCancel: { error in
                 print("Failed to paginate for posts: ", error)
             }
-        
     }
-    
-    
-    //MARK: - Fetch user
-    @objc private func fetchUser() {
-        let uid = userId ?? Auth.auth().currentUser?.uid ?? ""
-        
-        Database.fetchUserWithUID(uid: uid) { user in
-            self.user = user
-            self.navigationItem.title = self.user?.username
-            
-            self.collectionView.reloadData()
-            
-            self.paginatePost()
-            
-        }
-    }
-    
+
     //MARK: - Fetch posts
     private func fetchOrderedPost() {
         guard let uid = self.user?.uid else { return }
@@ -136,6 +107,37 @@ class UserProfileController: UICollectionViewController {
             } withCancel: { error in
                 print("Failed to fetch ordered posts: ", error)
             }
+    }
+    
+    @objc private func updatePosts() {
+        posts.removeAll()
+        fetchOrderedPost()
+    }
+    
+    private func setupLogOutButton() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "gear")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleLogOut))
+    }
+    
+    @objc func handleLogOut() {
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let logOutAlert = UIAlertAction(title: "Log Out", style: .destructive) { _ in
+            
+            do {
+                try Auth.auth().signOut()
+                let loginVC = LoginController()
+                let navController = UINavigationController(rootViewController: loginVC)
+                navController.modalPresentationStyle = .fullScreen
+                self.present(navController, animated: true, completion: nil)
+            } catch let error {
+                print("Failed to sign out: ", error)
+            }
+        }
+        
+        let cancelAlert = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(logOutAlert)
+        alertController.addAction(cancelAlert)
+        
+        present(alertController, animated: true, completion: nil)
     }
     
     //MARK: - Profile header

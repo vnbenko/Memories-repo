@@ -4,35 +4,45 @@ import Firebase
 class HomeController: UICollectionViewController {
     
     let cellId = "cellId"
+    
+    let refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(handleUpdateFeed), for: .valueChanged)
+        return refreshControl
+        
+    }()
+   
     var posts = [Post]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateFeed), name: SharePhotoController.updateFeedNotificationName, object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleUpdateFeed),
+            name: SharePhotoController.updateFeedNotificationName,
+            object: nil)
         
         collectionView.register(HomePostCell.self, forCellWithReuseIdentifier: cellId)
-        
-        let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+       
         collectionView.refreshControl = refreshControl
-        setupNavigationItems()
         
+        setupNavigationItems()
+
         fetchAllPosts()
-    }
-    
-    @objc func handleRefresh() {
-        posts.removeAll()
-        fetchAllPosts()
-    }
-    
-    @objc func handleUpdateFeed() {
-        handleRefresh()
     }
     
     private func fetchAllPosts() {
         fetchPosts()
         fetchFollowingUserIds()
+    }
+    
+    private func fetchPosts() {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        Database.fetchUserWithUID(uid: uid) { user in
+            self.fetchPostsWithUser(user: user)
+        }
     }
     
     private func fetchFollowingUserIds() {
@@ -50,29 +60,6 @@ class HomeController: UICollectionViewController {
             } withCancel: { error in
                 print("Failed to fetch following user ids: ", error)
             }
-    }
-    
-    func setupNavigationItems() {
-        let image = UIImage(named: "bar_logo")?.withRenderingMode(.alwaysOriginal)
-        navigationItem.titleView = UIImageView(image: image)
-        
-        
-        let camera = #imageLiteral(resourceName: "camera3").withRenderingMode(.alwaysOriginal)
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: camera, style: .plain, target: self, action: #selector(handleCamera))
-    }
-    
-    @objc func handleCamera() {
-        let cameraController = CameraController()
-        cameraController.modalPresentationStyle = .fullScreen
-        present(cameraController, animated: true, completion: nil)
-    }
-    
-    private func fetchPosts() {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        
-        Database.fetchUserWithUID(uid: uid) { user in
-            self.fetchPostsWithUser(user: user)
-        }
     }
     
     private func fetchPostsWithUser(user: User) {
@@ -116,6 +103,26 @@ class HomeController: UICollectionViewController {
             } withCancel: { error in
                 print("Failed to fetch posts: ", error)
             }
+    }
+    
+    @objc func handleCamera() {
+        let cameraController = CameraController()
+        cameraController.modalPresentationStyle = .fullScreen
+        present(cameraController, animated: true, completion: nil)
+    }
+    
+    private func setupNavigationItems() {
+        let image = UIImage(named: "bar_logo")?.withRenderingMode(.alwaysOriginal)
+        navigationItem.titleView = UIImageView(image: image)
+        
+        
+        let camera = UIImage(named: "camera")?.withRenderingMode(.alwaysOriginal)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: camera, style: .plain, target: self, action: #selector(handleCamera))
+    }
+    
+    @objc func handleUpdateFeed() {
+        posts.removeAll()
+        fetchAllPosts()
     }
     
     

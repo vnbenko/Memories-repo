@@ -53,7 +53,7 @@ class HomePostCell: UICollectionViewCell {
     
     let sendMessageButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(named: "send2")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        button.setImage(UIImage(named: "send")?.withRenderingMode(.alwaysOriginal), for: .normal)
         return button
     }()
     
