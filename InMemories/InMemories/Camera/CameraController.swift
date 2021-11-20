@@ -3,12 +3,6 @@ import AVFoundation
 
 class CameraController: UIViewController  {
     
-    let output = AVCapturePhotoOutput()
-    let customAnimationPresenter = CustomAnimationPresenter()
-    let customAnimationDismisser = CustomAnimationDismisser()
-    
-    
-    
     let photoButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(named: "capture_photo")?.withRenderingMode(.alwaysOriginal), for: .normal)
@@ -23,65 +17,62 @@ class CameraController: UIViewController  {
         return button
     }()
     
+    let captureView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
+    }()
+    
+    let output = AVCapturePhotoOutput()
+    let captureSession = AVCaptureSession()
+    
+    let customAnimationPresenter = CustomAnimationPresenter()
+    let customAnimationDismisser = CustomAnimationDismisser()
+    
+    var isCameraReady = true
+    
     override var prefersStatusBarHidden: Bool {
         return true
     }
     
+    // MARK: - Init
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(showButtons), name: PreviewPhoto.showButtonsNotificationName, object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(showHUDButtons), name: PreviewPhotoContainerView.showHUDNotificationName, object: nil)
         transitioningDelegate = self
         
+        configure()
         setupCaptureSession()
-        setupHUD()
     }
     
-    @objc func showHUDButtons() {
-        photoButton.isHidden = false
-        dismissButton.isHidden = false
-    }
-    
-    
-    
-    @objc func handleDismiss() {
-        dismiss(animated: true, completion: nil)
-    }
+    // MARK: - Actions
     
     @objc func handleCapturePhoto() {
         let settings = AVCapturePhotoSettings()
         
 #if (!arch(x86_64))
         guard let previewFormatType = settings.availablePreviewPhotoPixelFormatTypes.first else { return }
-        
         settings.previewPhotoFormat = [kCVPixelBufferPixelFormatTypeKey as String: previewFormatType]
-        
         output.capturePhoto(with: settings, delegate: self)
 #endif
         photoButton.isHidden = true
         dismissButton.isHidden = true
     }
     
-    private func setupHUD() {
-        view.addSubview(photoButton)
-        photoButton.anchor(
-            top: nil, paddingTop: 0,
-            left: nil, paddingLeft: 0,
-            right: nil, paddingRight: 0,
-            bottom: view.bottomAnchor, paddingBottom: 80,
-            width: 80, height: 80)
-        photoButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        
-        view.addSubview(dismissButton)
-        dismissButton.anchor(
-            top: view.topAnchor, paddingTop: 24,
-            left: nil, paddingLeft: 0,
-            right: view.rightAnchor, paddingRight: 12,
-            bottom: nil, paddingBottom: 0, width: 50, height: 50)
+    @objc func showButtons() {
+        photoButton.isHidden = false
+        dismissButton.isHidden = false
     }
     
+    @objc func handleDismiss() {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    // MARK: - Functions
+    
     private func setupCaptureSession() {
-        let captureSession = AVCaptureSession()
         
         //1. setup inputs
         guard let captureDevice = AVCaptureDevice.default(for: .video) else { return }
@@ -92,7 +83,7 @@ class CameraController: UIViewController  {
                 captureSession.addInput(input)
             }
         } catch let error {
-            print("Could not setup camera input:", error)
+            self.alert(message: error.localizedDescription, title: "Could not setup camera input")
         }
         
         //2. setup outputs
@@ -102,35 +93,79 @@ class CameraController: UIViewController  {
         
         //3. setup output preview
         let previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-        previewLayer.frame = view.frame
-        view.layer.addSublayer(previewLayer)
+        previewLayer.videoGravity = .resizeAspectFill
+        previewLayer.connection?.videoOrientation = .portrait
+        captureView.layoutIfNeeded()
+        previewLayer.frame = captureView.layer.bounds
+        
+        captureView.layer.addSublayer(previewLayer)
         
         captureSession.startRunning()
+    }
+    
+    // MARK: - ConfigureUI
+    
+    private func configure() {
+        configureCaptureView()
+        configureButtons()
+    }
+    
+    private func configureCaptureView() {
+        view.addSubview(captureView)
+        
+        captureView.anchor(top: view.safeAreaLayoutGuide.topAnchor, paddingTop: 0,
+                           left: view.leftAnchor, paddingLeft: 0,
+                           right: view.rightAnchor, paddingRight: 0,
+                           bottom: view.safeAreaLayoutGuide.bottomAnchor,
+                           paddingBottom: 50, width: 0, height: 0)
+        
+        captureView.layer.cornerRadius = 20
+        captureView.layer.masksToBounds = true
+    }
+    
+    private func configureButtons() {
+        view.addSubview(photoButton)
+        view.addSubview(dismissButton)
+        
+        photoButton.anchor(top: nil, paddingTop: 0,
+                           left: nil, paddingLeft: 0,
+                           right: nil, paddingRight: 0,
+                           bottom: captureView.bottomAnchor, paddingBottom: 12,
+                           width: 80, height: 80)
+        photoButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        
+        dismissButton.anchor(top: captureView.topAnchor, paddingTop: 12,
+                             left: nil, paddingLeft: 0,
+                             right: captureView.rightAnchor, paddingRight: 12,
+                             bottom: nil, paddingBottom: 0, width: 50, height: 50)
     }
     
 }
 
 extension CameraController: AVCapturePhotoCaptureDelegate {
-    func photoOutput(_ captureOutput: AVCapturePhotoOutput, didFinishProcessingPhoto photoSampleBuffer: CMSampleBuffer?, previewPhoto previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
+    
+    public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         
-        guard let photoSampleBuffer = photoSampleBuffer,
-              let previewPhotoSampleBuffer = previewPhotoSampleBuffer,
-        let imageData = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer: photoSampleBuffer, previewPhotoSampleBuffer: previewPhotoSampleBuffer) else { return }
+        if let error = error {
+            self.alert(message: error.localizedDescription, title: "Failed")
+            return
+        }
         
-        let previewImage = UIImage(data: imageData)
-       
-        let containerView = PreviewPhotoContainerView()
-        containerView.previewImageView.image = previewImage
-
+        guard let imageData = photo.fileDataRepresentation(),
+              let previewImage = UIImage(data: imageData) else { return }
         
-        view.addSubview(containerView)
-        containerView.anchor(top: view.topAnchor, paddingTop: 0, left: view.leftAnchor, paddingLeft: 0, right: view.rightAnchor, paddingRight: 0, bottom: view.bottomAnchor, paddingBottom: 0, width: 0, height: 0)
+        let previewPhotoView = PreviewPhoto()
+        previewPhotoView.previewImageView.image = previewImage
         
-
+        view.addSubview(previewPhotoView)
+        
+        previewPhotoView.anchor(top: view.topAnchor, paddingTop: 0,
+                                left: view.leftAnchor, paddingLeft: 0,
+                                right: view.rightAnchor, paddingRight: 0,
+                                bottom: view.bottomAnchor, paddingBottom: 0,
+                                width: 0, height: 0)
     }
 }
-
-
 
 extension CameraController: UIViewControllerTransitioningDelegate {
     
@@ -139,7 +174,7 @@ extension CameraController: UIViewControllerTransitioningDelegate {
     }
     
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return customAnimationDismisser 
+        return customAnimationDismisser
     }
 }
 

@@ -6,15 +6,15 @@ class MainTabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.delegate = self
-        showLoginController()
+        showSignInController()
         showAllControllers()
     }
     
-    private func showLoginController() {
+    private func showSignInController() {
         if Auth.auth().currentUser == nil {
             DispatchQueue.main.async {
-                let loginVC = LoginController()
-                let navController = UINavigationController(rootViewController: loginVC)
+                let signInVC = SignInController()
+                let navController = UINavigationController(rootViewController: signInVC)
                 navController.modalPresentationStyle = .fullScreen
                 navController.isNavigationBarHidden = true
                 self.present(navController, animated: true, completion: nil)

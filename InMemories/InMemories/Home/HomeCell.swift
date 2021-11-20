@@ -1,11 +1,11 @@
 import UIKit
 
-protocol HomePostCellDelegate {
+protocol HomeCellDelegate {
     func didTapCommentButton(post: Post)
-    func didTapLikeButton(cell: HomePostCell)
+    func didTapLikeButton(cell: HomeCell)
 }
 
-class HomePostCell: UICollectionViewCell {
+class HomeCell: UICollectionViewCell {
    
     let userProfileImageView: CustomImageView = {
         let imageView = CustomImageView()
@@ -87,7 +87,7 @@ class HomePostCell: UICollectionViewCell {
         }
     }
     
-    var delegate: HomePostCellDelegate?
+    var delegate: HomeCellDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)

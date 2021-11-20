@@ -14,6 +14,8 @@ class HomeController: UICollectionViewController {
    
     var posts = [Post]()
     
+    // MARK: - Init
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -23,7 +25,7 @@ class HomeController: UICollectionViewController {
             name: SharePhotoController.updateFeedNotificationName,
             object: nil)
         
-        collectionView.register(HomePostCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView.register(HomeCell.self, forCellWithReuseIdentifier: cellId)
        
         collectionView.refreshControl = refreshControl
         
@@ -135,7 +137,7 @@ extension HomeController: UICollectionViewDelegateFlowLayout {
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? HomePostCell else { return UICollectionViewCell() }
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? HomeCell else { return UICollectionViewCell() }
         cell.post = posts[indexPath.item]
         cell.delegate = self
         return cell
@@ -150,14 +152,14 @@ extension HomeController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-extension HomeController: HomePostCellDelegate {
+extension HomeController: HomeCellDelegate {
     func didTapCommentButton(post: Post) {
         let commentsController = CommentsController(collectionViewLayout: UICollectionViewFlowLayout())
         commentsController.post = post
         navigationController?.pushViewController(commentsController, animated: true)
     }
     
-    func didTapLikeButton(cell: HomePostCell) {
+    func didTapLikeButton(cell: HomeCell) {
         guard let indexPath = collectionView.indexPath(for: cell) else { return }
         var post = self.posts[indexPath.item]
         

@@ -6,7 +6,7 @@ class SignUpController: UIViewController {
     let photoButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(named: "add_photo")?.withRenderingMode(.alwaysOriginal), for: .normal)
-        button.addTarget(self, action: #selector(handlePhoto), for: .touchUpInside)
+        button.addTarget(self, action: #selector(handlePhotoProfile), for: .touchUpInside)
         return button
     }()
     
@@ -88,12 +88,16 @@ class SignUpController: UIViewController {
         return button
     }()
     
+    // MARK: - Init
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
+        configure()
     }
     
-    @objc func handlePhoto() {
+    // MARK: - Actions
+    
+    @objc func handlePhotoProfile() {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         imagePicker.allowsEditing = true
@@ -101,82 +105,103 @@ class SignUpController: UIViewController {
     }
     
     @objc func handleSignUp() {
-        guard let email = emailTextField.text?.trimmingCharacters(in: .whitespaces), !email.isEmpty  else { return }
-        guard let username = userNameTextField.text?.trimmingCharacters(in: .whitespaces), !username.isEmpty else { return }
-        guard let password = passwordTextField.text?.trimmingCharacters(in: .whitespaces), !password.isEmpty else { return }
+        guard let email = emailTextField.text?.trimmingCharacters(in: .whitespaces), emailTextField.hasText,
+              let username = userNameTextField.text?.trimmingCharacters(in: .whitespaces), userNameTextField.hasText,
+              let password = passwordTextField.text?.trimmingCharacters(in: .whitespaces), passwordTextField.hasText else { return }
         
-        //MARK: Create a new user
-        Auth.auth().createUser(withEmail: email, password: password) { (result, error) in
-           
+        
+        // MARK: Create a new user
+        
+        let auth = Auth.auth()
+        
+        auth.createUser(withEmail: email, password: password) { (result, error) in
+            
             if let error = error {
-                print("Failed to create user: ", error)
+                self.alert(message: error.localizedDescription, title: "Failed")
+                self.passwordTextField.text = ""
                 return
             }
             
-            print("Successfully created user: ", result?.user.uid ?? "")
+            print("User created: ", result?.user.uid ?? "")
             
-            //MARK: Upload user's photo to the storage
+            
+            // MARK: Upload user's photo to the storage
+            
             guard let image = self.photoButton.imageView?.image,
                   let uploadData = image.jpegData(compressionQuality: 0.3) else { return }
             
-            let storageReference = Storage.storage().reference()
-                .child("profile_images")
-                .child(UUID().uuidString)
+            let uid = UUID().uuidString
+            let storage = Storage.storage().reference()
             
             let metadata = StorageMetadata()
             metadata.contentType = "image/jpeg"
             
-            storageReference.putData(uploadData, metadata: metadata) { (metadata, error) in
-                
-                if let error = error {
-                    print("Failed to upload profile image: ", error)
-                    return
-                }
-                
-                print("Successfully uploaded profile image: ", metadata?.name ?? "")
-                
-                //MARK: Get a link to a photo's URL
-                storageReference.downloadURL { (url, error) in
-                   
+            storage
+                .child("profile_images")
+                .child(uid)
+                .putData(uploadData, metadata: metadata) { (metadata, error) in
+                    
                     if let error = error {
-                        print("Failed to get image's URL: ", error)
+                        self.alert(message: error.localizedDescription, title: "Failed")
                         return
                     }
                     
-                    print("Successfully got image's URL: ", url?.absoluteURL ?? "")
+                    print("Profile image is uploaded to storage: ", metadata?.name ?? "")
                     
-                    //MARK: Write user information to the database
-                    guard let imageURL = url?.absoluteString,
-                          let uid = result?.user.uid else { return }
                     
-                    let dictionaryValues = [
-                        "username" : username,
-                        "profileImage" : imageURL
-                    ]
+                    //MARK: Get a link to a photo's URL
                     
-                    let values = [uid : dictionaryValues]
-                    
-                    Database.database(url : Constants.shared.databaseUrlString).reference()
-                        .child("users")
-                        .updateChildValues(values) { (error, reference) in
-                           
+                    storage
+                        .child("profile_images")
+                        .child(uid)
+                        .downloadURL { (url, error) in
+                            
                             if let error = error {
-                                print("Failed to save user info to db: ", error)
+                                self.alert(message: error.localizedDescription, title: "Failed")
                                 return
                             }
                             
-                            print("Successfully saved user info to db: ", reference.url)
+                            print("Image's URL recieved: ", url?.absoluteURL ?? "")
                             
-                            guard let mainTabBarController = UIApplication.shared.windows.filter ({$0.isKeyWindow}).first?.rootViewController as? MainTabBarController else { return }
                             
-                            mainTabBarController.showAllControllers()
+                            // MARK: Write user information to the database
                             
-                            self.dismiss(animated: true, completion: nil)
+                            guard let imageURL = url?.absoluteString,
+                                  let uid = result?.user.uid else { return }
+                            
+                            let dictionaryValues = [
+                                "username" : username,
+                                "profileImage" : imageURL
+                            ]
+                            
+                            let values = [uid : dictionaryValues]
+                            
+                            let database = Database.database(url : Constants.shared.databaseUrlString).reference()
+                            
+                            database
+                                .child("users")
+                                .updateChildValues(values) { (error, reference) in
+                                    
+                                    if let error = error {
+                                        self.alert(message: error.localizedDescription, title: "Failed")
+                                        return
+                                    }
+                                    
+                                    print("User is saved to db: ", reference.url)
+                                    
+                                    self.showControllers()
+                                    self.dismiss(animated: true, completion: nil)
+                                }
                         }
-                } 
-            }
+                }
         }
     }
+    
+    @objc func handleSignIn() {
+        navigationController?.popViewController(animated: true)
+    }
+    
+    // MARK: Custom button appearance
     
     @objc func handleSignUpAppearance() {
         
@@ -189,43 +214,56 @@ class SignUpController: UIViewController {
         }
     }
     
-    @objc func handleSignIn() {
-        navigationController?.popViewController(animated: true)
+    // MARK: - Functions
+    
+    private func showControllers() {
+        guard let mainTabBarController = UIApplication.shared.windows.filter ({$0.isKeyWindow}).first?.rootViewController as? MainTabBarController else { return }
+        
+        mainTabBarController.showAllControllers()
     }
     
-    private func setupUI() {
+    // MARK: - Configure UI
+    
+    private func configure() {
         view.backgroundColor = .white
+        configureButtons()
+        configureInputFields()
+    }
+    
+    private func configureButtons() {
         view.addSubview(photoButton)
-        view.addSubview(inputFieldsStackView)
         view.addSubview(signInButton)
-
-        photoButton.anchor(
-            top: view.topAnchor, paddingTop: 40,
-            left: nil, paddingLeft: 0,
-            right: nil, paddingRight: 0,
-            bottom: nil, paddingBottom: 0,
-            width: 140, height: 140
+        
+        photoButton.anchor(top: view.topAnchor, paddingTop: 40,
+                           left: nil, paddingLeft: 0,
+                           right: nil, paddingRight: 0,
+                           bottom: nil, paddingBottom: 0,
+                           width: 140, height: 140
         )
         photoButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
-        
-        inputFieldsStackView.anchor(
-            top: photoButton.bottomAnchor, paddingTop: 20,
-            left: view.leftAnchor, paddingLeft: 40,
-            right: view.rightAnchor, paddingRight: 40,
-            bottom: nil, paddingBottom: 0,
-            width: 0, height: 200
+        signInButton.anchor(top: nil, paddingTop: 0,
+                            left: view.leftAnchor, paddingLeft: 0,
+                            right: view.rightAnchor, paddingRight: 0,
+                            bottom: view.bottomAnchor, paddingBottom: 0,
+                            width: 0, height: 50
         )
         
-        signInButton.anchor(
-            top: nil, paddingTop: 0,
-            left: view.leftAnchor, paddingLeft: 0,
-            right: view.rightAnchor, paddingRight: 0,
-            bottom: view.bottomAnchor, paddingBottom: 0,
-            width: 0, height: 50
+    }
+    
+    private func configureInputFields() {
+        view.addSubview(inputFieldsStackView)
+        
+        inputFieldsStackView.anchor(top: photoButton.bottomAnchor, paddingTop: 20,
+                                    left: view.leftAnchor, paddingLeft: 40,
+                                    right: view.rightAnchor, paddingRight: 40,
+                                    bottom: nil, paddingBottom: 0,
+                                    width: 0, height: 200
         )
     }
- 
+    
+    
+    
 }
 
 extension SignUpController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {

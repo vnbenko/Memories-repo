@@ -1,7 +1,7 @@
 import UIKit
 import Firebase
 
-class LoginController: UIViewController {
+class SignInController: UIViewController {
     
     
     let logoBackgroundImageView: UIImageView = {
@@ -84,12 +84,48 @@ class LoginController: UIViewController {
         return .lightContent
     }
     
-    lazy var auth = Auth.auth()
+    // MARK: - Init
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
+        configure()
     }
+    
+    // MARK: - Actions
+    
+    @objc func handleSignIn() {
+        guard let email = emailTextField.text?.trimmingCharacters(in: .whitespaces),
+              let password = passwordTextField.text?.trimmingCharacters(in: .whitespaces) else { return}
+        
+        let auth = Auth.auth()
+        
+        auth.signIn(withEmail: email, password: password) { data, error in
+            
+            if let error = error {
+                self.alert(message: error.localizedDescription, title: "Failed")
+                self.passwordTextField.text = ""
+                return
+            }
+            
+            print("User signed in: ", data?.user.uid ?? "")
+            
+            self.showControllers()
+            self.dismiss(animated: true, completion: nil)
+        }
+        
+    }
+    
+    private func showControllers() {
+        guard let mainTabBarController = UIApplication.shared.windows.filter ({$0.isKeyWindow}).first?.rootViewController as? MainTabBarController else { return }
+        mainTabBarController.showAllControllers()
+    }
+    
+    @objc func handleShowSignUp() {
+        let signUpController = SignUpController()
+        navigationController?.pushViewController(signUpController, animated: true)
+    }
+    
+    // MARK: Custom button appearance
     
     @objc func handleSignInAppearance() {
         if emailTextField.hasText && passwordTextField.hasText {
@@ -101,68 +137,58 @@ class LoginController: UIViewController {
         }
     }
     
-    @objc func handleSignIn() {
-        guard let email = emailTextField.text?.trimmingCharacters(in: .whitespaces),
-              let password = passwordTextField.text?.trimmingCharacters(in: .whitespaces) else { return}
-
-        auth.signIn(withEmail: email, password: password) { data, error in
-            
-            if let error = error {
-                print("Failed to sign in with email: ", error)
-                return
-            }
-            
-            print("Successfully logged back in with user: ", data?.user.uid ?? "")
-
-            guard let mainTabBarController = UIApplication.shared.windows.filter ({$0.isKeyWindow}).first?.rootViewController as? MainTabBarController else { return }
-            mainTabBarController.showAllControllers()
-            self.dismiss(animated: true, completion: nil)
-        }
-        
-    }
+    // MARK: - Configure UI
     
-    @objc func handleShowSignUp() {
-        let signUpController = SignUpController()
-        navigationController?.pushViewController(signUpController, animated: true)
-    }
-    
-    private func setupUI() {
+    private func configure() {
         view.backgroundColor = .white
+        configureLogo()
+        configureInputFields()
+        configureButtons()
+    }
+    
+    private func configureLogo() {
         view.addSubview(logoBackgroundImageView)
         logoBackgroundImageView.addSubview(logoImageView)
-        view.addSubview(inputFieldsStackView)
-        view.addSubview(signUpButton)
-          
-        logoBackgroundImageView.anchor(
-            top: view.topAnchor, paddingTop: 0,
-            left: view.leftAnchor, paddingLeft: 0,
-            right: view.rightAnchor, paddingRight: 0,
-            bottom: nil, paddingBottom: 0,
-            width: 0, height: 150
+        
+        logoBackgroundImageView.anchor(top: view.topAnchor, paddingTop: 0,
+                                       left: view.leftAnchor, paddingLeft: 0,
+                                       right: view.rightAnchor, paddingRight: 0,
+                                       bottom: nil, paddingBottom: 0,
+                                       width: 0, height: 150
         )
         
-        logoImageView.anchor(top: nil, paddingTop: 0, left: nil, paddingLeft: 0, right: nil, paddingRight: 0, bottom: logoBackgroundImageView.bottomAnchor, paddingBottom: 0, width: 0, height: 0)
+        logoImageView.anchor(top: nil, paddingTop: 0,
+                             left: nil, paddingLeft: 0,
+                             right: nil, paddingRight: 0,
+                             bottom: logoBackgroundImageView.bottomAnchor, paddingBottom: 0,
+                             width: 0, height: 0)
         logoImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             logoImageView.centerXAnchor.constraint(equalTo: logoBackgroundImageView.centerXAnchor),
             logoImageView.widthAnchor.constraint(equalToConstant: 200),
             logoImageView.heightAnchor.constraint(equalToConstant: 80)
         ])
-  
-        inputFieldsStackView.anchor(
-            top: logoBackgroundImageView.bottomAnchor, paddingTop: 40,
-            left: view.leftAnchor, paddingLeft: 40,
-            right: view.rightAnchor, paddingRight: 40,
-            bottom: nil, paddingBottom: 0,
-            width: 0, height: 140
-        )
+    }
+    
+    private func configureInputFields() {
+        view.addSubview(inputFieldsStackView)
         
-        signUpButton.anchor(
-            top: nil, paddingTop: 0,
-            left: view.leftAnchor, paddingLeft: 0,
-            right: view.rightAnchor, paddingRight: 0,
-            bottom: view.bottomAnchor, paddingBottom: 0,
-            width: 0, height: 50
+        inputFieldsStackView.anchor(top: logoBackgroundImageView.bottomAnchor, paddingTop: 40,
+                                    left: view.leftAnchor, paddingLeft: 40,
+                                    right: view.rightAnchor, paddingRight: 40,
+                                    bottom: nil, paddingBottom: 0,
+                                    width: 0, height: 140
+        )
+    }
+    
+    private func configureButtons() {
+        view.addSubview(signUpButton)
+        
+        signUpButton.anchor(top: nil, paddingTop: 0,
+                            left: view.leftAnchor, paddingLeft: 0,
+                            right: view.rightAnchor, paddingRight: 0,
+                            bottom: view.bottomAnchor, paddingBottom: 0,
+                            width: 0, height: 50
         )
     }
     

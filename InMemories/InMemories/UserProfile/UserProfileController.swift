@@ -21,7 +21,7 @@ class UserProfileController: UICollectionViewController {
         
         collectionView.register(UserProfileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
         collectionView.register(UserProfilePhotoCell.self, forCellWithReuseIdentifier: cellId)
-        collectionView.register(HomePostCell.self, forCellWithReuseIdentifier: homePostCellId)
+        collectionView.register(HomeCell.self, forCellWithReuseIdentifier: homePostCellId)
         
         setupLogOutButton()
         
@@ -71,10 +71,11 @@ class UserProfileController: UICollectionViewController {
                     allObject.removeFirst()
                 }
                 
-                guard let user = self.user else { return }
+                
     
                 allObject.forEach({ snapshot in
                     guard let dictionary = snapshot.value as? [String: Any] else { return }
+                    guard let user = self.user else { return }
                     var post = Post(user: user, dictionary: dictionary)
                     post.id = snapshot.key
                     self.posts.append(post)
@@ -108,7 +109,7 @@ class UserProfileController: UICollectionViewController {
                 print("Failed to fetch ordered posts: ", error)
             }
     }
-    
+
     @objc private func updatePosts() {
         posts.removeAll()
         fetchOrderedPost()
@@ -124,8 +125,8 @@ class UserProfileController: UICollectionViewController {
             
             do {
                 try Auth.auth().signOut()
-                let loginVC = LoginController()
-                let navController = UINavigationController(rootViewController: loginVC)
+                let signInVC = SignInController()
+                let navController = UINavigationController(rootViewController: signInVC)
                 navController.modalPresentationStyle = .fullScreen
                 self.present(navController, animated: true, completion: nil)
             } catch let error {
@@ -165,7 +166,7 @@ class UserProfileController: UICollectionViewController {
             cell.post = posts[indexPath.item]
             return cell
         } else {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: homePostCellId, for: indexPath) as? HomePostCell else { return UICollectionViewCell() }
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: homePostCellId, for: indexPath) as? HomeCell else { return UICollectionViewCell() }
             cell.post = posts[indexPath.item]
             return cell
         }
