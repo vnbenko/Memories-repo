@@ -3,40 +3,48 @@ import Firebase
 
 class HomeController: UICollectionViewController {
     
-    let cellId = "cellId"
-    
     let refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(handleUpdateFeed), for: .valueChanged)
         return refreshControl
         
     }()
-   
+    
     var posts = [Post]()
     
     // MARK: - Init
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        subscribeToNotification()
         
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleUpdateFeed),
-            name: SharePhotoController.updateFeedNotificationName,
-            object: nil)
+        collectionView.register(HomeCell.self, forCellWithReuseIdentifier: HomeCell.cellIdentifier)
         
-        collectionView.register(HomeCell.self, forCellWithReuseIdentifier: cellId)
-       
         collectionView.refreshControl = refreshControl
         
         setupNavigationItems()
-
+        
         fetchAllPosts()
     }
     
+    // MARK: - Actions
+    
+    @objc func handleCamera() {
+        let cameraController = CameraController()
+        cameraController.modalPresentationStyle = .fullScreen
+        present(cameraController, animated: true, completion: nil)
+    }
+    
+    @objc func handleUpdateFeed() {
+        posts.removeAll()
+        fetchAllPosts()
+    }
+    
+    // MARK: - Fetch Functions
+    
     private func fetchAllPosts() {
         fetchPosts()
-        fetchFollowingUserIds()
+        fetchFollowingUsers()
     }
     
     private func fetchPosts() {
@@ -47,8 +55,9 @@ class HomeController: UICollectionViewController {
         }
     }
     
-    private func fetchFollowingUserIds() {
+    private func fetchFollowingUsers() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
+        
         Database.database(url: Constants.shared.databaseUrlString).reference()
             .child("following")
             .child(uid)
@@ -60,7 +69,7 @@ class HomeController: UICollectionViewController {
                     }
                 }
             } withCancel: { error in
-                print("Failed to fetch following user ids: ", error)
+                self.alert(message: error.localizedDescription, title: "Failed")
             }
     }
     
@@ -99,18 +108,12 @@ class HomeController: UICollectionViewController {
                             }
                             self.collectionView.reloadData()
                         } withCancel: { error in
-                            print("Failed to fetch like for post: ", error)
+                            self.alert(message: error.localizedDescription, title: "Failed")
                         }
                 }
             } withCancel: { error in
-                print("Failed to fetch posts: ", error)
+                self.alert(message: error.localizedDescription, title: "Failed")
             }
-    }
-    
-    @objc func handleCamera() {
-        let cameraController = CameraController()
-        cameraController.modalPresentationStyle = .fullScreen
-        present(cameraController, animated: true, completion: nil)
     }
     
     private func setupNavigationItems() {
@@ -122,12 +125,13 @@ class HomeController: UICollectionViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: camera, style: .plain, target: self, action: #selector(handleCamera))
     }
     
-    @objc func handleUpdateFeed() {
-        posts.removeAll()
-        fetchAllPosts()
+    private func subscribeToNotification() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleUpdateFeed),
+            name: SharePhotoController.updateFeedNotificationName,
+            object: nil)
     }
-    
-    
 }
 
 extension HomeController: UICollectionViewDelegateFlowLayout {
@@ -137,17 +141,14 @@ extension HomeController: UICollectionViewDelegateFlowLayout {
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? HomeCell else { return UICollectionViewCell() }
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCell.cellIdentifier, for: indexPath) as? HomeCell else { return UICollectionViewCell() }
         cell.post = posts[indexPath.item]
         cell.delegate = self
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        var height: CGFloat = 40 + 8 + 8 // username userprofileimageview
-        height += view.frame.width
-        height += 50
-        height += 60
+        let height =  view.frame.width + 166 // username userprofileimageview 50 + 8 + 8 + 50 + 60
         return CGSize(width: view.frame.width, height: height)
     }
 }
@@ -171,12 +172,14 @@ extension HomeController: HomeCellDelegate {
             .child("likes")
             .child(postId)
             .updateChildValues(values) { error, _ in
+                
                 if let error = error {
-                    print("Failed to like post: ", error)
+                    self.alert(message: error.localizedDescription, title: "Failed")
                     return
                 }
+                
                 values[uid] == 1 ? print("Successfully liked post") : print("Successfully unliked post")
-                 
+                
                 post.isLiked = !post.isLiked
                 self.posts[indexPath.item] = post
                 self.collectionView.reloadItems(at: [indexPath])

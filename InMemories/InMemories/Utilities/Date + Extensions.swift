@@ -1,7 +1,7 @@
 import Foundation
 
 extension Date {
-    func timeAgoDisplay() -> String {
+    func showTimeAgo() -> String {
         let secondsAgo = Int(Date().timeIntervalSince(self))
         
         let minute = 60
