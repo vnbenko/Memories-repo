@@ -17,6 +17,7 @@ class SignUpController: UIViewController {
         textField.font = UIFont.systemFont(ofSize: 14)
         textField.autocapitalizationType = .none
         textField.borderStyle = .roundedRect
+        textField.returnKeyType = .next
         textField.addTarget(self, action: #selector(handleSignUpAppearance), for: .editingChanged)
         return textField
     }()
@@ -27,6 +28,7 @@ class SignUpController: UIViewController {
         textField.backgroundColor = UIColor(white: 0, alpha: 0.03)
         textField.font = UIFont.systemFont(ofSize: 14)
         textField.borderStyle = .roundedRect
+        textField.returnKeyType = .next
         textField.addTarget(self, action: #selector(handleSignUpAppearance), for: .editingChanged)
         return textField
     }()
@@ -39,6 +41,7 @@ class SignUpController: UIViewController {
         textField.isSecureTextEntry = true
         textField.autocapitalizationType = .none
         textField.borderStyle = .roundedRect
+        textField.returnKeyType = .done
         textField.addTarget(self, action: #selector(handleSignUpAppearance), for: .editingChanged)
         return textField
     }()
@@ -92,6 +95,10 @@ class SignUpController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        emailTextField.delegate = self
+        userNameTextField.delegate = self
+        passwordTextField.delegate = self
+        
         configure()
     }
     
@@ -284,4 +291,23 @@ extension SignUpController: UIImagePickerControllerDelegate, UINavigationControl
         dismiss(animated: true, completion: nil)
     }
 }
+
+extension SignUpController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        switch textField {
+        case emailTextField:
+            textField.resignFirstResponder()
+            userNameTextField.becomeFirstResponder()
+        case userNameTextField:
+            textField.resignFirstResponder()
+            passwordTextField.becomeFirstResponder()
+        case passwordTextField:
+            textField.resignFirstResponder()
+        default: break
+        }
+        return true
+    }
+}
+
 

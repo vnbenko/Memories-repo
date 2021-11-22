@@ -25,6 +25,7 @@ class SignInController: UIViewController {
         textField.font = UIFont.systemFont(ofSize: 14)
         textField.autocapitalizationType = .none
         textField.borderStyle = .roundedRect
+        textField.returnKeyType = .next
         textField.addTarget(self, action: #selector(handleSignInAppearance), for: .editingChanged)
         return textField
     }()
@@ -37,6 +38,7 @@ class SignInController: UIViewController {
         textField.autocapitalizationType = .none
         textField.isSecureTextEntry = true
         textField.borderStyle = .roundedRect
+        textField.returnKeyType = .done
         textField.addTarget(self, action: #selector(handleSignInAppearance), for: .editingChanged)
         return textField
     }()
@@ -88,7 +90,11 @@ class SignInController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        emailTextField.delegate = self
+        passwordTextField.delegate = self
+        
         configure()
+        
     }
     
     // MARK: - Actions
@@ -192,4 +198,17 @@ class SignInController: UIViewController {
         )
     }
     
+}
+
+extension SignInController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField == emailTextField {
+            textField.resignFirstResponder()
+            passwordTextField.becomeFirstResponder()
+        } else if textField == passwordTextField {
+            textField.resignFirstResponder()
+        }
+        return true
+    }
 }
