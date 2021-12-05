@@ -18,6 +18,11 @@ class SharePhotoController: UIViewController {
         return textView
     }()
     
+    let containerView: UIView = {
+        let view = UIView()
+        return view
+    }()
+    
     override var prefersStatusBarHidden: Bool {
         return true
     }
@@ -28,14 +33,13 @@ class SharePhotoController: UIViewController {
         }
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
-        view.backgroundColor = .customGray()
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Share", style: .plain, target: self, action: #selector(handleShare))
-        
-        setupImageAndTextViews()
+        configureUI()
     }
+    
+    // MARK: - Actions
     
     @objc func handleShare() {
         guard let image = selectedImage,
@@ -78,6 +82,8 @@ class SharePhotoController: UIViewController {
         }
     }
     
+    // MARK: - Functions
+    
     private func saveToDatabaseWithImageUrl(imageUrl: String) {
         guard let postImage = selectedImage else { return }
         guard let caption = textView.text else { return }
@@ -111,16 +117,38 @@ class SharePhotoController: UIViewController {
         }
     }
     
-    private func setupImageAndTextViews() {
-        let containerView = UIView()
+    // MARK: - Configure
+    
+    private func configureUI() {
+        
+        view.backgroundColor = .customGray()
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Share", style: .plain, target: self, action: #selector(handleShare))
+        
+        configureImagesAndTextViews()
+    }
+    
+    private func configureImagesAndTextViews() {
         view.addSubview(containerView)
-        containerView.anchor(top: view.safeAreaLayoutGuide.topAnchor, paddingTop: 0, left: view.leftAnchor, paddingLeft: 0, right: view.rightAnchor, paddingRight: 0, bottom: nil, paddingBottom: 0, width: 0, height: 100)
-        
-        containerView.addSubview(imageView)
-        imageView.anchor(top: containerView.topAnchor, paddingTop: 8, left: containerView.leftAnchor, paddingLeft: 8, right: nil, paddingRight: 0, bottom: containerView.bottomAnchor, paddingBottom: 8, width: 84, height: 0)
-        
         containerView.addSubview(textView)
-        textView.anchor(top: containerView.topAnchor, paddingTop: 0, left: imageView.rightAnchor, paddingLeft: 4, right: containerView.rightAnchor, paddingRight: 0, bottom: containerView.bottomAnchor, paddingBottom: 0, width: 0, height: 0)
+        containerView.addSubview(imageView)
+        
+        containerView.anchor(top: view.safeAreaLayoutGuide.topAnchor, paddingTop: 0,
+                             left: view.leftAnchor, paddingLeft: 0,
+                             right: view.rightAnchor, paddingRight: 0,
+                             bottom: nil, paddingBottom: 0,
+                             width: 0, height: 100)
+        
+        imageView.anchor(top: containerView.topAnchor, paddingTop: 8,
+                         left: containerView.leftAnchor, paddingLeft: 8,
+                         right: nil, paddingRight: 0,
+                         bottom: containerView.bottomAnchor, paddingBottom: 8,
+                         width: 84, height: 0)
+        
+        textView.anchor(top: containerView.topAnchor, paddingTop: 0,
+                        left: imageView.rightAnchor, paddingLeft: 4,
+                        right: containerView.rightAnchor, paddingRight: 0,
+                        bottom: containerView.bottomAnchor, paddingBottom: 0,
+                        width: 0, height: 0)
         
     }
 }
