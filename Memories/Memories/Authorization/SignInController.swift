@@ -86,15 +86,18 @@ class SignInController: UIViewController {
         return .lightContent
     }
     
-    // MARK: - Init
+    // MARK: - Lifecycle functions
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        emailTextField.delegate = self
-        passwordTextField.delegate = self
         
         configure()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
+        configureUI()
     }
     
     // MARK: - Actions
@@ -144,15 +147,19 @@ class SignInController: UIViewController {
         }
     }
     
-    // MARK: - Configure UI
+    // MARK: - Configure
     
     private func configure() {
+        configureDelegates()
+    }
+    
+    private func configureUI() {
         view.backgroundColor = .white
         configureLogo()
         configureInputFields()
         configureButtons()
     }
-    
+
     private func configureLogo() {
         view.addSubview(logoBackgroundImageView)
         logoBackgroundImageView.addSubview(logoImageView)
@@ -197,6 +204,11 @@ class SignInController: UIViewController {
                             bottom: view.bottomAnchor, paddingBottom: 0,
                             width: 0, height: 50
         )
+    }
+    
+    private func configureDelegates() {
+        emailTextField.delegate = self
+        passwordTextField.delegate = self
     }
     
 }

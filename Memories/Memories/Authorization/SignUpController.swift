@@ -95,11 +95,14 @@ class SignUpController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        emailTextField.delegate = self
-        userNameTextField.delegate = self
-        passwordTextField.delegate = self
-        
+
         configure()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        configureUI()
     }
     
     // MARK: - Actions
@@ -158,7 +161,7 @@ class SignUpController: UIViewController {
                     print("Profile image is uploaded to storage: ", metadata?.name ?? "")
                     
                     
-                    //MARK: Get a link to a photo's URL
+                    // MARK: Get a link to a photo's URL
                     
                     storage
                         .child("profile_images")
@@ -233,9 +236,13 @@ class SignUpController: UIViewController {
         mainTabBarController.showAllControllers()
     }
     
-    // MARK: - Configure UI
+    // MARK: - Configure
     
     private func configure() {
+        configureDelegates()
+    }
+    
+    private func configureUI() {
         view.backgroundColor = .white
         configureButtons()
         configureInputFields()
@@ -271,6 +278,12 @@ class SignUpController: UIViewController {
                                     bottom: nil, paddingBottom: 0,
                                     width: 0, height: 200
         )
+    }
+    
+    private func configureDelegates() {
+        emailTextField.delegate = self
+        userNameTextField.delegate = self
+        passwordTextField.delegate = self
     }
     
     
