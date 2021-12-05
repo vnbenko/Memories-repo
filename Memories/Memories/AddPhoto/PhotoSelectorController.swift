@@ -20,16 +20,24 @@ class PhotoSelectorController: UICollectionViewController {
         return true
     }
     
+    // MARK: - Lifecycle functions
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        collectionView.register(PhotoSelectorCell.self, forCellWithReuseIdentifier: cellId)
-        collectionView.register(PhotoSelectorHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
+        configure()
         
-        setupNavButtons()
         fetchPhotos()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        configureUI()
+    }
 
+    // MARK: - Actions
+    
     @objc func handleCancel() {
         dismiss(animated: true, completion: nil)
     }
@@ -40,11 +48,7 @@ class PhotoSelectorController: UICollectionViewController {
         navigationController?.pushViewController(sharePhotoController, animated: true)
     }
     
-    private func setupNavButtons() {
-        navigationController?.navigationBar.tintColor = .black
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Next", style: .plain, target: self, action: #selector(handleNext))
-    }
+    // MARK: - Functions
     
     private func assetsFetchOptions() -> PHFetchOptions {
         let fetchOptions = PHFetchOptions()
@@ -53,10 +57,7 @@ class PhotoSelectorController: UICollectionViewController {
         fetchOptions.sortDescriptors = [sortDescriptor]
         return fetchOptions
     }
-    
 
-    
-    
     private func fetchPhotos() {
         let allPhotos = PHAsset.fetchAssets(with: .image, options: assetsFetchOptions())
         
@@ -107,12 +108,25 @@ class PhotoSelectorController: UICollectionViewController {
         }
     }
     
-   
-}
-
-extension PhotoSelectorController: UICollectionViewDelegateFlowLayout {
+    // MARK: - Configure
     
-    //MARK: - Header settings
+    private func configure() {
+        collectionView.register(PhotoSelectorCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView.register(PhotoSelectorHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
+    }
+    
+    private func configureUI() {
+        configureNavButtons()
+    }
+    
+    private func configureNavButtons() {
+        navigationController?.navigationBar.tintColor = .black
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Next", style: .plain, target: self, action: #selector(handleNext))
+    }
+
+    // MARK: - Header settings
+    
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as? PhotoSelectorHeader else { return UICollectionReusableView() }
         
@@ -132,16 +146,7 @@ extension PhotoSelectorController: UICollectionViewDelegateFlowLayout {
         return header
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 1, left: 0, bottom: 0, right: 0)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        let width = view.frame.width
-        return CGSize(width: width, height: width)
-    }
-    
-    //MARK: - Grid cell settings
+    // MARK: - Grid cell settings
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return images.count
@@ -161,10 +166,27 @@ extension PhotoSelectorController: UICollectionViewDelegateFlowLayout {
         self.selectedImage = images[indexPath.item]
         self.collectionView.reloadData()
         
-        //Ыcroll up when you have selected an image
+        //Scroll up when you have selected an image
         let indexPath = IndexPath(item: 0, section: 0)
         collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
     }
+    
+}
+
+extension PhotoSelectorController: UICollectionViewDelegateFlowLayout {
+    
+    // MARK: - Header sizing
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 1, left: 0, bottom: 0, right: 0)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        let width = view.frame.width
+        return CGSize(width: width, height: width)
+    }
+    
+    // MARK: - Grid cell sizing
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 1
