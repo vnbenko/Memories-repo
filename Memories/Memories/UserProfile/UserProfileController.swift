@@ -16,9 +16,7 @@ class UserProfileController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(updatePosts), name: SharePhotoController.updateFeedNotificationName, object: nil)
-        
+
         collectionView.register(UserProfileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
         collectionView.register(UserProfilePhotoCell.self, forCellWithReuseIdentifier: cellId)
         collectionView.register(HomeCell.self, forCellWithReuseIdentifier: homePostCellId)
@@ -29,7 +27,19 @@ class UserProfileController: UICollectionViewController {
         
     }
     
-    //MARK: - Fetch user
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(updatePosts), name: SharePhotoController.updateFeedNotificationName, object: nil)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    // MARK: - Fetch user
     @objc private func fetchUser() {
         let uid = userId ?? Auth.auth().currentUser?.uid ?? ""
         
@@ -88,7 +98,7 @@ class UserProfileController: UICollectionViewController {
         }
     }
     
-    //MARK: - Fetch posts
+    // MARK: - Fetch posts
     private func fetchOrderedPost() {
         guard let uid = self.user?.uid else { return }
         
@@ -143,7 +153,8 @@ class UserProfileController: UICollectionViewController {
         present(alertController, animated: true, completion: nil)
     }
     
-    //MARK: - Profile header
+    // MARK: - Profile header
+    
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "headerId", for: indexPath) as? UserProfileHeader else { return UICollectionReusableView() }
         header.user = self.user
@@ -152,7 +163,8 @@ class UserProfileController: UICollectionViewController {
         return header
     }
     
-    //MARK: - Grid cell
+    // MARK: - Grid cell settings
+    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return posts.count
     }
@@ -177,12 +189,14 @@ class UserProfileController: UICollectionViewController {
 }
 
 extension UserProfileController: UICollectionViewDelegateFlowLayout {
-    //MARK: - Header sizing
+    // MARK: Header sizing
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: view.frame.width, height: 200)
     }
     
-    //MARK: - Grid cell sizing
+    // MARK: Grid cell sizing
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         if isGridView {
