@@ -72,9 +72,7 @@ class UserProfileController: UICollectionViewController {
             if self.posts.count > 0 && allObject.count > 0 {
                 allObject.removeFirst()
             }
-            
-            
-            
+ 
             allObject.forEach({ snapshot in
                 guard let dictionary = snapshot.value as? [String: Any] else { return }
                 guard let user = self.user else { return }

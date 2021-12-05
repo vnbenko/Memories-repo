@@ -5,11 +5,16 @@ class PhotoSelectorController: UICollectionViewController {
     
     let cellId = "cellId"
     let headerId = "headerId"
+    let page = 10
     
     var selectedImage: UIImage?
     var header: PhotoSelectorHeader?
     var images = [UIImage]()
     var assets = [PHAsset]()
+    var beginIndex = 0
+    var endIndex = 9
+    var loading = false
+    var hasNextPage = false
     
     override var prefersStatusBarHidden: Bool {
         return true
@@ -24,7 +29,7 @@ class PhotoSelectorController: UICollectionViewController {
         setupNavButtons()
         fetchPhotos()
     }
-    
+
     @objc func handleCancel() {
         dismiss(animated: true, completion: nil)
     }
@@ -43,51 +48,74 @@ class PhotoSelectorController: UICollectionViewController {
     
     private func assetsFetchOptions() -> PHFetchOptions {
         let fetchOptions = PHFetchOptions()
-        fetchOptions.fetchLimit = 30
+        fetchOptions.includeHiddenAssets = true
         let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
         fetchOptions.sortDescriptors = [sortDescriptor]
         return fetchOptions
     }
     
+
+    
+    
     private func fetchPhotos() {
         let allPhotos = PHAsset.fetchAssets(with: .image, options: assetsFetchOptions())
         
-        DispatchQueue.global(qos: .background).async {
-            allPhotos.enumerateObjects { asset, count, stop in
+        endIndex = beginIndex + (page - 1)
+        if endIndex > allPhotos.count {
+            endIndex = allPhotos.count - 1
+        }
+        let arr = Array(beginIndex...endIndex)
+        
+        let indexSet = IndexSet(arr)
+        
+        if allPhotos.count == self.images.count {
+            self.hasNextPage = false
+            self.loading = false
+            return
+        }
+        
+        self.loading = true
+        
+        DispatchQueue.global(qos: .background).async { [weak self] in
+            guard let self = self else { return}
+            allPhotos.enumerateObjects(at: indexSet, options: NSEnumerationOptions.concurrent, using: { (asset, count, stop) in
+                
                 let imageManager = PHImageManager.default()
                 let targetSize = CGSize(width: 200, height: 200)
                 let options = PHImageRequestOptions()
                 options.isSynchronous = true
-                
-                imageManager.requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFit, options: options) { [weak self] image, info in
-                    guard let self = self else { return }
+                imageManager.requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFit, options: options, resultHandler: { (image, info) in
                     if let image = image {
                         self.images.append(image)
                         self.assets.append(asset)
-                        if self.selectedImage == nil {
-                            self.selectedImage = image
-                        }
                     }
                     
-                    if count == allPhotos.count - 1 {
-                        DispatchQueue.main.async {
-                            self.collectionView?.reloadData()
-                        }
-                        
+                    if self.selectedImage == nil {
+                        self.selectedImage = image
+                    }
+                    
+                })
+                if self.images.count - 1 == indexSet.last! {
+                    self.loading = false
+                    self.hasNextPage = self.images.count != allPhotos.count
+                    self.beginIndex = self.images.count
+                    DispatchQueue.main.async {
+                        self.collectionView.reloadData()
                     }
                 }
-            }
+            })
         }
     }
     
+   
 }
 
 extension PhotoSelectorController: UICollectionViewDelegateFlowLayout {
-
+    
     //MARK: - Header settings
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as? PhotoSelectorHeader else { return UICollectionReusableView() }
-
+        
         self.header = header
         header.photoImageView.image = selectedImage
         
@@ -122,6 +150,10 @@ extension PhotoSelectorController: UICollectionViewDelegateFlowLayout {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? PhotoSelectorCell else { return UICollectionViewCell() }
         cell.photoImageView.image = images[indexPath.item]
+        
+        if self.hasNextPage && !loading && indexPath.row == self.images.count - 1 {
+            fetchPhotos()
+        }
         return cell
     }
     
