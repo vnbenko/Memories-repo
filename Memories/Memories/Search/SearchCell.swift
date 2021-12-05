@@ -16,6 +16,12 @@ class SearchCell: UICollectionViewCell {
         return label
     }()
     
+    let separatorView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(white: 0, alpha: 0.5)
+        return view
+    }()
+    
     var user: User? {
         didSet {
             userNameLabel.text = user?.username
@@ -24,25 +30,45 @@ class SearchCell: UICollectionViewCell {
         }
     }
     
+    // MARK: - Init
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        addSubview(profileImageView)
-        profileImageView.anchor(top: nil, paddingTop: 0, left: leftAnchor, paddingLeft: 8, right: nil, paddingRight: 0, bottom: nil, paddingBottom: 0, width: 50, height: 50)
-        profileImageView.layer.cornerRadius = 50 / 2
-        profileImageView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        
-        addSubview(userNameLabel)
-        userNameLabel.anchor(top: topAnchor, paddingTop: 0, left: profileImageView.rightAnchor, paddingLeft: 8, right: rightAnchor, paddingRight: 0, bottom: bottomAnchor, paddingBottom: 0, width: 0, height: 0)
-        
-        let separatorView = UIView()
-        separatorView.backgroundColor = UIColor(white: 0, alpha: 0.5)
-        addSubview(separatorView)
-        separatorView.anchor(top: nil, paddingTop: 0, left: userNameLabel.leftAnchor, paddingLeft: 0, right: rightAnchor, paddingRight: 0, bottom: bottomAnchor, paddingBottom: 0, width: 0, height: 0.5)
+        configureUI()
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        return nil
+    }
+    
+    // MARK: - Configure
+    
+    private func configureUI() {
+        addSubview(profileImageView)
+        addSubview(userNameLabel)
+        addSubview(separatorView)
+        
+        profileImageView.anchor(top: nil, paddingTop: 0,
+                                left: leftAnchor, paddingLeft: 8,
+                                right: nil, paddingRight: 0,
+                                bottom: nil, paddingBottom: 0,
+                                width: 50, height: 50)
+        profileImageView.layer.cornerRadius = 50 / 2
+        profileImageView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        
+        userNameLabel.anchor(top: topAnchor, paddingTop: 0,
+                             left: profileImageView.rightAnchor, paddingLeft: 8,
+                             right: rightAnchor, paddingRight: 0,
+                             bottom: bottomAnchor, paddingBottom: 0,
+                             width: 0, height: 0)
+        
+        separatorView.anchor(top: nil, paddingTop: 0,
+                             left: userNameLabel.leftAnchor, paddingLeft: 0,
+                             right: rightAnchor, paddingRight: 0,
+                             bottom: bottomAnchor, paddingBottom: 0,
+                             width: 0, height: 0.5)
+        
     }
     
 }

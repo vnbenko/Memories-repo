@@ -17,6 +17,9 @@ class SearchController: UICollectionViewController {
     var users = [User]()
     var filteredUsers = [User]()
     
+    
+    // MARK: - Lifecycle functions
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -43,6 +46,8 @@ class SearchController: UICollectionViewController {
         searchBar.isHidden = false
     }
     
+    // MARK: - Functions
+    
     private func fetchUsers() {
         Database.database(url: Constants.shared.databaseUrlString).reference()
             .child("users")
@@ -64,10 +69,8 @@ class SearchController: UICollectionViewController {
                     self.users.append(user)
                 }
                 
-                self.users.sort { user1, user2 in
-                    return user1.username.compare(user2.username) == .orderedAscending
-                }
-                
+                self.users.sort { $0.username > $1.username }
+
                 self.filteredUsers = self.users
                 self.collectionView.reloadData()
             } withCancel: { error in
@@ -75,6 +78,8 @@ class SearchController: UICollectionViewController {
             }
         
     }
+    
+    // MARK: - Grid cell settings
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return filteredUsers.count
@@ -87,7 +92,6 @@ class SearchController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
         searchBar.isHidden = true
         searchBar.resignFirstResponder()
         
@@ -97,15 +101,17 @@ class SearchController: UICollectionViewController {
         userProfileController.userId = user.uid
         navigationController?.pushViewController(userProfileController, animated: true)
     }
-    
-    
 }
+
+// MARK: - Grid cell sizing
 
 extension SearchController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: view.frame.width, height: 66)
     }
 }
+
+// MARK: - SearchBar Delegate
 
 extension SearchController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
