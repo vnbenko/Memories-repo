@@ -56,11 +56,11 @@ class PreviewPhoto: UIView {
         
         PHPhotoLibrary.shared().performChanges {
             PHAssetChangeRequest.creationRequestForAsset(from: previewImage)
-        } completionHandler: { success, error in
+        } completionHandler: { [weak self] success, error in
+            guard let self = self else { return }
             
             if error != nil  {
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
+                DispatchQueue.main.async {
                     self.showPopUpMessageWithAnimating("Something went wrong")
                     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
                         self.removeFromSuperview()
@@ -69,8 +69,7 @@ class PreviewPhoto: UIView {
                 return
             }
             
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
+            DispatchQueue.main.async {  
                 self.showPopUpMessageWithAnimating("Saved")
                 self.saveButton.isHidden = true
             }

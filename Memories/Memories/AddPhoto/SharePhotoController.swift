@@ -52,7 +52,9 @@ class SharePhotoController: UIViewController {
         let metadata = StorageMetadata()
         metadata.contentType = "image/jpeg"
         
-        storageReference.putData(uploadata, metadata: metadata) { metadata, error in
+        storageReference.putData(uploadata, metadata: metadata) { [weak self] metadata, error in
+            guard let self = self else { return }
+            
             if let error = error {
                 self.navigationItem.rightBarButtonItem?.isEnabled = true
                 print("Failed to upload image: ", error)
@@ -61,7 +63,9 @@ class SharePhotoController: UIViewController {
             
             print("Successfully uploaded post image: ", metadata?.name ?? "")
             
-            storageReference.downloadURL(completion: { url, error in
+            storageReference.downloadURL(completion: { [weak self] url, error in
+                guard let self = self else { return }
+                
                 if let error = error {
                     print("Failed to upload image: ", error)
                     return
@@ -91,7 +95,9 @@ class SharePhotoController: UIViewController {
             "creationDate": Date().timeIntervalSince1970
         ] as [String : Any]
         
-        ref.updateChildValues(values) { error, reference in
+        ref.updateChildValues(values) { [weak self] error, reference in
+            guard let self = self else { return }
+            
             if let error = error {
                 self.navigationItem.rightBarButtonItem?.isEnabled = true
                 print("Failed to save post to DB: ", error)

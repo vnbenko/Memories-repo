@@ -121,7 +121,8 @@ class SignUpController: UIViewController {
         
         let auth = Auth.auth()
         
-        auth.createUser(withEmail: email, password: password) { (result, error) in
+        auth.createUser(withEmail: email, password: password) { [weak self] (result, error) in
+            guard let self = self else { return }
             
             if let error = error {
                 self.alert(message: error.localizedDescription, title: "Failed")
@@ -146,7 +147,8 @@ class SignUpController: UIViewController {
             storage
                 .child("profile_images")
                 .child(uid)
-                .putData(uploadData, metadata: metadata) { (metadata, error) in
+                .putData(uploadData, metadata: metadata) { [weak self] (metadata, error) in
+                    guard let self = self else { return }
                     
                     if let error = error {
                         self.alert(message: error.localizedDescription, title: "Failed")
@@ -161,7 +163,8 @@ class SignUpController: UIViewController {
                     storage
                         .child("profile_images")
                         .child(uid)
-                        .downloadURL { (url, error) in
+                        .downloadURL { [weak self] (url, error) in
+                            guard let self = self else { return }
                             
                             if let error = error {
                                 self.alert(message: error.localizedDescription, title: "Failed")
@@ -187,7 +190,8 @@ class SignUpController: UIViewController {
                             
                             database
                                 .child("users")
-                                .updateChildValues(values) { (error, reference) in
+                                .updateChildValues(values) { [weak self] (error, reference) in
+                                    guard let self = self else { return }
                                     
                                     if let error = error {
                                         self.alert(message: error.localizedDescription, title: "Failed")

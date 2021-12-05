@@ -50,7 +50,9 @@ class HomeController: UICollectionViewController {
     private func fetchPosts() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        Database.fetchUserWithUID(uid: uid) { user in
+        Database.fetchUserWithUID(uid: uid) { [weak self] user in
+            guard let self = self else { return }
+            
             self.fetchPostsWithUser(user: user)
         }
     }
@@ -62,9 +64,12 @@ class HomeController: UICollectionViewController {
             .child("following")
             .child(uid)
             .observeSingleEvent(of: .value) { snapshot in
+                
                 guard let userIdsDictionary = snapshot.value as? [String: Any] else { return }
                 userIdsDictionary.forEach { key, value in
-                    Database.fetchUserWithUID(uid: key) { user in
+                    Database.fetchUserWithUID(uid: key) { [weak self] user in
+                        guard let self = self else { return }
+                        
                         self.fetchPostsWithUser(user: user)
                     }
                 }
@@ -77,7 +82,8 @@ class HomeController: UICollectionViewController {
         Database.database(url: Constants.shared.databaseUrlString).reference()
             .child("posts")
             .child(user.uid)
-            .observeSingleEvent(of: .value) { snapshot in
+            .observeSingleEvent(of: .value) { [weak self] snapshot in
+                guard let self = self else { return }
                 
                 self.collectionView.refreshControl?.endRefreshing()
                 
@@ -94,7 +100,8 @@ class HomeController: UICollectionViewController {
                         .child("likes")
                         .child(key)
                         .child(uid)
-                        .observeSingleEvent(of: .value) { snapshot in
+                        .observeSingleEvent(of: .value) { [weak self] snapshot in
+                            guard let self = self else { return }
                             
                             if let value = snapshot.value as? Int, value == 1 {
                                 post.isLiked = true
@@ -111,6 +118,7 @@ class HomeController: UICollectionViewController {
                             self.alert(message: error.localizedDescription, title: "Failed")
                         }
                 }
+                
             } withCancel: { error in
                 self.alert(message: error.localizedDescription, title: "Failed")
             }
@@ -171,7 +179,8 @@ extension HomeController: HomeCellDelegate {
         Database.database(url: Constants.shared.databaseUrlString).reference()
             .child("likes")
             .child(postId)
-            .updateChildValues(values) { error, _ in
+            .updateChildValues(values) { [weak self] error, _ in
+                guard let self = self else { return }
                 
                 if let error = error {
                     self.alert(message: error.localizedDescription, title: "Failed")

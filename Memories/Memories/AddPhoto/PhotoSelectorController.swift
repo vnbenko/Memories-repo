@@ -59,7 +59,8 @@ class PhotoSelectorController: UICollectionViewController {
                 let options = PHImageRequestOptions()
                 options.isSynchronous = true
                 
-                imageManager.requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFit, options: options) { image, info in
+                imageManager.requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFit, options: options) { [weak self] image, info in
+                    guard let self = self else { return }
                     if let image = image {
                         self.images.append(image)
                         self.assets.append(asset)

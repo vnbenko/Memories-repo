@@ -46,7 +46,8 @@ class SearchController: UICollectionViewController {
     private func fetchUsers() {
         Database.database(url: Constants.shared.databaseUrlString).reference()
             .child("users")
-            .observeSingleEvent(of: .value) { snapshot in
+            .observeSingleEvent(of: .value) { [weak self] snapshot in
+                guard let self = self else { return }
                 
                 guard let dictionaries = snapshot.value as? [String: Any] else { return }
                 

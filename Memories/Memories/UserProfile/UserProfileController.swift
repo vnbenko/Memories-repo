@@ -33,14 +33,15 @@ class UserProfileController: UICollectionViewController {
     @objc private func fetchUser() {
         let uid = userId ?? Auth.auth().currentUser?.uid ?? ""
         
-        Database.fetchUserWithUID(uid: uid) { user in
+        Database.fetchUserWithUID(uid: uid) { [weak self] user in
+            guard let self = self else { return }
+            
             self.user = user
             self.navigationItem.title = self.user?.username
             
             self.collectionView.reloadData()
             
             self.paginatePost()
-            
         }
     }
     
@@ -50,7 +51,7 @@ class UserProfileController: UICollectionViewController {
         let reference = Database.database(url: Constants.shared.databaseUrlString).reference()
             .child("posts")
             .child(uid)
-      
+        
         var query = reference.queryOrdered(byChild: "creationDate")
         
         if posts.count > 0 {
@@ -58,58 +59,61 @@ class UserProfileController: UICollectionViewController {
             query = query.queryEnding(atValue: value)
         }
         
-        query.queryLimited(toLast: 4).observeSingleEvent(of: .value) { snapshot in
+        query.queryLimited(toLast: 4).observeSingleEvent(of: .value) { [weak self] snapshot in
+            guard let self = self else { return }
             
-                guard var allObject = snapshot.children.allObjects as? [DataSnapshot] else { return }
-                
+            guard var allObject = snapshot.children.allObjects as? [DataSnapshot] else { return }
+            
             allObject.reverse()
-                if allObject.count < 4 {
-                    self.isFinishedPaging = true
-                }
-                
-                if self.posts.count > 0 && allObject.count > 0 {
-                    allObject.removeFirst()
-                }
-                
-                
-    
-                allObject.forEach({ snapshot in
-                    guard let dictionary = snapshot.value as? [String: Any] else { return }
-                    guard let user = self.user else { return }
-                    var post = Post(user: user, dictionary: dictionary)
-                    post.id = snapshot.key
-                    self.posts.append(post)
-                })
-                
-                self.collectionView.reloadData()
-                
-            } withCancel: { error in
-                print("Failed to paginate for posts: ", error)
+            if allObject.count < 4 {
+                self.isFinishedPaging = true
             }
+            
+            if self.posts.count > 0 && allObject.count > 0 {
+                allObject.removeFirst()
+            }
+            
+            
+            
+            allObject.forEach({ snapshot in
+                guard let dictionary = snapshot.value as? [String: Any] else { return }
+                guard let user = self.user else { return }
+                var post = Post(user: user, dictionary: dictionary)
+                post.id = snapshot.key
+                self.posts.append(post)
+            })
+            
+            self.collectionView.reloadData()
+            
+        } withCancel: { error in
+            print("Failed to paginate for posts: ", error)
+        }
     }
-
+    
     //MARK: - Fetch posts
     private func fetchOrderedPost() {
         guard let uid = self.user?.uid else { return }
-
+        
         Database.database(url: Constants.shared.databaseUrlString).reference()
             .child("posts")
             .child(uid)
             .queryOrdered(byChild: "creationDate")
-            .observe(.childAdded) { snapshot in
+            .observe(.childAdded) { [weak self] snapshot in
+                guard let self = self else { return }
+                
                 guard let dictionary = snapshot.value as? [String: Any] else { return }
-
+                
                 guard let user = self.user else { return }
                 let post = Post(user: user, dictionary: dictionary)
                 self.posts.insert(post, at: 0)
-
+                
                 self.collectionView.reloadData()
-
+                
             } withCancel: { error in
                 print("Failed to fetch ordered posts: ", error)
             }
     }
-
+    
     @objc private func updatePosts() {
         posts.removeAll()
         fetchOrderedPost()

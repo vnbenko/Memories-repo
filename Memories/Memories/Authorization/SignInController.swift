@@ -105,7 +105,8 @@ class SignInController: UIViewController {
         
         let auth = Auth.auth()
         
-        auth.signIn(withEmail: email, password: password) { data, error in
+        auth.signIn(withEmail: email, password: password) { [weak self] data, error in
+            guard let self = self else { return }
             
             if let error = error {
                 self.alert(message: error.localizedDescription, title: "Failed")
@@ -122,7 +123,7 @@ class SignInController: UIViewController {
     }
     
     private func showControllers() {
-        guard let mainTabBarController = UIApplication.shared.windows.filter ({$0.isKeyWindow}).first?.rootViewController as? MainTabBarController else { return }
+        guard let mainTabBarController = UIApplication.shared.windows.filter ({ $0.isKeyWindow }).first?.rootViewController as? MainTabBarController else { return }
         mainTabBarController.showAllControllers()
     }
     

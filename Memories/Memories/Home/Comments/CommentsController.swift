@@ -1,8 +1,6 @@
 import UIKit
 import Firebase
 
-
-
 class CommentsController: UICollectionViewController {
     
     lazy var containerView: CommentInputAccessoryView = {
@@ -59,12 +57,15 @@ class CommentsController: UICollectionViewController {
         Database.database(url: Constants.shared.databaseUrlString).reference()
             .child("comments")
             .child(postId)
-            .observe(.childAdded) { snapshot in
+            .observe(.childAdded) { [weak self] snapshot in
+                guard let self = self else { return }
                 
                 guard let dictionary = snapshot.value as? [String: Any],
                       let uid = dictionary["uid"] as? String else { return }
                 
-                Database.fetchUserWithUID(uid: uid) { user in
+                Database.fetchUserWithUID(uid: uid) { [weak self] user in
+                    guard let self = self else { return }
+                    
                     let comment = Comment(user: user, dictionary: dictionary)
                     self.comments.append(comment)
                     self.collectionView.reloadData()
@@ -114,7 +115,9 @@ extension CommentsController: CommentInputAccessoryViewDelegate {
             .child("comments")
             .child(postId)
             .childByAutoId()
-            .updateChildValues(values) { error, reference in
+            .updateChildValues(values) { [weak self] error, reference in
+                guard let self = self else { return }
+                
                 if let error = error {
                     self.alert(message: error.localizedDescription, title: "Failed")
                     return

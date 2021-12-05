@@ -175,7 +175,9 @@ class UserProfileHeader: UICollectionViewCell {
                 .child("following")
                 .child(currentLoggedInId)
                 .child(userId)
-                .removeValue { error, reference in
+                .removeValue { [weak self] error, reference in
+                    guard let self = self else { return }
+                    
                     if let error = error {
                         print("Failed to unfollow user: ", error)
                         return
@@ -190,7 +192,9 @@ class UserProfileHeader: UICollectionViewCell {
             Database.database(url: Constants.shared.databaseUrlString).reference()
                 .child("following")
                 .child(currentLoggedInId)
-                .updateChildValues(values) { error, referense in
+                .updateChildValues(values) { [weak self] error, referense in
+                    guard let self = self else { return }
+                    
                     if let error = error {
                         print("Failed to follow user: ", error)
                         return
@@ -225,7 +229,8 @@ class UserProfileHeader: UICollectionViewCell {
                 .child("following")
                 .child(currentLoggedInUserId)
                 .child(userId)
-                .observeSingleEvent(of: .value) { snapshot in
+                .observeSingleEvent(of: .value) { [weak self] snapshot in
+                    guard let self = self else { return }
                     
                     if let isFollowing = snapshot.value as? Int, isFollowing == 1 {
                         self.editProfileFollowButton.setTitle("Unfollow", for: .normal)
