@@ -52,7 +52,6 @@
 		1D3A838D33B68BE16E796C41 /* Pods-Memories.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Memories.debug.xcconfig"; path = "Target Support Files/Pods-Memories/Pods-Memories.debug.xcconfig"; sourceTree = "<group>"; };
 		2955F89A364D32E7B8EDD68D /* Pods_Memories.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Memories.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F61F64B38759ACC577F0CF1 /* Pods-Memories.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Memories.release.xcconfig"; path = "Target Support Files/Pods-Memories/Pods-Memories.release.xcconfig"; sourceTree = "<group>"; };
-		F5438CD72737C575008B7784 /* UserProfilePhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UserProfilePhotoCell.swift; path = "/Users/vnbenko/Documents/GIT projects/Memories-repo/Memories/Memories/UserProfile/UserProfilePhotoCell.swift"; sourceTree = "<absolute>"; };
 		F5438CD92737C5E3008B7784 /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		F5438CDC2737C7CD008B7784 /* HomeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCell.swift; sourceTree = "<group>"; };
 		F5438CDE2737FFF3008B7784 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -249,10 +248,9 @@
 		F5D9D5422725AC2F00A23ED2 /* UserProfile */ = {
 			isa = PBXGroup;
 			children = (
-				F5ABCE68274B7D310064FA5D /* UserProfilePhotoCell.swift */,
 				F5FE66FC27258C02009166A7 /* UserProfileController.swift */,
 				F5D9D5402725AC1A00A23ED2 /* UserProfileHeader.swift */,
-				F5438CD72737C575008B7784 /* UserProfilePhotoCell.swift */,
+				F5ABCE68274B7D310064FA5D /* UserProfilePhotoCell.swift */,
 			);
 			path = UserProfile;
 			sourceTree = "<group>";
