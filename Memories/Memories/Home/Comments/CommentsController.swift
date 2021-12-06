@@ -23,7 +23,7 @@ class CommentsController: UICollectionViewController {
     var post: Post?
     var comments = [Comment]()
     
-    //MARK: - Init
+    // MARK: - Lifecycle functions
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,10 +46,11 @@ class CommentsController: UICollectionViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        
         tabBarController?.tabBar.isHidden = false
     }
     
-    //MARK: - Functions
+    // MARK: - Functions
     
     private func fetchCommets() {
         guard let postId = self.post?.id else { return }
@@ -75,7 +76,7 @@ class CommentsController: UICollectionViewController {
             }
     }
     
-    //MARK: - Grid cell settings
+    // MARK: - Grid cell settings
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return comments.count

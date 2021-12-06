@@ -21,9 +21,13 @@ class CommentInputTextView: UITextView {
     override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
        
-        subscribeNotificathion()
+        NotificationCenter.default.addObserver(self, selector: #selector(handleTextChange), name: UITextView.textDidChangeNotification, object: nil)
         
         configure()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     required init?(coder: NSCoder) {
@@ -39,10 +43,6 @@ class CommentInputTextView: UITextView {
     
     func showPlaceholderLabel() {
         placeholderLabel.isHidden = false
-    }
-    
-    private func subscribeNotificathion() {
-        NotificationCenter.default.addObserver(self, selector: #selector(handleTextChange), name: UITextView.textDidChangeNotification, object: nil)
     }
     
     // MARK: - Configure UI
