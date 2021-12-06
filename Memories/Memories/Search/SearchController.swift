@@ -74,7 +74,7 @@ class SearchController: UICollectionViewController {
                 self.filteredUsers = self.users
                 self.collectionView.reloadData()
             } withCancel: { error in
-                print("Failed to fetch users for search: ", error)
+                self.alert(message: error.localizedDescription, title: "Failed")
             }
         
     }
