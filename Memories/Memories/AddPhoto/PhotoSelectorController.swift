@@ -61,19 +61,21 @@ class PhotoSelectorController: UICollectionViewController {
     private func fetchPhotos() {
         let allPhotos = PHAsset.fetchAssets(with: .image, options: assetsFetchOptions())
         
-        endIndex = beginIndex + (page - 1)
-        if endIndex > allPhotos.count {
-            endIndex = allPhotos.count - 1
-        }
-        let arr = Array(beginIndex...endIndex)
-        
-        let indexSet = IndexSet(arr)
-        
         if allPhotos.count == self.images.count {
             self.hasNextPage = false
             self.loading = false
             return
         }
+        
+        endIndex = beginIndex + (page - 1)
+        
+        if endIndex > allPhotos.count {
+            endIndex = allPhotos.count - 1
+        }
+        
+        let arr = Array(beginIndex...endIndex)
+        
+        let indexSet = IndexSet(arr)
         
         self.loading = true
         

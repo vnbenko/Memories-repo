@@ -61,7 +61,7 @@ class SharePhotoController: UIViewController {
             
             if let error = error {
                 self.navigationItem.rightBarButtonItem?.isEnabled = true
-                print("Failed to upload image: ", error)
+                self.alert(message: error.localizedDescription, title: "Failed")
                 return
             }
             
@@ -71,7 +71,7 @@ class SharePhotoController: UIViewController {
                 guard let self = self else { return }
                 
                 if let error = error {
-                    print("Failed to upload image: ", error)
+                    self.alert(message: error.localizedDescription, title: "Failed")
                     return
                 }
                 guard let imageUrl = url?.absoluteString else { return }
@@ -106,7 +106,7 @@ class SharePhotoController: UIViewController {
             
             if let error = error {
                 self.navigationItem.rightBarButtonItem?.isEnabled = true
-                print("Failed to save post to DB: ", error)
+                self.alert(message: error.localizedDescription, title: "Failed")
                 return
             }
             print("Successfully saved post to DB")
