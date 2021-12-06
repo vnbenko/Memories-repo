@@ -98,7 +98,7 @@ class UserProfileHeader: UICollectionViewCell {
         button.layer.borderColor = UIColor.lightGray.cgColor
         button.layer.borderWidth = 1
         button.layer.cornerRadius = 3
-
+        
         button.addTarget(self, action: #selector(handleProfileOrFollow), for: .touchUpInside)
         return button
     }()
@@ -114,44 +114,20 @@ class UserProfileHeader: UICollectionViewCell {
     }
     
     var delegate: UserProfileHeaderDelegate?
-
+    
+    // MARK: - Init
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        addSubview(profileImageView)
-        addSubview(usernameLabel)
-        addSubview(editProfileFollowButton)
-        
-        setupButtonToolbar()
-        setupUserStatsView()
-        
-        profileImageView.layer.cornerRadius = 80 / 2
-        profileImageView.clipsToBounds = true
-        profileImageView.anchor(
-            top: topAnchor, paddingTop: 12,
-            left: leftAnchor, paddingLeft: 12,
-            right: nil, paddingRight: 0,
-            bottom: nil, paddingBottom: 0,
-            width: 80, height: 80
-        )
-        
-        usernameLabel.anchor(
-            top: profileImageView.bottomAnchor, paddingTop: 4,
-            left: leftAnchor, paddingLeft: 12,
-            right: rightAnchor, paddingRight: 12,
-            bottom: gridButton.topAnchor, paddingBottom: 0,
-            width: 0, height: 0
-        )
-        
-        editProfileFollowButton.anchor(
-            top: postsLabel.bottomAnchor, paddingTop: 2,
-            left: postsLabel.leftAnchor, paddingLeft: 0,
-            right: followingLabel.rightAnchor, paddingRight: 0,
-            bottom: nil, paddingBottom: 0,
-            width: 0, height: 34
-        )
-        
+        configureUI()
     }
+    
+    required init?(coder: NSCoder) {
+        return nil
+    }
+    
+    // MARK: - Actions
     
     @objc func handleChangeToListView() {
         listButton.tintColor = .customBlue()
@@ -209,6 +185,8 @@ class UserProfileHeader: UICollectionViewCell {
         }
     }
     
+    // MARK: - Functions
+    
     private func setupFollowStyle() {
         self.editProfileFollowButton.setTitle("Follow", for: .normal)
         self.editProfileFollowButton.backgroundColor = .customBlue()
@@ -245,25 +223,62 @@ class UserProfileHeader: UICollectionViewCell {
         }
     }
     
-    private func setupUserStatsView() {
-        let stackView = UIStackView(arrangedSubviews: [
-            postsLabel,
-            followersLabel,
-            followingLabel
-        ])
+    // MARK: - Configure
+    
+    private func configureUI() {
+        configureButtonToolbar()
+        configureProfileUI()
+    }
+    
+    private func configureProfileUI() {
+        addSubview(profileImageView)
+        addSubview(usernameLabel)
+        addSubview(editProfileFollowButton)
+        
+        profileImageView.layer.cornerRadius = 80 / 2
+        profileImageView.clipsToBounds = true
+        profileImageView.anchor(top: topAnchor, paddingTop: 12,
+                                left: leftAnchor, paddingLeft: 12,
+                                right: nil, paddingRight: 0,
+                                bottom: nil, paddingBottom: 0,
+                                width: 80, height: 80
+        )
+        
+        // MARK: User stats
+        let stackView = UIStackView(arrangedSubviews: [postsLabel,
+                                                       followersLabel,
+                                                       followingLabel
+                                                      ])
         stackView.distribution = .fillEqually
         
         addSubview(stackView)
-        stackView.anchor(
-            top: topAnchor, paddingTop: 12,
-            left: profileImageView.rightAnchor, paddingLeft: 12,
-            right: rightAnchor, paddingRight: 12,
-            bottom: nil, paddingBottom: 0,
-            width: 0, height: 50
+        stackView.anchor(top: topAnchor, paddingTop: 12,
+                         left: profileImageView.rightAnchor, paddingLeft: 12,
+                         right: rightAnchor, paddingRight: 12,
+                         bottom: nil, paddingBottom: 0,
+                         width: 0, height: 50
         )
+        
+        usernameLabel.anchor(top: profileImageView.bottomAnchor, paddingTop: 4,
+                             left: leftAnchor, paddingLeft: 12,
+                             right: rightAnchor, paddingRight: 12,
+                             bottom: gridButton.topAnchor, paddingBottom: 0,
+                             width: 0, height: 0
+        )
+        
+        editProfileFollowButton.anchor(top: postsLabel.bottomAnchor, paddingTop: 2,
+                                       left: postsLabel.leftAnchor, paddingLeft: 0,
+                                       right: followingLabel.rightAnchor, paddingRight: 0,
+                                       bottom: nil, paddingBottom: 0,
+                                       width: 0, height: 34
+        )
+        
+        
     }
     
-    private func setupButtonToolbar() {
+
+    
+    private func configureButtonToolbar() {
         let topDividerView = UIView()
         topDividerView.backgroundColor = .lightGray
         
@@ -280,34 +295,27 @@ class UserProfileHeader: UICollectionViewCell {
         stackView.distribution = .fillEqually
         
         addSubview(stackView)
-        stackView.anchor(
-            top: nil, paddingTop: 0,
-            left: leftAnchor, paddingLeft: 0,
-            right: rightAnchor, paddingRight: 0,
-            bottom: bottomAnchor, paddingBottom: 0,
-            width: 0, height: 50
+        stackView.anchor(top: nil, paddingTop: 0,
+                         left: leftAnchor, paddingLeft: 0,
+                         right: rightAnchor, paddingRight: 0,
+                         bottom: bottomAnchor, paddingBottom: 0,
+                         width: 0, height: 50
         )
         
         addSubview(topDividerView)
-        topDividerView.anchor(
-            top: stackView.topAnchor, paddingTop: 0,
-            left: leftAnchor, paddingLeft: 0,
-            right: rightAnchor, paddingRight: 0,
-            bottom: nil, paddingBottom: 0,
-            width: 0, height: 0.5
+        topDividerView.anchor(top: stackView.topAnchor, paddingTop: 0,
+                              left: leftAnchor, paddingLeft: 0,
+                              right: rightAnchor, paddingRight: 0,
+                              bottom: nil, paddingBottom: 0,
+                              width: 0, height: 0.5
         )
         
         addSubview(bottomDividerView)
-        bottomDividerView.anchor(
-            top: stackView.bottomAnchor, paddingTop: 0,
-            left: leftAnchor, paddingLeft: 0,
-            right: rightAnchor, paddingRight: 0,
-            bottom: nil, paddingBottom: 0,
-            width: 0, height: 0.5
+        bottomDividerView.anchor(top: stackView.bottomAnchor, paddingTop: 0,
+                                 left: leftAnchor, paddingLeft: 0,
+                                 right: rightAnchor, paddingRight: 0,
+                                 bottom: nil, paddingBottom: 0,
+                                 width: 0, height: 0.5
         )
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }

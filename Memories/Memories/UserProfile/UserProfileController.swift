@@ -13,24 +13,21 @@ class UserProfileController: UICollectionViewController {
     var isGridView = true
     var isFinishedPaging = false
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        collectionView.register(UserProfileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
-        collectionView.register(UserProfilePhotoCell.self, forCellWithReuseIdentifier: cellId)
-        collectionView.register(HomeCell.self, forCellWithReuseIdentifier: homePostCellId)
         
-        setupLogOutButton()
+        configure()
         
         fetchUser()
-        
     }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         NotificationCenter.default.addObserver(self, selector: #selector(updatePosts), name: SharePhotoController.updateFeedNotificationName, object: nil)
+        
+        configureUI()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -39,7 +36,8 @@ class UserProfileController: UICollectionViewController {
         NotificationCenter.default.removeObserver(self)
     }
     
-    // MARK: - Fetch user
+    // MARK: - Actions
+    
     @objc private func fetchUser() {
         let uid = userId ?? Auth.auth().currentUser?.uid ?? ""
         
@@ -54,6 +52,35 @@ class UserProfileController: UICollectionViewController {
             self.paginatePost()
         }
     }
+    
+    @objc private func updatePosts() {
+        posts.removeAll()
+        fetchOrderedPost()
+    }
+    
+    @objc func handleLogOut() {
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let logOutAlert = UIAlertAction(title: "Log Out", style: .destructive) { _ in
+            
+            do {
+                try Auth.auth().signOut()
+                let signInVC = SignInController()
+                let navController = UINavigationController(rootViewController: signInVC)
+                navController.modalPresentationStyle = .fullScreen
+                self.present(navController, animated: true, completion: nil)
+            } catch let error {
+                self.alert(message: error.localizedDescription, title: "Failed")
+            }
+        }
+        
+        let cancelAlert = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(logOutAlert)
+        alertController.addAction(cancelAlert)
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    // MARK: - Functions
     
     private func paginatePost() {
         guard let uid = self.user?.uid else { return }
@@ -94,11 +121,10 @@ class UserProfileController: UICollectionViewController {
             self.collectionView.reloadData()
             
         } withCancel: { error in
-            print("Failed to paginate for posts: ", error)
+            self.alert(message: error.localizedDescription, title: "Failed")
         }
     }
     
-    // MARK: - Fetch posts
     private func fetchOrderedPost() {
         guard let uid = self.user?.uid else { return }
         
@@ -118,39 +144,24 @@ class UserProfileController: UICollectionViewController {
                 self.collectionView.reloadData()
                 
             } withCancel: { error in
-                print("Failed to fetch ordered posts: ", error)
+                self.alert(message: error.localizedDescription, title: "Failed")
             }
     }
     
-    @objc private func updatePosts() {
-        posts.removeAll()
-        fetchOrderedPost()
+    // MARK: - Configure
+    
+    private func configure() {
+        collectionView.register(UserProfileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
+        collectionView.register(UserProfilePhotoCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView.register(HomeCell.self, forCellWithReuseIdentifier: homePostCellId)
     }
     
-    private func setupLogOutButton() {
+    private func configureUI() {
+        configureLogOutButton()
+    }
+    
+    private func configureLogOutButton() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "gear")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleLogOut))
-    }
-    
-    @objc func handleLogOut() {
-        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        let logOutAlert = UIAlertAction(title: "Log Out", style: .destructive) { _ in
-            
-            do {
-                try Auth.auth().signOut()
-                let signInVC = SignInController()
-                let navController = UINavigationController(rootViewController: signInVC)
-                navController.modalPresentationStyle = .fullScreen
-                self.present(navController, animated: true, completion: nil)
-            } catch let error {
-                print("Failed to sign out: ", error)
-            }
-        }
-        
-        let cancelAlert = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        alertController.addAction(logOutAlert)
-        alertController.addAction(cancelAlert)
-        
-        present(alertController, animated: true, completion: nil)
     }
     
     // MARK: - Profile header
@@ -189,6 +200,7 @@ class UserProfileController: UICollectionViewController {
 }
 
 extension UserProfileController: UICollectionViewDelegateFlowLayout {
+   
     // MARK: Header sizing
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
@@ -220,6 +232,8 @@ extension UserProfileController: UICollectionViewDelegateFlowLayout {
     }
     
 }
+
+// MARK: - Delegate actions
 
 extension UserProfileController: UserProfileHeaderDelegate {
     func didChangeToListView() {
