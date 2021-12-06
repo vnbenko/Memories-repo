@@ -41,10 +41,11 @@ class PreviewPhoto: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        NotificationCenter.default.post(name: PreviewPhoto.showButtonsNotificationName, object: nil)
+        
         configure()
+        configureUI()
     }
-
+    
     required init?(coder: NSCoder) {
         return nil
     }
@@ -61,7 +62,7 @@ class PreviewPhoto: UIView {
             
             if error != nil  {
                 DispatchQueue.main.async {
-                    self.showPopUpMessageWithAnimating("Something went wrong")
+                    self.showPopUpMessageWithAnimating("Couldn't save the photo.")
                     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
                         self.removeFromSuperview()
                     }
@@ -104,9 +105,13 @@ class PreviewPhoto: UIView {
         }
     }
     
-    // MARK: - ConfigureUI
+    // MARK: - Configure
     
     private func configure() {
+        configureNotifications()
+    }
+    
+    private func configureUI() {
         configureImageViews()
         configureButtons()
     }
@@ -135,5 +140,9 @@ class PreviewPhoto: UIView {
                           right: nil, paddingRight: 0,
                           bottom: bottomAnchor, paddingBottom: 12,
                           width: 50, height: 50)
+    }
+    
+    private func configureNotifications() {
+        NotificationCenter.default.post(name: PreviewPhoto.showButtonsNotificationName, object: nil)
     }
 }

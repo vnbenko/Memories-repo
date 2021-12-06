@@ -35,16 +35,28 @@ class CameraController: UIViewController  {
         return true
     }
     
-    // MARK: - Init
+    // MARK: - Lifecycle functions
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        NotificationCenter.default.addObserver(self, selector: #selector(showButtons), name: PreviewPhoto.showButtonsNotificationName, object: nil)
-        
-        transitioningDelegate = self
         
         configure()
+        configureUI()
         setupCaptureSession()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(showButtons), name: PreviewPhoto.showButtonsNotificationName, object: nil)
+        
+        
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self)
     }
     
     // MARK: - Actions
@@ -103,9 +115,13 @@ class CameraController: UIViewController  {
         captureSession.startRunning()
     }
     
-    // MARK: - ConfigureUI
+    // MARK: - Configure
     
     private func configure() {
+        configureDelegates()
+    }
+    
+    private func configureUI() {
         configureCaptureView()
         configureButtons()
     }
@@ -138,6 +154,10 @@ class CameraController: UIViewController  {
                              left: nil, paddingLeft: 0,
                              right: captureView.rightAnchor, paddingRight: 12,
                              bottom: nil, paddingBottom: 0, width: 50, height: 50)
+    }
+    
+    private func configureDelegates() {
+        transitioningDelegate = self
     }
     
 }
