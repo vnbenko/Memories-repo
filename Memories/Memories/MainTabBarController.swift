@@ -3,12 +3,24 @@ import Firebase
 
 class MainTabBarController: UITabBarController {
     
+    // MARK: - Lifecycle functions
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.delegate = self
+        
+        configure()
+        
         showSignInController()
         showAllControllers()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        configureUI()
+    }
+    
+    // MARK: - Functions
     
     private func showSignInController() {
         if Auth.auth().currentUser == nil {
@@ -51,17 +63,9 @@ class MainTabBarController: UITabBarController {
                            plusNavController,
                            likeNavController,
                            userProfileNavController]
-        
-        modifyTabBar()
     }
     
-    private func modifyTabBar() {
-        tabBar.tintColor = .black
-        guard let items = tabBar.items else { return }
-        for item in items {
-            item.imageInsets = UIEdgeInsets(top: 4, left: 0, bottom: -4, right: 0)
-        }
-    }
+
     
     private func createNavController(rootViewController: UIViewController = UIViewController(), selectedImage: UIImage, unselectedImage: UIImage) -> UINavigationController {
         let navController = UINavigationController(rootViewController: rootViewController)
@@ -69,7 +73,33 @@ class MainTabBarController: UITabBarController {
         navController.tabBarItem.image = unselectedImage
         return navController
     }
+    
+    // MARK: - Configure
+    
+    private func configure() {
+        configureDelegates()
+    }
+    
+    private func configureUI() {
+        configureTabBar()
+    }
+    
+    private func configureTabBar() {
+        tabBar.tintColor = .black
+        guard let items = tabBar.items else { return }
+        
+        for item in items {
+            item.imageInsets = UIEdgeInsets(top: 4, left: 0, bottom: -4, right: 0)
+        }
+    }
+    
+    private func configureDelegates() {
+        self.delegate = self
+    }
+    
 }
+
+// MARK: - TabBarController delegate
 
 extension MainTabBarController: UITabBarControllerDelegate {
     
