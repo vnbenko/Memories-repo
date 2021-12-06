@@ -12,19 +12,27 @@ class HomeController: UICollectionViewController {
     
     var posts = [Post]()
     
-    // MARK: - Init
+    // MARK: - Lifecycle functions
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        subscribeToNotification()
-        
-        collectionView.register(HomeCell.self, forCellWithReuseIdentifier: HomeCell.cellIdentifier)
-        
-        collectionView.refreshControl = refreshControl
-        
-        setupNavigationItems()
-        
+       
+        configure()
         fetchAllPosts()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateFeed), name: SharePhotoController.updateFeedNotificationName, object: nil)
+        
+        configureUI()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self)
     }
     
     // MARK: - Actions
@@ -110,9 +118,8 @@ class HomeController: UICollectionViewController {
                             }
                             self.posts.append(post)
                             
-                            self.posts.sort { post1, post2 in
-                                return post1.creationDate.compare(post2.creationDate) == .orderedDescending
-                            }
+                            self.posts.sort { $0.creationDate > $1.creationDate }
+
                             self.collectionView.reloadData()
                         } withCancel: { error in
                             self.alert(message: error.localizedDescription, title: "Failed")
@@ -124,25 +131,26 @@ class HomeController: UICollectionViewController {
             }
     }
     
-    private func setupNavigationItems() {
+    // MARK: - Configure
+    
+    private func configure() {
+        collectionView.register(HomeCell.self, forCellWithReuseIdentifier: HomeCell.cellIdentifier)
+    }
+    
+    private func configureUI() {
+        configureNavigationItems()
+        collectionView.refreshControl = refreshControl
+    }
+
+    private func configureNavigationItems() {
         let image = UIImage(named: "bar_logo")?.withRenderingMode(.alwaysOriginal)
         navigationItem.titleView = UIImageView(image: image)
-        
         
         let camera = UIImage(named: "camera")?.withRenderingMode(.alwaysOriginal)
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: camera, style: .plain, target: self, action: #selector(handleCamera))
     }
     
-    private func subscribeToNotification() {
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleUpdateFeed),
-            name: SharePhotoController.updateFeedNotificationName,
-            object: nil)
-    }
-}
-
-extension HomeController: UICollectionViewDelegateFlowLayout {
+    // MARK: - Grid cell settings
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return posts.count
@@ -154,12 +162,18 @@ extension HomeController: UICollectionViewDelegateFlowLayout {
         cell.delegate = self
         return cell
     }
-    
+}
+   
+// MARK: - Grid cell sizing
+
+extension HomeController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let height =  view.frame.width + 166 // username userprofileimageview 50 + 8 + 8 + 50 + 60
         return CGSize(width: view.frame.width, height: height)
     }
 }
+
+// MARK: - Delegates actions
 
 extension HomeController: HomeCellDelegate {
     func didTapCommentButton(post: Post) {

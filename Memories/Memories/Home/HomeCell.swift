@@ -93,7 +93,7 @@ class HomeCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        configure()
+        configureUI()
     }
     
     required init?(coder: NSCoder) {
@@ -131,7 +131,7 @@ class HomeCell: UICollectionViewCell {
     
     // MARK: - Configure UI
     
-    private func configure() {
+    private func configureUI() {
         configureImageViews()
         configureButtons()
         configureLabels()
