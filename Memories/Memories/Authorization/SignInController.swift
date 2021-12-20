@@ -69,14 +69,16 @@ class SignInController: UIViewController {
     
     let signUpButton: UIButton = {
         let button = UIButton(type: .system)
-        let attributedTitle = NSMutableAttributedString(string: "Don't have an account?  ", attributes: [
-            .font : UIFont.systemFont(ofSize: 14),
-            .foregroundColor : UIColor.lightGray
-        ])
-        attributedTitle.append(NSAttributedString(string: "Sign Up", attributes: [
-            .font : UIFont.boldSystemFont(ofSize: 14),
-            .foregroundColor : UIColor.customBlue()
-        ]))
+        let attributedTitle = NSMutableAttributedString(
+            string: "Don't have an account?  ", attributes: [
+                .font : UIFont.systemFont(ofSize: 14),
+                .foregroundColor : UIColor.lightGray
+            ])
+        attributedTitle.append(NSAttributedString(
+            string: "Sign Up", attributes: [
+                .font : UIFont.boldSystemFont(ofSize: 14),
+                .foregroundColor : UIColor.customBlue()
+            ]))
         button.setAttributedTitle(attributedTitle, for: .normal)
         button.addTarget(self, action: #selector(handleShowSignUp), for: .touchUpInside)
         return button
@@ -90,7 +92,7 @@ class SignInController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        view.backgroundColor = .red
         configure()
     }
     
@@ -132,7 +134,8 @@ class SignInController: UIViewController {
     
     @objc func handleShowSignUp() {
         let signUpController = SignUpController()
-        navigationController?.pushViewController(signUpController, animated: true)
+        signUpController.modalPresentationStyle = .fullScreen
+        self.present(signUpController, animated: true, completion: nil)
     }
     
     // MARK: Custom button appearance
@@ -159,23 +162,25 @@ class SignInController: UIViewController {
         configureInputFields()
         configureButtons()
     }
-
+    
     private func configureLogo() {
         view.addSubview(logoBackgroundImageView)
         logoBackgroundImageView.addSubview(logoImageView)
         
-        logoBackgroundImageView.anchor(top: view.topAnchor, paddingTop: 0,
-                                       left: view.leftAnchor, paddingLeft: 0,
-                                       right: view.rightAnchor, paddingRight: 0,
-                                       bottom: nil, paddingBottom: 0,
-                                       width: 0, height: 150
+        logoBackgroundImageView.anchor(
+            top: view.topAnchor, paddingTop: 0,
+            left: view.leftAnchor, paddingLeft: 0,
+            right: view.rightAnchor, paddingRight: 0,
+            bottom: nil, paddingBottom: 0,
+            width: 0, height: 150
         )
         
-        logoImageView.anchor(top: nil, paddingTop: 0,
-                             left: nil, paddingLeft: 0,
-                             right: nil, paddingRight: 0,
-                             bottom: logoBackgroundImageView.bottomAnchor, paddingBottom: 0,
-                             width: 0, height: 0)
+        logoImageView.anchor(
+            top: nil, paddingTop: 0,
+            left: nil, paddingLeft: 0,
+            right: nil, paddingRight: 0,
+            bottom: logoBackgroundImageView.bottomAnchor, paddingBottom: 0,
+            width: 0, height: 0)
         logoImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             logoImageView.centerXAnchor.constraint(equalTo: logoBackgroundImageView.centerXAnchor),
@@ -187,22 +192,24 @@ class SignInController: UIViewController {
     private func configureInputFields() {
         view.addSubview(inputFieldsStackView)
         
-        inputFieldsStackView.anchor(top: logoBackgroundImageView.bottomAnchor, paddingTop: 40,
-                                    left: view.leftAnchor, paddingLeft: 40,
-                                    right: view.rightAnchor, paddingRight: 40,
-                                    bottom: nil, paddingBottom: 0,
-                                    width: 0, height: 140
+        inputFieldsStackView.anchor(
+            top: logoBackgroundImageView.bottomAnchor, paddingTop: 40,
+            left: view.leftAnchor, paddingLeft: 40,
+            right: view.rightAnchor, paddingRight: 40,
+            bottom: nil, paddingBottom: 0,
+            width: 0, height: 140
         )
     }
     
     private func configureButtons() {
         view.addSubview(signUpButton)
         
-        signUpButton.anchor(top: nil, paddingTop: 0,
-                            left: view.leftAnchor, paddingLeft: 0,
-                            right: view.rightAnchor, paddingRight: 0,
-                            bottom: view.bottomAnchor, paddingBottom: 0,
-                            width: 0, height: 50
+        signUpButton.anchor(
+            top: nil, paddingTop: 0,
+            left: view.leftAnchor, paddingLeft: 0,
+            right: view.rightAnchor, paddingRight: 0,
+            bottom: view.bottomAnchor, paddingBottom: 0,
+            width: 0, height: 50
         )
     }
     

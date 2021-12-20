@@ -1,6 +1,6 @@
 import UIKit
 
-class CustomAnimationDismisser: NSObject, UIViewControllerAnimatedTransitioning {
+final class AnimationDismiss: NSObject, UIViewControllerAnimatedTransitioning {
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return 0.5

@@ -70,7 +70,7 @@ class PreviewPhoto: UIView {
                 return
             }
             
-            DispatchQueue.main.async {  
+            DispatchQueue.main.async {
                 self.showPopUpMessageWithAnimating("Saved")
                 self.saveButton.isHidden = true
             }
@@ -118,28 +118,31 @@ class PreviewPhoto: UIView {
     
     private func configureImageViews() {
         addSubview(previewImageView)
-  
-        previewImageView.anchor(top: safeAreaLayoutGuide.topAnchor, paddingTop: 0,
-                                left: leftAnchor, paddingLeft: 0,
-                                right: rightAnchor, paddingRight: 0,
-                                bottom: safeAreaLayoutGuide.bottomAnchor, paddingBottom: 50,
-                                width: 0, height: 0)
+        
+        previewImageView.anchor(
+            top: safeAreaLayoutGuide.topAnchor, paddingTop: 0,
+            left: leftAnchor, paddingLeft: 0,
+            right: rightAnchor, paddingRight: 0,
+            bottom: safeAreaLayoutGuide.bottomAnchor, paddingBottom: 50,
+            width: 0, height: 0)
     }
     
     private func configureButtons() {
         addSubview(removePreviewButton)
         addSubview(saveButton)
         
-        removePreviewButton.anchor(top: previewImageView.topAnchor, paddingTop: 12,
-                                   left: previewImageView.leftAnchor, paddingLeft: 12,
-                                   right: nil, paddingRight: 0,
-                                   bottom: nil, paddingBottom: 0, width: 50, height: 50)
+        removePreviewButton.anchor(
+            top: previewImageView.topAnchor, paddingTop: 12,
+            left: previewImageView.leftAnchor, paddingLeft: 12,
+            right: nil, paddingRight: 0,
+            bottom: nil, paddingBottom: 0, width: 50, height: 50)
         
-        saveButton.anchor(top: nil, paddingTop: 0,
-                          left: leftAnchor, paddingLeft: 12,
-                          right: nil, paddingRight: 0,
-                          bottom: bottomAnchor, paddingBottom: 12,
-                          width: 50, height: 50)
+        saveButton.anchor(
+            top: nil, paddingTop: 0,
+            left: leftAnchor, paddingLeft: 12,
+            right: nil, paddingRight: 0,
+            bottom: bottomAnchor, paddingBottom: 12,
+            width: 50, height: 50)
     }
     
     private func configureNotifications() {

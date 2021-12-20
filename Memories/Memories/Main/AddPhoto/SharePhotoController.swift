@@ -74,11 +74,11 @@ class SharePhotoController: UIViewController {
                     self.alert(message: error.localizedDescription, title: "Failed")
                     return
                 }
+                
                 guard let imageUrl = url?.absoluteString else { return }
                 print("Successfully got post image url: ", imageUrl)
                 self.saveToDatabaseWithImageUrl(imageUrl: imageUrl)
             })
-
         }
     }
     
@@ -112,7 +112,6 @@ class SharePhotoController: UIViewController {
             print("Successfully saved post to DB")
             self.dismiss(animated: true, completion: nil)
             
-            
             NotificationCenter.default.post(name: SharePhotoController.updateFeedNotificationName, object: nil)
         }
     }
@@ -132,23 +131,26 @@ class SharePhotoController: UIViewController {
         containerView.addSubview(textView)
         containerView.addSubview(imageView)
         
-        containerView.anchor(top: view.safeAreaLayoutGuide.topAnchor, paddingTop: 0,
-                             left: view.leftAnchor, paddingLeft: 0,
-                             right: view.rightAnchor, paddingRight: 0,
-                             bottom: nil, paddingBottom: 0,
-                             width: 0, height: 100)
+        containerView.anchor(
+            top: view.safeAreaLayoutGuide.topAnchor, paddingTop: 0,
+            left: view.leftAnchor, paddingLeft: 0,
+            right: view.rightAnchor, paddingRight: 0,
+            bottom: nil, paddingBottom: 0,
+            width: 0, height: 100)
         
-        imageView.anchor(top: containerView.topAnchor, paddingTop: 8,
-                         left: containerView.leftAnchor, paddingLeft: 8,
-                         right: nil, paddingRight: 0,
-                         bottom: containerView.bottomAnchor, paddingBottom: 8,
-                         width: 84, height: 0)
+        imageView.anchor(
+            top: containerView.topAnchor, paddingTop: 8,
+            left: containerView.leftAnchor, paddingLeft: 8,
+            right: nil, paddingRight: 0,
+            bottom: containerView.bottomAnchor, paddingBottom: 8,
+            width: 84, height: 0)
         
-        textView.anchor(top: containerView.topAnchor, paddingTop: 0,
-                        left: imageView.rightAnchor, paddingLeft: 4,
-                        right: containerView.rightAnchor, paddingRight: 0,
-                        bottom: containerView.bottomAnchor, paddingBottom: 0,
-                        width: 0, height: 0)
+        textView.anchor(
+            top: containerView.topAnchor, paddingTop: 0,
+            left: imageView.rightAnchor, paddingLeft: 4,
+            right: containerView.rightAnchor, paddingRight: 0,
+            bottom: containerView.bottomAnchor, paddingBottom: 0,
+            width: 0, height: 0)
         
     }
 }

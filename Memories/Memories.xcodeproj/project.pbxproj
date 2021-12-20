@@ -33,8 +33,8 @@
 		F5ABCE4D274B7C180064FA5D /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59700B327368EF80014A36A /* Post.swift */; };
 		F5ABCE4E274B7C180064FA5D /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5438CDE2737FFF3008B7784 /* User.swift */; };
 		F5ABCE4F274B7C180064FA5D /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59486CF273BDD25005C05F7 /* Comment.swift */; };
-		F5ABCE50274B7C180064FA5D /* CustomAnimationPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F58F1B1B273B0F4900E0A0E4 /* CustomAnimationPresenter.swift */; };
-		F5ABCE51274B7C180064FA5D /* CustomAnimationDismisser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F58F1B1D273B130000E0A0E4 /* CustomAnimationDismisser.swift */; };
+		F5ABCE50274B7C180064FA5D /* AnimationPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F58F1B1B273B0F4900E0A0E4 /* AnimationPresenter.swift */; };
+		F5ABCE51274B7C180064FA5D /* AnimationDismiss.swift in Sources */ = {isa = PBXBuildFile; fileRef = F58F1B1D273B130000E0A0E4 /* AnimationDismiss.swift */; };
 		F5ABCE52274B7C180064FA5D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5D9D53E2725A53F00A23ED2 /* Constants.swift */; };
 		F5ABCE53274B7C180064FA5D /* UIColor + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5D540AC270CD8DE0077C389 /* UIColor + Extensions.swift */; };
 		F5ABCE54274B7C180064FA5D /* UIView + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5D540AE270CE51B0077C389 /* UIView + Extensions.swift */; };
@@ -42,10 +42,11 @@
 		F5ABCE56274B7C180064FA5D /* CustomImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59700BA273696ED0014A36A /* CustomImageView.swift */; };
 		F5ABCE57274B7C180064FA5D /* Date + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5782A3027399F280020CD9A /* Date + Extensions.swift */; };
 		F5ABCE58274B7C180064FA5D /* UIViewController + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5E4F2C12747C56100596103 /* UIViewController + Extensions.swift */; };
-		F5ABCE62274B7C670064FA5D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5767E1B270CAE2200387576 /* Main.storyboard */; };
 		F5ABCE63274B7C670064FA5D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F5767E1E270CAE2400387576 /* Assets.xcassets */; };
 		F5ABCE64274B7C670064FA5D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5767E20270CAE2400387576 /* LaunchScreen.storyboard */; };
 		F5ABCE69274B7D310064FA5D /* UserProfilePhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5ABCE68274B7D310064FA5D /* UserProfilePhotoCell.swift */; };
+		F5DF551F276CCBA500D7F9A3 /* AppController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DF551E276CCBA500D7F9A3 /* AppController.swift */; };
+		F5DF5521276CCD6B00D7F9A3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DF5520276CCD6B00D7F9A3 /* SceneDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,7 +63,6 @@
 		F5767E12270CAE2200387576 /* Memories.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Memories.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5767E15270CAE2200387576 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F5767E19270CAE2200387576 /* SignUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpController.swift; sourceTree = "<group>"; };
-		F5767E1C270CAE2200387576 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		F5767E1E270CAE2400387576 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F5767E21270CAE2400387576 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F5767E23270CAE2400387576 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -70,8 +70,8 @@
 		F5782A332739BAB10020CD9A /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
 		F586BC46273ECD100046D171 /* CommentInputAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentInputAccessoryView.swift; sourceTree = "<group>"; };
 		F586BC48273EDEBA0046D171 /* CommentInputTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentInputTextView.swift; sourceTree = "<group>"; };
-		F58F1B1B273B0F4900E0A0E4 /* CustomAnimationPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnimationPresenter.swift; sourceTree = "<group>"; };
-		F58F1B1D273B130000E0A0E4 /* CustomAnimationDismisser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnimationDismisser.swift; sourceTree = "<group>"; };
+		F58F1B1B273B0F4900E0A0E4 /* AnimationPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationPresenter.swift; sourceTree = "<group>"; };
+		F58F1B1D273B130000E0A0E4 /* AnimationDismiss.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationDismiss.swift; sourceTree = "<group>"; };
 		F59486CB273BBCBA005C05F7 /* CommentsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsController.swift; sourceTree = "<group>"; };
 		F59486CD273BD52A005C05F7 /* CommentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentCell.swift; sourceTree = "<group>"; };
 		F59486CF273BDD25005C05F7 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
@@ -89,6 +89,8 @@
 		F5D540AE270CE51B0077C389 /* UIView + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView + Extensions.swift"; sourceTree = "<group>"; };
 		F5D9D53E2725A53F00A23ED2 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		F5D9D5402725AC1A00A23ED2 /* UserProfileHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileHeader.swift; sourceTree = "<group>"; };
+		F5DF551E276CCBA500D7F9A3 /* AppController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppController.swift; sourceTree = "<group>"; };
+		F5DF5520276CCD6B00D7F9A3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		F5E4F2C12747C56100596103 /* UIViewController + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController + Extensions.swift"; sourceTree = "<group>"; };
 		F5FE66FA27258B1A009166A7 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		F5FE66FC27258C02009166A7 /* UserProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileController.swift; sourceTree = "<group>"; };
@@ -164,22 +166,15 @@
 			isa = PBXGroup;
 			children = (
 				F5767E15270CAE2200387576 /* AppDelegate.swift */,
-				F5FE66FA27258B1A009166A7 /* MainTabBarController.swift */,
+				F5DF551E276CCBA500D7F9A3 /* AppController.swift */,
+				F5DF5520276CCD6B00D7F9A3 /* SceneDelegate.swift */,
 				F5C0F6932725F40C00A58E4D /* Authorization */,
+				F5DF5526276CE2BB00D7F9A3 /* Main */,
 				F5782A322739BA9E0020CD9A /* Camera */,
-				F5438CDB2737C5E7008B7784 /* Home */,
-				F5438CE227381316008B7784 /* Search */,
-				F59700AC2735650E0014A36A /* AddPhoto */,
-				F5952BA02741048A00BC3326 /* Like */,
-				F5D9D5422725AC2F00A23ED2 /* UserProfile */,
 				F59700B527368F180014A36A /* Models */,
 				F5E4F2BF2747978100596103 /* Transition */,
 				F5D540AB270CD8B30077C389 /* Utilities */,
-				F5767E1B270CAE2200387576 /* Main.storyboard */,
-				F5767E1E270CAE2400387576 /* Assets.xcassets */,
-				F5767E20270CAE2400387576 /* LaunchScreen.storyboard */,
-				F5767E23270CAE2400387576 /* Info.plist */,
-				F5ABCE7B274B7F310064FA5D /* GoogleService-Info.plist */,
+				F5DF551D276CC7A800D7F9A3 /* Supporting Files */,
 			);
 			path = Memories;
 			sourceTree = "<group>";
@@ -255,11 +250,35 @@
 			path = UserProfile;
 			sourceTree = "<group>";
 		};
+		F5DF551D276CC7A800D7F9A3 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				F5767E1E270CAE2400387576 /* Assets.xcassets */,
+				F5767E20270CAE2400387576 /* LaunchScreen.storyboard */,
+				F5767E23270CAE2400387576 /* Info.plist */,
+				F5ABCE7B274B7F310064FA5D /* GoogleService-Info.plist */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		F5DF5526276CE2BB00D7F9A3 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				F5FE66FA27258B1A009166A7 /* MainTabBarController.swift */,
+				F5438CDB2737C5E7008B7784 /* Home */,
+				F5438CE227381316008B7784 /* Search */,
+				F59700AC2735650E0014A36A /* AddPhoto */,
+				F5952BA02741048A00BC3326 /* Like */,
+				F5D9D5422725AC2F00A23ED2 /* UserProfile */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
 		F5E4F2BF2747978100596103 /* Transition */ = {
 			isa = PBXGroup;
 			children = (
-				F58F1B1B273B0F4900E0A0E4 /* CustomAnimationPresenter.swift */,
-				F58F1B1D273B130000E0A0E4 /* CustomAnimationDismisser.swift */,
+				F58F1B1B273B0F4900E0A0E4 /* AnimationPresenter.swift */,
+				F58F1B1D273B130000E0A0E4 /* AnimationDismiss.swift */,
 			);
 			path = Transition;
 			sourceTree = "<group>";
@@ -335,7 +354,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F5182BE5274C2B89006CBC8C /* GoogleService-Info.plist in Resources */,
-				F5ABCE62274B7C670064FA5D /* Main.storyboard in Resources */,
 				F5ABCE63274B7C670064FA5D /* Assets.xcassets in Resources */,
 				F5ABCE64274B7C670064FA5D /* LaunchScreen.storyboard in Resources */,
 			);
@@ -396,10 +414,12 @@
 				F5ABCE39274B7C180064FA5D /* SignInController.swift in Sources */,
 				F5ABCE3A274B7C180064FA5D /* SignUpController.swift in Sources */,
 				F5ABCE3B274B7C180064FA5D /* CameraController.swift in Sources */,
+				F5DF551F276CCBA500D7F9A3 /* AppController.swift in Sources */,
 				F5ABCE3C274B7C180064FA5D /* PreviewPhoto.swift in Sources */,
 				F5ABCE3D274B7C180064FA5D /* HomeController.swift in Sources */,
 				F5ABCE3E274B7C180064FA5D /* HomeCell.swift in Sources */,
 				F5ABCE3F274B7C180064FA5D /* CommentsController.swift in Sources */,
+				F5DF5521276CCD6B00D7F9A3 /* SceneDelegate.swift in Sources */,
 				F5ABCE40274B7C180064FA5D /* CommentCell.swift in Sources */,
 				F5ABCE41274B7C180064FA5D /* CommentInputAccessoryView.swift in Sources */,
 				F5ABCE42274B7C180064FA5D /* CommentInputTextView.swift in Sources */,
@@ -415,8 +435,8 @@
 				F5ABCE4D274B7C180064FA5D /* Post.swift in Sources */,
 				F5ABCE4E274B7C180064FA5D /* User.swift in Sources */,
 				F5ABCE4F274B7C180064FA5D /* Comment.swift in Sources */,
-				F5ABCE50274B7C180064FA5D /* CustomAnimationPresenter.swift in Sources */,
-				F5ABCE51274B7C180064FA5D /* CustomAnimationDismisser.swift in Sources */,
+				F5ABCE50274B7C180064FA5D /* AnimationPresenter.swift in Sources */,
+				F5ABCE51274B7C180064FA5D /* AnimationDismiss.swift in Sources */,
 				F5ABCE52274B7C180064FA5D /* Constants.swift in Sources */,
 				F5ABCE53274B7C180064FA5D /* UIColor + Extensions.swift in Sources */,
 				F5ABCE54274B7C180064FA5D /* UIView + Extensions.swift in Sources */,
@@ -430,14 +450,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		F5767E1B270CAE2200387576 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				F5767E1C270CAE2200387576 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		F5767E20270CAE2400387576 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -500,7 +512,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -555,7 +567,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -573,8 +585,8 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8M97DT7VG5;
-				INFOPLIST_FILE = "$(SRCROOT)/Memories/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				INFOPLIST_FILE = "$(SRCROOT)/Memories/Supporting Files/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -582,7 +594,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.iBenko.Memories;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -594,8 +606,8 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8M97DT7VG5;
-				INFOPLIST_FILE = "$(SRCROOT)/Memories/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				INFOPLIST_FILE = "$(SRCROOT)/Memories/Supporting Files/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -603,7 +615,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.iBenko.Memories;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

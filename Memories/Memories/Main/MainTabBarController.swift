@@ -8,9 +8,7 @@ class MainTabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        configure()
-        
-        showSignInController()
+        self.delegate = self
         showAllControllers()
     }
     
@@ -21,18 +19,6 @@ class MainTabBarController: UITabBarController {
     }
     
     // MARK: - Functions
-    
-    private func showSignInController() {
-        if Auth.auth().currentUser == nil {
-            DispatchQueue.main.async {
-                let signInVC = SignInController()
-                let navController = UINavigationController(rootViewController: signInVC)
-                navController.modalPresentationStyle = .fullScreen
-                navController.isNavigationBarHidden = true
-                self.present(navController, animated: true, completion: nil)
-            }
-        }
-    }
     
     func showAllControllers() {
         //home
@@ -65,7 +51,7 @@ class MainTabBarController: UITabBarController {
                            userProfileNavController]
     }
     
-
+    
     
     private func createNavController(rootViewController: UIViewController = UIViewController(), selectedImage: UIImage, unselectedImage: UIImage) -> UINavigationController {
         let navController = UINavigationController(rootViewController: rootViewController)
@@ -75,10 +61,6 @@ class MainTabBarController: UITabBarController {
     }
     
     // MARK: - Configure
-    
-    private func configure() {
-        configureDelegates()
-    }
     
     private func configureUI() {
         configureTabBar()
@@ -91,10 +73,6 @@ class MainTabBarController: UITabBarController {
         for item in items {
             item.imageInsets = UIEdgeInsets(top: 4, left: 0, bottom: -4, right: 0)
         }
-    }
-    
-    private func configureDelegates() {
-        self.delegate = self
     }
     
 }

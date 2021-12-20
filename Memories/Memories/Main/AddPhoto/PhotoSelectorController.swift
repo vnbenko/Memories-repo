@@ -35,7 +35,7 @@ class PhotoSelectorController: UICollectionViewController {
         
         configureUI()
     }
-
+    
     // MARK: - Actions
     
     @objc func handleCancel() {
@@ -57,7 +57,7 @@ class PhotoSelectorController: UICollectionViewController {
         fetchOptions.sortDescriptors = [sortDescriptor]
         return fetchOptions
     }
-
+    
     private func fetchPhotos() {
         let allPhotos = PHAsset.fetchAssets(with: .image, options: assetsFetchOptions())
         
@@ -81,32 +81,36 @@ class PhotoSelectorController: UICollectionViewController {
         
         DispatchQueue.global(qos: .background).async { [weak self] in
             guard let self = self else { return}
-            allPhotos.enumerateObjects(at: indexSet, options: NSEnumerationOptions.concurrent, using: { (asset, count, stop) in
-                
-                let imageManager = PHImageManager.default()
-                let targetSize = CGSize(width: 200, height: 200)
-                let options = PHImageRequestOptions()
-                options.isSynchronous = true
-                imageManager.requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFit, options: options, resultHandler: { (image, info) in
-                    if let image = image {
-                        self.images.append(image)
-                        self.assets.append(asset)
-                    }
+            allPhotos.enumerateObjects(
+                at: indexSet,
+                options: NSEnumerationOptions.concurrent,
+                using: { (asset, count, stop) in
                     
-                    if self.selectedImage == nil {
-                        self.selectedImage = image
+                    let imageManager = PHImageManager.default()
+                    let targetSize = CGSize(width: 200, height: 200)
+                    let options = PHImageRequestOptions()
+                    options.isSynchronous = true
+                   
+                    imageManager.requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFit, options: options, resultHandler: { (image, info) in
+                               if let image = image {
+                                   self.images.append(image)
+                                   self.assets.append(asset)
+                               }
+                               
+                               if self.selectedImage == nil {
+                                   self.selectedImage = image
+                               }
+                               
+                           })
+                    if self.images.count - 1 == indexSet.last! {
+                        self.loading = false
+                        self.hasNextPage = self.images.count != allPhotos.count
+                        self.beginIndex = self.images.count
+                        DispatchQueue.main.async {
+                            self.collectionView.reloadData()
+                        }
                     }
-                    
                 })
-                if self.images.count - 1 == indexSet.last! {
-                    self.loading = false
-                    self.hasNextPage = self.images.count != allPhotos.count
-                    self.beginIndex = self.images.count
-                    DispatchQueue.main.async {
-                        self.collectionView.reloadData()
-                    }
-                }
-            })
         }
     }
     
@@ -126,7 +130,7 @@ class PhotoSelectorController: UICollectionViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Next", style: .plain, target: self, action: #selector(handleNext))
     }
-
+    
     // MARK: - Header settings
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -140,9 +144,10 @@ class PhotoSelectorController: UICollectionViewController {
                 let selectedAsset = self.assets[index]
                 let imageManager = PHImageManager.default()
                 let targetSize = CGSize(width: 600, height: 600)
+                
                 imageManager.requestImage(for: selectedAsset, targetSize: targetSize, contentMode: .aspectFit, options: nil) { image, info in
-                    header.photoImageView.image = image
-                }
+                           header.photoImageView.image = image
+                       }
             }
         }
         return header

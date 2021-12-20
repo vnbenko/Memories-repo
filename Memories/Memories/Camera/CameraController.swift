@@ -26,8 +26,8 @@ class CameraController: UIViewController  {
     let output = AVCapturePhotoOutput()
     let captureSession = AVCaptureSession()
     
-    let customAnimationPresenter = CustomAnimationPresenter()
-    let customAnimationDismisser = CustomAnimationDismisser()
+    let customAnimationPresenter = AnimationPresenter()
+    let customAnimationDismisser = AnimationDismiss()
     
     var isCameraReady = true
     
@@ -48,9 +48,11 @@ class CameraController: UIViewController  {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(showButtons), name: PreviewPhoto.showButtonsNotificationName, object: nil)
-        
-        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(showButtons),
+            name: PreviewPhoto.showButtonsNotificationName,
+            object: nil)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -79,7 +81,7 @@ class CameraController: UIViewController  {
     }
     
     @objc func handleDismiss() {
-        dismiss(animated: true, completion: nil)
+        navigationController?.popViewController(animated: true)
     }
     
     // MARK: - Functions
@@ -129,11 +131,12 @@ class CameraController: UIViewController  {
     private func configureCaptureView() {
         view.addSubview(captureView)
         
-        captureView.anchor(top: view.safeAreaLayoutGuide.topAnchor, paddingTop: 0,
-                           left: view.leftAnchor, paddingLeft: 0,
-                           right: view.rightAnchor, paddingRight: 0,
-                           bottom: view.safeAreaLayoutGuide.bottomAnchor,
-                           paddingBottom: 50, width: 0, height: 0)
+        captureView.anchor(
+            top: view.safeAreaLayoutGuide.topAnchor, paddingTop: 0,
+            left: view.leftAnchor, paddingLeft: 0,
+            right: view.rightAnchor, paddingRight: 0,
+            bottom: view.safeAreaLayoutGuide.bottomAnchor,
+            paddingBottom: 50, width: 0, height: 0)
         
         captureView.layer.cornerRadius = 20
         captureView.layer.masksToBounds = true
@@ -143,17 +146,19 @@ class CameraController: UIViewController  {
         view.addSubview(photoButton)
         view.addSubview(dismissButton)
         
-        photoButton.anchor(top: nil, paddingTop: 0,
-                           left: nil, paddingLeft: 0,
-                           right: nil, paddingRight: 0,
-                           bottom: captureView.bottomAnchor, paddingBottom: 12,
-                           width: 80, height: 80)
+        photoButton.anchor(
+            top: nil, paddingTop: 0,
+            left: nil, paddingLeft: 0,
+            right: nil, paddingRight: 0,
+            bottom: captureView.bottomAnchor, paddingBottom: 12,
+            width: 80, height: 80)
         photoButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
-        dismissButton.anchor(top: captureView.topAnchor, paddingTop: 12,
-                             left: nil, paddingLeft: 0,
-                             right: captureView.rightAnchor, paddingRight: 12,
-                             bottom: nil, paddingBottom: 0, width: 50, height: 50)
+        dismissButton.anchor(
+            top: captureView.topAnchor, paddingTop: 12,
+            left: nil, paddingLeft: 0,
+            right: captureView.rightAnchor, paddingRight: 12,
+            bottom: nil, paddingBottom: 0, width: 50, height: 50)
     }
     
     private func configureDelegates() {
@@ -179,11 +184,12 @@ extension CameraController: AVCapturePhotoCaptureDelegate {
         
         view.addSubview(previewPhotoView)
         
-        previewPhotoView.anchor(top: view.topAnchor, paddingTop: 0,
-                                left: view.leftAnchor, paddingLeft: 0,
-                                right: view.rightAnchor, paddingRight: 0,
-                                bottom: view.bottomAnchor, paddingBottom: 0,
-                                width: 0, height: 0)
+        previewPhotoView.anchor(
+            top: view.topAnchor, paddingTop: 0,
+            left: view.leftAnchor, paddingLeft: 0,
+            right: view.rightAnchor, paddingRight: 0,
+            bottom: view.bottomAnchor, paddingBottom: 0,
+            width: 0, height: 0)
     }
 }
 

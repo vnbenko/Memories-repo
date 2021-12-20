@@ -116,16 +116,19 @@ class HomeCell: UICollectionViewCell {
     private func setupAttributedCaption() {
         
         guard let post = self.post else { return }
-        let attributedText = NSMutableAttributedString(string: post.user.username,
-                                                       attributes: [.font : UIFont.boldSystemFont(ofSize: 14)])
+        let attributedText = NSMutableAttributedString(
+            string: post.user.username,
+            attributes: [.font : UIFont.boldSystemFont(ofSize: 14)])
         
-        attributedText.append(NSAttributedString(string: " \(post.caption)\n",
-                                                 attributes: [.font : UIFont.systemFont(ofSize: 14)]))
+        attributedText.append(NSAttributedString(
+            string: " \(post.caption)\n",
+            attributes: [.font : UIFont.systemFont(ofSize: 14)]))
         
-        attributedText.append(NSAttributedString(string: post.creationDate.showTimeAgo(),
-                                                 attributes: [.font : UIFont.systemFont(ofSize: 14),
-                                                              .foregroundColor : UIColor.lightGray]))
-       
+        attributedText.append(NSAttributedString(
+            string: post.creationDate.showTimeAgo(),
+            attributes: [.font : UIFont.systemFont(ofSize: 14),
+                         .foregroundColor : UIColor.lightGray]))
+        
         self.captionLabel.attributedText = attributedText
     }
     
@@ -141,10 +144,20 @@ class HomeCell: UICollectionViewCell {
         addSubview(userProfileImageView)
         addSubview(photoImageView)
         
-        userProfileImageView.anchor(top: topAnchor, paddingTop: 8, left: leftAnchor, paddingLeft: 8, right: nil, paddingRight: 0, bottom: nil, paddingBottom: 0, width: 40, height: 40)
+        userProfileImageView.anchor(
+            top: topAnchor, paddingTop: 8,
+            left: leftAnchor, paddingLeft: 8,
+            right: nil, paddingRight: 0,
+            bottom: nil, paddingBottom: 0,
+            width: 40, height: 40)
         userProfileImageView.layer.cornerRadius = 40 / 2
         
-        photoImageView.anchor(top: userProfileImageView.bottomAnchor, paddingTop: 8, left: leftAnchor, paddingLeft: 0, right: rightAnchor, paddingRight: 0, bottom: nil, paddingBottom: 0, width: 0, height: 0)
+        photoImageView.anchor(
+            top: userProfileImageView.bottomAnchor, paddingTop: 8,
+            left: leftAnchor, paddingLeft: 0,
+            right: rightAnchor, paddingRight: 0,
+            bottom: nil, paddingBottom: 0,
+            width: 0, height: 0)
         photoImageView.heightAnchor.constraint(equalTo: widthAnchor, multiplier: 1).isActive = true
     }
     
@@ -152,34 +165,38 @@ class HomeCell: UICollectionViewCell {
         addSubview(userNameLabel)
         addSubview(captionLabel)
         
-        userNameLabel.anchor(top: topAnchor, paddingTop: 0,
-                             left: userProfileImageView.rightAnchor, paddingLeft: 8,
-                             right: optionsButton.leftAnchor, paddingRight: 0,
-                             bottom: photoImageView.topAnchor, paddingBottom: 0,
-                             width: 0, height: 0)
+        userNameLabel.anchor(
+            top: topAnchor, paddingTop: 0,
+            left: userProfileImageView.rightAnchor, paddingLeft: 8,
+            right: optionsButton.leftAnchor, paddingRight: 0,
+            bottom: photoImageView.topAnchor, paddingBottom: 0,
+            width: 0, height: 0)
         
-        captionLabel.anchor(top: likeButton.bottomAnchor, paddingTop: 0,
-                            left: leftAnchor, paddingLeft: 8,
-                            right: rightAnchor, paddingRight: 8,
-                            bottom: bottomAnchor, paddingBottom: 0,
-                            width: 0, height: 0)
+        captionLabel.anchor(
+            top: likeButton.bottomAnchor, paddingTop: 0,
+            left: leftAnchor, paddingLeft: 8,
+            right: rightAnchor, paddingRight: 8,
+            bottom: bottomAnchor, paddingBottom: 0,
+            width: 0, height: 0)
     }
     
     private func configureButtons() {
         addSubview(optionsButton)
         addSubview(bookmarkButton)
         
-        optionsButton.anchor(top: topAnchor, paddingTop: 0,
-                             left: nil, paddingLeft: 0,
-                             right: rightAnchor, paddingRight: 0,
-                             bottom: photoImageView.topAnchor, paddingBottom: 0,
-                             width: 44, height: 0)
+        optionsButton.anchor(
+            top: topAnchor, paddingTop: 0,
+            left: nil, paddingLeft: 0,
+            right: rightAnchor, paddingRight: 0,
+            bottom: photoImageView.topAnchor, paddingBottom: 0,
+            width: 44, height: 0)
         
-        bookmarkButton.anchor(top: photoImageView.bottomAnchor, paddingTop: 0,
-                              left: nil, paddingLeft: 0,
-                              right: rightAnchor, paddingRight: 0,
-                              bottom: nil, paddingBottom: 0,
-                              width: 40, height: 50)
+        bookmarkButton.anchor(
+            top: photoImageView.bottomAnchor, paddingTop: 0,
+            left: nil, paddingLeft: 0,
+            right: rightAnchor, paddingRight: 0,
+            bottom: nil, paddingBottom: 0,
+            width: 40, height: 50)
         
         configureStackViewButtons()
     }
@@ -189,11 +206,12 @@ class HomeCell: UICollectionViewCell {
         stackView.distribution = .fillEqually
         
         addSubview(stackView)
-        stackView.anchor(top: photoImageView.bottomAnchor, paddingTop: 0,
-                         left: leftAnchor, paddingLeft: 4,
-                         right: nil, paddingRight: 0,
-                         bottom: nil, paddingBottom: 0,
-                         width: 120, height: 50)
+        stackView.anchor(
+            top: photoImageView.bottomAnchor, paddingTop: 0,
+            left: leftAnchor, paddingLeft: 4,
+            right: nil, paddingRight: 0,
+            bottom: nil, paddingBottom: 0,
+            width: 120, height: 50)
     }
-      
+    
 }

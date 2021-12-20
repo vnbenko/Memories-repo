@@ -25,7 +25,11 @@ class UserProfileController: UICollectionViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(updatePosts), name: SharePhotoController.updateFeedNotificationName, object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(updatePosts),
+            name: SharePhotoController.updateFeedNotificationName,
+            object: nil)
         
         configureUI()
     }

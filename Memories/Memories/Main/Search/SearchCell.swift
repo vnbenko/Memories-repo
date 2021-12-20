@@ -49,25 +49,28 @@ class SearchCell: UICollectionViewCell {
         addSubview(userNameLabel)
         addSubview(separatorView)
         
-        profileImageView.anchor(top: nil, paddingTop: 0,
-                                left: leftAnchor, paddingLeft: 8,
-                                right: nil, paddingRight: 0,
-                                bottom: nil, paddingBottom: 0,
-                                width: 50, height: 50)
+        profileImageView.anchor(
+            top: nil, paddingTop: 0,
+            left: leftAnchor, paddingLeft: 8,
+            right: nil, paddingRight: 0,
+            bottom: nil, paddingBottom: 0,
+            width: 50, height: 50)
         profileImageView.layer.cornerRadius = 50 / 2
         profileImageView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         
-        userNameLabel.anchor(top: topAnchor, paddingTop: 0,
-                             left: profileImageView.rightAnchor, paddingLeft: 8,
-                             right: rightAnchor, paddingRight: 0,
-                             bottom: bottomAnchor, paddingBottom: 0,
-                             width: 0, height: 0)
+        userNameLabel.anchor(
+            top: topAnchor, paddingTop: 0,
+            left: profileImageView.rightAnchor, paddingLeft: 8,
+            right: rightAnchor, paddingRight: 0,
+            bottom: bottomAnchor, paddingBottom: 0,
+            width: 0, height: 0)
         
-        separatorView.anchor(top: nil, paddingTop: 0,
-                             left: userNameLabel.leftAnchor, paddingLeft: 0,
-                             right: rightAnchor, paddingRight: 0,
-                             bottom: bottomAnchor, paddingBottom: 0,
-                             width: 0, height: 0.5)
+        separatorView.anchor(
+            top: nil, paddingTop: 0,
+            left: userNameLabel.leftAnchor, paddingLeft: 0,
+            right: rightAnchor, paddingRight: 0,
+            bottom: bottomAnchor, paddingBottom: 0,
+            width: 0, height: 0.5)
         
     }
     

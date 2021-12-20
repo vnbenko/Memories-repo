@@ -95,7 +95,7 @@ class SignUpController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        view.backgroundColor = .blue
         configure()
     }
     
@@ -252,19 +252,21 @@ class SignUpController: UIViewController {
         view.addSubview(photoButton)
         view.addSubview(signInButton)
         
-        photoButton.anchor(top: view.topAnchor, paddingTop: 40,
-                           left: nil, paddingLeft: 0,
-                           right: nil, paddingRight: 0,
-                           bottom: nil, paddingBottom: 0,
-                           width: 140, height: 140
+        photoButton.anchor(
+            top: view.topAnchor, paddingTop: 40,
+            left: nil, paddingLeft: 0,
+            right: nil, paddingRight: 0,
+            bottom: nil, paddingBottom: 0,
+            width: 140, height: 140
         )
         photoButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
-        signInButton.anchor(top: nil, paddingTop: 0,
-                            left: view.leftAnchor, paddingLeft: 0,
-                            right: view.rightAnchor, paddingRight: 0,
-                            bottom: view.bottomAnchor, paddingBottom: 0,
-                            width: 0, height: 50
+        signInButton.anchor(
+            top: nil, paddingTop: 0,
+            left: view.leftAnchor, paddingLeft: 0,
+            right: view.rightAnchor, paddingRight: 0,
+            bottom: view.bottomAnchor, paddingBottom: 0,
+            width: 0, height: 50
         )
         
     }
@@ -272,11 +274,12 @@ class SignUpController: UIViewController {
     private func configureInputFields() {
         view.addSubview(inputFieldsStackView)
         
-        inputFieldsStackView.anchor(top: photoButton.bottomAnchor, paddingTop: 20,
-                                    left: view.leftAnchor, paddingLeft: 40,
-                                    right: view.rightAnchor, paddingRight: 40,
-                                    bottom: nil, paddingBottom: 0,
-                                    width: 0, height: 200
+        inputFieldsStackView.anchor(
+            top: photoButton.bottomAnchor, paddingTop: 20,
+            left: view.leftAnchor, paddingLeft: 40,
+            right: view.rightAnchor, paddingRight: 40,
+            bottom: nil, paddingBottom: 0,
+            width: 0, height: 200
         )
     }
     
