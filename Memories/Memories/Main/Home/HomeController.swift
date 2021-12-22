@@ -43,8 +43,8 @@ class HomeController: UICollectionViewController {
     
     @objc func handleCamera() {
         let cameraController = CameraController()
-        navigationController?.pushViewController(cameraController, animated: true)
-
+        cameraController.modalPresentationStyle = .fullScreen
+        self.present(cameraController, animated: true, completion: nil)
     }
     
     @objc func handleUpdateFeed() {

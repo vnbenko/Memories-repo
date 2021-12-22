@@ -26,10 +26,8 @@ class CameraController: UIViewController  {
     let output = AVCapturePhotoOutput()
     let captureSession = AVCaptureSession()
     
-    let customAnimationPresenter = AnimationPresenter()
-    let customAnimationDismisser = AnimationDismiss()
-    
-    var isCameraReady = true
+    let animationPresenter = AnimationPresenter()
+    let animationDismisser = AnimationDismisser()
     
     override var prefersStatusBarHidden: Bool {
         return true
@@ -81,7 +79,7 @@ class CameraController: UIViewController  {
     }
     
     @objc func handleDismiss() {
-        navigationController?.popViewController(animated: true)
+        self.dismiss(animated: true, completion: nil)
     }
     
     // MARK: - Functions
@@ -196,11 +194,11 @@ extension CameraController: AVCapturePhotoCaptureDelegate {
 extension CameraController: UIViewControllerTransitioningDelegate {
     
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return customAnimationPresenter
+        return animationPresenter
     }
     
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return customAnimationDismisser
+        return animationDismisser
     }
 }
 

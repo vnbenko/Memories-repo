@@ -34,7 +34,7 @@
 		F5ABCE4E274B7C180064FA5D /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5438CDE2737FFF3008B7784 /* User.swift */; };
 		F5ABCE4F274B7C180064FA5D /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59486CF273BDD25005C05F7 /* Comment.swift */; };
 		F5ABCE50274B7C180064FA5D /* AnimationPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F58F1B1B273B0F4900E0A0E4 /* AnimationPresenter.swift */; };
-		F5ABCE51274B7C180064FA5D /* AnimationDismiss.swift in Sources */ = {isa = PBXBuildFile; fileRef = F58F1B1D273B130000E0A0E4 /* AnimationDismiss.swift */; };
+		F5ABCE51274B7C180064FA5D /* AnimationDismisser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F58F1B1D273B130000E0A0E4 /* AnimationDismisser.swift */; };
 		F5ABCE52274B7C180064FA5D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5D9D53E2725A53F00A23ED2 /* Constants.swift */; };
 		F5ABCE53274B7C180064FA5D /* UIColor + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5D540AC270CD8DE0077C389 /* UIColor + Extensions.swift */; };
 		F5ABCE54274B7C180064FA5D /* UIView + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5D540AE270CE51B0077C389 /* UIView + Extensions.swift */; };
@@ -71,7 +71,7 @@
 		F586BC46273ECD100046D171 /* CommentInputAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentInputAccessoryView.swift; sourceTree = "<group>"; };
 		F586BC48273EDEBA0046D171 /* CommentInputTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentInputTextView.swift; sourceTree = "<group>"; };
 		F58F1B1B273B0F4900E0A0E4 /* AnimationPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationPresenter.swift; sourceTree = "<group>"; };
-		F58F1B1D273B130000E0A0E4 /* AnimationDismiss.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationDismiss.swift; sourceTree = "<group>"; };
+		F58F1B1D273B130000E0A0E4 /* AnimationDismisser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationDismisser.swift; sourceTree = "<group>"; };
 		F59486CB273BBCBA005C05F7 /* CommentsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsController.swift; sourceTree = "<group>"; };
 		F59486CD273BD52A005C05F7 /* CommentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentCell.swift; sourceTree = "<group>"; };
 		F59486CF273BDD25005C05F7 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
@@ -278,7 +278,7 @@
 			isa = PBXGroup;
 			children = (
 				F58F1B1B273B0F4900E0A0E4 /* AnimationPresenter.swift */,
-				F58F1B1D273B130000E0A0E4 /* AnimationDismiss.swift */,
+				F58F1B1D273B130000E0A0E4 /* AnimationDismisser.swift */,
 			);
 			path = Transition;
 			sourceTree = "<group>";
@@ -436,7 +436,7 @@
 				F5ABCE4E274B7C180064FA5D /* User.swift in Sources */,
 				F5ABCE4F274B7C180064FA5D /* Comment.swift in Sources */,
 				F5ABCE50274B7C180064FA5D /* AnimationPresenter.swift in Sources */,
-				F5ABCE51274B7C180064FA5D /* AnimationDismiss.swift in Sources */,
+				F5ABCE51274B7C180064FA5D /* AnimationDismisser.swift in Sources */,
 				F5ABCE52274B7C180064FA5D /* Constants.swift in Sources */,
 				F5ABCE53274B7C180064FA5D /* UIColor + Extensions.swift in Sources */,
 				F5ABCE54274B7C180064FA5D /* UIView + Extensions.swift in Sources */,

@@ -204,6 +204,7 @@ class SignUpController: UIViewController {
                                     print("User is saved to db: ", reference.url)
                                     
                                     self.showControllers()
+                                    
                                     self.dismiss(animated: true, completion: nil)
                                 }
                         }
@@ -212,7 +213,7 @@ class SignUpController: UIViewController {
     }
     
     @objc func handleSignIn() {
-        navigationController?.popViewController(animated: true)
+        self.dismiss(animated: true, completion: nil)
     }
     
     // MARK: Custom button appearance
@@ -265,7 +266,7 @@ class SignUpController: UIViewController {
             top: nil, paddingTop: 0,
             left: view.leftAnchor, paddingLeft: 0,
             right: view.rightAnchor, paddingRight: 0,
-            bottom: view.bottomAnchor, paddingBottom: 0,
+            bottom: view.safeAreaLayoutGuide.bottomAnchor, paddingBottom: 0,
             width: 0, height: 50
         )
         

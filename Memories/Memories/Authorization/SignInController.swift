@@ -135,6 +135,7 @@ class SignInController: UIViewController {
     @objc func handleShowSignUp() {
         let signUpController = SignUpController()
         signUpController.modalPresentationStyle = .fullScreen
+        
         self.present(signUpController, animated: true, completion: nil)
     }
     
@@ -208,7 +209,7 @@ class SignInController: UIViewController {
             top: nil, paddingTop: 0,
             left: view.leftAnchor, paddingLeft: 0,
             right: view.rightAnchor, paddingRight: 0,
-            bottom: view.bottomAnchor, paddingBottom: 0,
+            bottom: view.safeAreaLayoutGuide.bottomAnchor, paddingBottom: 0,
             width: 0, height: 50
         )
     }
