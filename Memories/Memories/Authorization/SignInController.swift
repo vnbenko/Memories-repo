@@ -2,8 +2,7 @@ import UIKit
 import Firebase
 
 class SignInController: UIViewController {
-    
-    
+
     let logoBackgroundImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "background_logo")
@@ -233,3 +232,4 @@ extension SignInController: UITextFieldDelegate {
         return true
     }
 }
+

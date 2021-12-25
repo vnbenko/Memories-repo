@@ -3,10 +3,10 @@ import UIKit
 class CustomImageView: UIImageView {
     
     var imageCache = [String: UIImage]()
-    var lastUrlUsedToLoadImage: String?
+    var oldUrlImage: String?
     
     func loadImage(urlString: String) {
-        lastUrlUsedToLoadImage = urlString
+        oldUrlImage = urlString
 
         self.image = nil
 
@@ -23,7 +23,7 @@ class CustomImageView: UIImageView {
                 return
             }
             //we check dublicating url
-            if url.absoluteString != self.lastUrlUsedToLoadImage {
+            if url.absoluteString != self.oldUrlImage {
                 return
             }
             

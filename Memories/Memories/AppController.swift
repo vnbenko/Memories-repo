@@ -36,7 +36,7 @@ final class AppController {
         window.makeKeyAndVisible()
     }
     
-    @objc private func handleAppState() {
+    @objc func handleAppState() {
         if Auth.auth().currentUser != nil {
             let mainTabBarController = MainTabBarController()
             rootViewController = mainTabBarController

@@ -17,7 +17,6 @@ class UserProfileController: UICollectionViewController {
         super.viewDidLoad()
         
         configure()
-        
         fetchUser()
     }
     

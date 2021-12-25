@@ -16,7 +16,7 @@ class HomeController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-       
+        
         configure()
         fetchAllPosts()
     }
@@ -86,7 +86,13 @@ class HomeController: UICollectionViewController {
                     }
                 }
             } withCancel: { error in
-                self.alert(message: error.localizedDescription, title: "Failed")
+                do {
+                    try Auth.auth().signOut()
+                    AppController.shared.handleAppState()
+                } catch let error {
+                    self.alert(message: error.localizedDescription, title: "Failed")
+                }
+                
             }
     }
     
@@ -123,7 +129,7 @@ class HomeController: UICollectionViewController {
                             self.posts.append(post)
                             
                             self.posts.sort { $0.creationDate > $1.creationDate }
-
+                            
                             self.collectionView.reloadData()
                         } withCancel: { error in
                             self.alert(message: error.localizedDescription, title: "Failed")
@@ -145,7 +151,7 @@ class HomeController: UICollectionViewController {
         configureNavigationItems()
         collectionView.refreshControl = refreshControl
     }
-
+    
     private func configureNavigationItems() {
         let image = UIImage(named: "bar_logo")?.withRenderingMode(.alwaysOriginal)
         navigationItem.titleView = UIImageView(image: image)
@@ -169,7 +175,7 @@ class HomeController: UICollectionViewController {
         return cell
     }
 }
-   
+
 // MARK: - Grid cell sizing
 
 extension HomeController: UICollectionViewDelegateFlowLayout {
@@ -214,8 +220,5 @@ extension HomeController: HomeCellDelegate {
                 self.collectionView.reloadItems(at: [indexPath])
             }
     }
-    
-    
-    
-    
 }
+

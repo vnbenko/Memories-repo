@@ -88,11 +88,11 @@ extension MainTabBarController: UITabBarControllerDelegate {
             let photoSelectorFlowLayout = UICollectionViewFlowLayout()
             let photoSelectorController = PhotoSelectorController(collectionViewLayout: photoSelectorFlowLayout)
             let navController = UINavigationController(rootViewController: photoSelectorController)
-            navController.navigationBar.backgroundColor = .customGray()
+            navController.modalPresentationStyle = .fullScreen
             present(navController, animated: true, completion: nil)
             return false
         }
-        
+
         return true
     }
 }
