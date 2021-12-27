@@ -34,10 +34,10 @@ class MainTabBarController: UITabBarController {
         //plus
         let plusNavController = createNavController(selectedImage: #imageLiteral(resourceName: "plus_unselected"), unselectedImage: #imageLiteral(resourceName: "plus_unselected"))
         
-        //like
-        let likeFlowLayout = UICollectionViewFlowLayout()
-        let likeController = LikeController(collectionViewLayout: likeFlowLayout)
-        let likeNavController = createNavController(rootViewController: likeController, selectedImage: #imageLiteral(resourceName: "like_selected_black"), unselectedImage: #imageLiteral(resourceName: "like_unselected"))
+        //activity
+        let activityFlowLayout = UICollectionViewFlowLayout()
+        let activityController = ActivityController(collectionViewLayout: activityFlowLayout)
+        let activityNavController = createNavController(rootViewController: activityController, selectedImage: #imageLiteral(resourceName: "activity_selected"), unselectedImage: #imageLiteral(resourceName: "activity_unselected"))
         
         //user profile
         let userProfileFlowLayout = UICollectionViewFlowLayout()
@@ -47,7 +47,7 @@ class MainTabBarController: UITabBarController {
         viewControllers = [homeNavController,
                            searchNavController,
                            plusNavController,
-                           likeNavController,
+                           activityNavController,
                            userProfileNavController]
     }
     

@@ -46,7 +46,7 @@ class UserProfileHeader: UICollectionViewCell {
     
     let postsLabel: UILabel = {
         let label = UILabel()
-        let attributedText = NSMutableAttributedString(string: "11\n", attributes: [
+        let attributedText = NSMutableAttributedString(string: "0\n", attributes: [
             .font : UIFont.boldSystemFont(ofSize: 14)
         ])
         attributedText.append(NSAttributedString(string: "posts", attributes: [
@@ -61,7 +61,7 @@ class UserProfileHeader: UICollectionViewCell {
     
     let followersLabel: UILabel = {
         let label = UILabel()
-        let attributedText = NSMutableAttributedString(string: "5\n", attributes: [
+        let attributedText = NSMutableAttributedString(string: "0\n", attributes: [
             .font : UIFont.boldSystemFont(ofSize: 14)
         ])
         attributedText.append(NSAttributedString(string: "followers", attributes: [
@@ -76,7 +76,7 @@ class UserProfileHeader: UICollectionViewCell {
     
     let followingLabel: UILabel = {
         let label = UILabel()
-        let attributedText = NSMutableAttributedString(string: "45\n", attributes: [
+        let attributedText = NSMutableAttributedString(string: "0\n", attributes: [
             .font : UIFont.boldSystemFont(ofSize: 14)
         ])
         attributedText.append(NSAttributedString(string: "following", attributes: [
@@ -84,8 +84,8 @@ class UserProfileHeader: UICollectionViewCell {
             .font: UIFont.systemFont(ofSize: 14)
         ]))
         label.attributedText = attributedText
-        label.numberOfLines = 0
         label.textAlignment = .center
+        label.numberOfLines = 0
         return label
     }()
     
@@ -110,6 +110,7 @@ class UserProfileHeader: UICollectionViewCell {
             usernameLabel.text = user?.username
             
             setupEditFollowButton()
+            setupActivityLabels()
         }
     }
     
@@ -119,8 +120,13 @@ class UserProfileHeader: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-
         configureUI()
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(setupActivityLabels),
+            name: UserProfileController.updateActivityLabelsNotificationName,
+            object: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -146,42 +152,75 @@ class UserProfileHeader: UICollectionViewCell {
         guard let currentLoggedInId = Auth.auth().currentUser?.uid else { return }
         guard let userId = user?.uid else { return }
         
-        if editProfileFollowButton.titleLabel?.text == "Unfollow" {
-            Database.database(url: Constants.shared.databaseUrlString).reference()
-                .child("following")
-                .child(currentLoggedInId)
-                .child(userId)
-                .removeValue { [weak self] error, reference in
-                    guard let self = self else { return }
-                    
-                    if let error = error {
-                        print("Failed to unfollow user: ", error)
-                        return
-                    }
-                    print("Successfully unfollowed user: ", self.user?.username ?? "")
-                    
-                    self.setupFollowStyle()
-                }
-        } else {
+        if currentLoggedInId == userId {
+            print("tap edit profile")
             
-            let values = [userId: 1]
-            Database.database(url: Constants.shared.databaseUrlString).reference()
-                .child("following")
-                .child(currentLoggedInId)
-                .updateChildValues(values) { [weak self] error, referense in
-                    guard let self = self else { return }
-                    
-                    if let error = error {
-                        print("Failed to follow user: ", error)
-                        return
+        } else {
+            if editProfileFollowButton.titleLabel?.text == "Unfollow" {
+                Database.database(url: Constants.shared.databaseUrlString).reference()
+                    .child("following")
+                    .child(currentLoggedInId)
+                    .child(userId)
+                    .removeValue { error, reference in
+                        
+                        if let error = error {
+                            print("Failed to unfollow user: ", error)
+                            return
+                        }
+                        
+                        print("Successfully unfollowed user: ", self.user?.username ?? "")
+                        
+                        self.setupFollowStyle()
+                        self.setupFollowingLabels()
                     }
-                    
-                    print("Successfully followed user: ", self.user?.username ?? "")
-                    self.editProfileFollowButton.setTitle("Unfollow", for: .normal)
-                    self.editProfileFollowButton.backgroundColor = .white
-                    self.editProfileFollowButton.setTitleColor(.black, for: .normal)
-                    
-                }
+                
+                Database.database(url: Constants.shared.databaseUrlString).reference()
+                    .child("followers")
+                    .child(userId)
+                    .child(currentLoggedInId)
+                    .removeValue { error, reference in
+                        
+                        if let error = error {
+                            print("Failed to unfollow user: ", error)
+                            return
+                        }
+                        
+                        self.setupFollowersLabels()
+                    }
+                
+            } else {
+                
+                let values = [userId: Date().timeIntervalSince1970]
+                Database.database(url: Constants.shared.databaseUrlString).reference()
+                    .child("following")
+                    .child(currentLoggedInId)
+                    .updateChildValues(values) { error, reference in
+                        
+                        if let error = error {
+                            print("Failed to follow user: ", error)
+                            return
+                        }
+                        
+                        print("Successfully followed user: ", self.user?.username ?? "")
+                        self.editProfileFollowButton.setTitle("Unfollow", for: .normal)
+                        self.editProfileFollowButton.backgroundColor = .white
+                        self.editProfileFollowButton.setTitleColor(.black, for: .normal)
+                        self.setupFollowingLabels()
+                    }
+                
+                Database.database(url: Constants.shared.databaseUrlString).reference()
+                    .child("followers")
+                    .child(userId)
+                    .child(currentLoggedInId)
+                    .updateChildValues(values) { error, reference in
+                        
+                        if let error = error {
+                            print("Failed to follow user: ", error)
+                            return
+                        }
+                        self.setupFollowersLabels()
+                    }
+            }
         }
     }
     
@@ -198,29 +237,92 @@ class UserProfileHeader: UICollectionViewCell {
         guard let currentLoggedInUserId = Auth.auth().currentUser?.uid,
               let userId = user?.uid else { return }
         
-        if currentLoggedInUserId == userId {
-            //TODO: Edit profile logic
-        } else {
-            
+        if currentLoggedInUserId != userId {
             //check if following
             Database.database(url: Constants.shared.databaseUrlString).reference()
                 .child("following")
                 .child(currentLoggedInUserId)
                 .child(userId)
-                .observeSingleEvent(of: .value) { [weak self] snapshot in
-                    guard let self = self else { return }
+                .observeSingleEvent(of: .value) { snapshot in
                     
                     if let isFollowing = snapshot.value as? Int, isFollowing == 1 {
                         self.editProfileFollowButton.setTitle("Unfollow", for: .normal)
                     } else {
                         self.setupFollowStyle()
+                        
                     }
                     
                 } withCancel: { error in
                     print("Failed to check if following: ", error)
-                    
                 }
         }
+    }
+    
+    @objc private func setupActivityLabels() {
+        setupPostsLabel()
+        setupFollowersLabels()
+        setupFollowingLabels()
+    }
+    
+    private func setupPostsLabel() {
+        guard let currentUserId = Auth.auth().currentUser?.uid,
+              let userId = user?.uid else { return }
+        
+        Database.database(url: Constants.shared.databaseUrlString).reference()
+            .child("posts")
+            .child(currentUserId == userId ? currentUserId : userId)
+            .observeSingleEvent(of: .value) { snapshot in
+                guard let userIdsDictionary = snapshot.value as? [String: Any] else { return }
+                let attributedText = NSMutableAttributedString(string: "\(userIdsDictionary.count)\n", attributes: [
+                    .font : UIFont.boldSystemFont(ofSize: 14)
+                ])
+                attributedText.append(NSAttributedString(string: "posts", attributes: [
+                    .foregroundColor : UIColor.lightGray,
+                    .font: UIFont.systemFont(ofSize: 14)
+                ]))
+                self.postsLabel.attributedText = attributedText
+            }
+    }
+    
+    private func setupFollowersLabels() {
+        guard let currentUserId = Auth.auth().currentUser?.uid,
+              let userId = user?.uid else { return }
+        
+        Database.database(url: Constants.shared.databaseUrlString).reference()
+            .child("followers")
+            .child(currentUserId == userId ? currentUserId : userId)
+            .observeSingleEvent(of: .value) { snapshot in
+                let userIdsDictionary = snapshot.value as? [String: Any]
+                
+                let attributedText = NSMutableAttributedString(string: "\(userIdsDictionary?.count ?? 0)\n", attributes: [
+                    .font : UIFont.boldSystemFont(ofSize: 14)
+                ])
+                attributedText.append(NSAttributedString(string: "followers", attributes: [
+                    .foregroundColor : UIColor.lightGray,
+                    .font: UIFont.systemFont(ofSize: 14)
+                ]))
+                self.followersLabel.attributedText = attributedText
+            }
+    }
+    
+    private func setupFollowingLabels() {
+        guard let currentUserId = Auth.auth().currentUser?.uid,
+              let userId = user?.uid else { return }
+        
+        Database.database(url: Constants.shared.databaseUrlString).reference()
+            .child("following")
+            .child(currentUserId == userId ? currentUserId : userId)
+            .observeSingleEvent(of: .value) { snapshot in
+                guard let userIdsDictionary = snapshot.value as? [String: Any] else { return }
+                let attributedText = NSMutableAttributedString(string: "\(userIdsDictionary.count)\n", attributes: [
+                    .font : UIFont.boldSystemFont(ofSize: 14)
+                ])
+                attributedText.append(NSAttributedString(string: "following", attributes: [
+                    .foregroundColor : UIColor.lightGray,
+                    .font: UIFont.systemFont(ofSize: 14)
+                ]))
+                self.followingLabel.attributedText = attributedText
+            }
     }
     
     // MARK: - Configure

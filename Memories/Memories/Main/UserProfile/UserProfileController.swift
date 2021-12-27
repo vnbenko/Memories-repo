@@ -3,6 +3,8 @@ import Firebase
 
 class UserProfileController: UICollectionViewController {
     
+    static let updateActivityLabelsNotificationName = NSNotification.Name("updateLabels")
+    
     let cellId = "cellId"
     let headerId = "headerId"
     let homePostCellId = "homePostCellId"
@@ -23,6 +25,7 @@ class UserProfileController: UICollectionViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        NotificationCenter.default.post(name: UserProfileController.updateActivityLabelsNotificationName, object: nil)
         
         NotificationCenter.default.addObserver(
             self,
@@ -48,8 +51,9 @@ class UserProfileController: UICollectionViewController {
             guard let self = self else { return }
             
             self.user = user
-            self.navigationItem.title = self.user?.username
-            
+            guard let userName = self.user?.username else { return }
+            self.navigationItem.title = userName
+           
             self.collectionView.reloadData()
             
             self.paginatePost()
@@ -99,9 +103,8 @@ class UserProfileController: UICollectionViewController {
             query = query.queryEnding(atValue: value)
         }
         
-        query.queryLimited(toLast: 4).observeSingleEvent(of: .value) { [weak self] snapshot in
-            guard let self = self else { return }
-            
+        query.queryLimited(toLast: 4).observeSingleEvent(of: .value) { snapshot in
+           
             guard var allObject = snapshot.children.allObjects as? [DataSnapshot] else { return }
             
             allObject.reverse()
@@ -135,9 +138,8 @@ class UserProfileController: UICollectionViewController {
             .child("posts")
             .child(uid)
             .queryOrdered(byChild: "creationDate")
-            .observe(.childAdded) { [weak self] snapshot in
-                guard let self = self else { return }
-                
+            .observe(.childAdded) { snapshot in
+               
                 guard let dictionary = snapshot.value as? [String: Any] else { return }
                 
                 guard let user = self.user else { return }
@@ -207,7 +209,8 @@ extension UserProfileController: UICollectionViewDelegateFlowLayout {
     // MARK: Header sizing
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: view.frame.width, height: 200)
+        let size = CGSize(width: view.frame.width, height: 200)
+        return size
     }
     
     // MARK: Grid cell sizing
