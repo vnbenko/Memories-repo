@@ -3,8 +3,6 @@ import Photos
 
 class PhotoSelectorController: UICollectionViewController {
     
-    let cellId = "cellId"
-    let headerId = "headerId"
     let page = 10
     
     var selectedImage: UIImage?
@@ -26,7 +24,6 @@ class PhotoSelectorController: UICollectionViewController {
         super.viewDidLoad()
         
         configure()
-        
         fetchPhotos()
     }
     
@@ -35,6 +32,8 @@ class PhotoSelectorController: UICollectionViewController {
         
         configureUI()
     }
+    
+    //TODO: - Resizing photos
     
     // MARK: - Actions
     
@@ -117,8 +116,8 @@ class PhotoSelectorController: UICollectionViewController {
     // MARK: - Configure
     
     private func configure() {
-        collectionView.register(PhotoSelectorCell.self, forCellWithReuseIdentifier: cellId)
-        collectionView.register(PhotoSelectorHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
+        collectionView.register(PhotoSelectorCell.self, forCellWithReuseIdentifier: PhotoSelectorCell.cellId)
+        collectionView.register(PhotoSelectorHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: PhotoSelectorHeader.headerId)
     }
     
     private func configureUI() {
@@ -134,7 +133,7 @@ class PhotoSelectorController: UICollectionViewController {
     // MARK: - Header settings
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as? PhotoSelectorHeader else { return UICollectionReusableView() }
+        guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: PhotoSelectorHeader.headerId, for: indexPath) as? PhotoSelectorHeader else { return UICollectionReusableView() }
         
         self.header = header
         header.photoImageView.image = selectedImage
@@ -160,7 +159,7 @@ class PhotoSelectorController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? PhotoSelectorCell else { return UICollectionViewCell() }
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoSelectorCell.cellId, for: indexPath) as? PhotoSelectorCell else { return UICollectionViewCell() }
         cell.photoImageView.image = images[indexPath.item]
         
         if self.hasNextPage && !loading && indexPath.row == self.images.count - 1 {

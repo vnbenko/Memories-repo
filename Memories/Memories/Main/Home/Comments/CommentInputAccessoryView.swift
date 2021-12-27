@@ -23,7 +23,6 @@ class CommentInputAccessoryView: UIView {
         return button
     }()
     
-    // 2
     override var intrinsicContentSize: CGSize {
         return .zero
     }
@@ -37,8 +36,6 @@ class CommentInputAccessoryView: UIView {
         autoresizingMask = .flexibleHeight
       
         configure()
-        
-        setupLineSeparatorView()
     }
     
     required init?(coder: NSCoder) {
@@ -59,17 +56,6 @@ class CommentInputAccessoryView: UIView {
         commentTextView.showPlaceholderLabel()
     }
     
-    private func setupLineSeparatorView() {
-        let lineSeparator = UIView()
-        lineSeparator.backgroundColor = .customGray()
-        addSubview(lineSeparator)
-        lineSeparator.anchor(
-            top: topAnchor, paddingTop: 0,
-            left: leftAnchor, paddingLeft: 0,
-            right: rightAnchor, paddingRight: 0,
-            bottom: nil, paddingBottom: 0,
-            width: 0, height: 0.5)
-    }
     
     // MARK: - Configure UI
     
@@ -77,8 +63,9 @@ class CommentInputAccessoryView: UIView {
         backgroundColor = .white
         configureButtons()
         configureTextView()
+        configureSeparatorView()
     }
-    
+
     private func configureButtons() {
         addSubview(sendButton)
         
@@ -99,6 +86,18 @@ class CommentInputAccessoryView: UIView {
             right: sendButton.leftAnchor, paddingRight: 0,
             bottom: safeAreaLayoutGuide.bottomAnchor, paddingBottom: 8,
             width: 0, height: 0)
+    }
+    
+    private func configureSeparatorView() {
+        let lineSeparator = UIView()
+        lineSeparator.backgroundColor = .customGray()
+        addSubview(lineSeparator)
+        lineSeparator.anchor(
+            top: topAnchor, paddingTop: 0,
+            left: leftAnchor, paddingLeft: 0,
+            right: rightAnchor, paddingRight: 0,
+            bottom: nil, paddingBottom: 0,
+            width: 0, height: 0.5)
     }
 }
 

@@ -16,7 +16,7 @@ class CommentCell: UICollectionViewCell {
         return textView
     }()
     
-    static let cellIdentifier = "CommentCell"
+    static let cellId = "CommentCell"
     
     var comment: Comment? {
         didSet {

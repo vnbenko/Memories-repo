@@ -7,7 +7,7 @@ class SharePhotoController: UIViewController {
     
     let imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
+        //imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         return imageView
     }()
@@ -68,8 +68,7 @@ class SharePhotoController: UIViewController {
             
             print("Successfully uploaded post image: ", metadata?.name ?? "")
             
-            storageReference.downloadURL(completion: { [weak self] url, error in
-                guard let self = self else { return }
+            storageReference.downloadURL(completion: { url, error in
                 
                 if let error = error {
                     self.alert(message: error.localizedDescription, title: "Failed")
@@ -90,9 +89,9 @@ class SharePhotoController: UIViewController {
         guard let caption = commentTextView.text else { return }
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        let userPostRef = Database.database(url: Constants.shared.databaseUrlString).reference().child("posts").child(uid)
-        
-        let ref = userPostRef.childByAutoId()
+        let database = Database.database(url: Constants.shared.databaseUrlString).reference()
+            .child("posts")
+            .child(uid)
         
         let values = [
             "imageUrl": imageUrl,
@@ -102,8 +101,7 @@ class SharePhotoController: UIViewController {
             "creationDate": Date().timeIntervalSince1970
         ] as [String : Any]
         
-        ref.updateChildValues(values) { [weak self] error, reference in
-            guard let self = self else { return }
+        database.childByAutoId().updateChildValues(values) { error, reference in
             
             if let error = error {
                 self.navigationItem.rightBarButtonItem?.isEnabled = true

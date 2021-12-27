@@ -30,10 +30,6 @@ class CommentInputTextView: UITextView {
         configure()
     }
     
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-    
     required init?(coder: NSCoder) {
         return nil
     }

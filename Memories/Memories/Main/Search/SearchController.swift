@@ -3,7 +3,7 @@ import Firebase
 
 class SearchController: UICollectionViewController {
     
-    let cellId = "cellId"
+    
     
     //lazy var is used when we need to subscribe on delegate.
     lazy var searchBar: UISearchBar = {
@@ -23,7 +23,7 @@ class SearchController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        collectionView.register(SearchCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView.register(SearchCell.self, forCellWithReuseIdentifier: SearchCell.cellId)
         collectionView.alwaysBounceVertical = true
         collectionView.keyboardDismissMode = .onDrag
         
@@ -51,9 +51,8 @@ class SearchController: UICollectionViewController {
     private func fetchUsers() {
         Database.database(url: Constants.shared.databaseUrlString).reference()
             .child("users")
-            .observeSingleEvent(of: .value) { [weak self] snapshot in
-                guard let self = self else { return }
-                
+            .observeSingleEvent(of: .value) { snapshot in
+               
                 guard let dictionaries = snapshot.value as? [String: Any] else { return }
                 
                 dictionaries.forEach { key, value in
@@ -86,7 +85,7 @@ class SearchController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? SearchCell else { return UICollectionViewCell() }
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchCell.cellId, for: indexPath) as? SearchCell else { return UICollectionViewCell() }
         cell.user = filteredUsers[indexPath.item]
         return cell
     }
@@ -107,7 +106,8 @@ class SearchController: UICollectionViewController {
 
 extension SearchController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width, height: 66)
+        let size = CGSize(width: view.frame.width, height: 66)
+        return size
     }
 }
 

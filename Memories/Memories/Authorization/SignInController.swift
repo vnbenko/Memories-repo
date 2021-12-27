@@ -109,8 +109,7 @@ class SignInController: UIViewController {
         
         let auth = Auth.auth()
         
-        auth.signIn(withEmail: email, password: password) { [weak self] data, error in
-            guard let self = self else { return }
+        auth.signIn(withEmail: email, password: password) { data, error in
             
             if let error = error {
                 self.alert(message: error.localizedDescription, title: "Failed")

@@ -2,6 +2,8 @@ import UIKit
 
 class SearchCell: UICollectionViewCell {
     
+    static let cellId = "cellId"
+    
     let profileImageView: CustomImageView = {
         let imageView = CustomImageView()
         imageView.contentMode = .scaleAspectFill

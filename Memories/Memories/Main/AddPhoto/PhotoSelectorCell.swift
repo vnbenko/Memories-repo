@@ -2,6 +2,8 @@ import UIKit
 
 class PhotoSelectorCell: UICollectionViewCell {
     
+    static let cellId = "cellId"
+    
     let photoImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill

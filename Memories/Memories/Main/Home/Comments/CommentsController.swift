@@ -30,7 +30,7 @@ class CommentsController: UICollectionViewController {
         
         navigationItem.title = "Comments"
         
-        collectionView.register(CommentCell.self, forCellWithReuseIdentifier: CommentCell.cellIdentifier)
+        collectionView.register(CommentCell.self, forCellWithReuseIdentifier: CommentCell.cellId)
         
         collectionView.alwaysBounceVertical = true
         collectionView.keyboardDismissMode = .interactive
@@ -58,15 +58,13 @@ class CommentsController: UICollectionViewController {
         Database.database(url: Constants.shared.databaseUrlString).reference()
             .child("comments")
             .child(postId)
-            .observe(.childAdded) { [weak self] snapshot in
-                guard let self = self else { return }
-                
+            .observe(.childAdded) { snapshot in
+               
                 guard let dictionary = snapshot.value as? [String: Any],
                       let uid = dictionary["uid"] as? String else { return }
                 
-                Database.fetchUserWithUID(uid: uid) { [weak self] user in
-                    guard let self = self else { return }
-                    
+                Database.fetchUserWithUID(uid: uid) { user in
+                  
                     let comment = Comment(user: user, dictionary: dictionary)
                     self.comments.append(comment)
                     self.collectionView.reloadData()
@@ -82,7 +80,7 @@ class CommentsController: UICollectionViewController {
         return comments.count
     }
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CommentCell.cellIdentifier, for: indexPath) as? CommentCell else { return UICollectionViewCell() }
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CommentCell.cellId, for: indexPath) as? CommentCell else { return UICollectionViewCell() }
         cell.comment = comments[indexPath.item]
         return cell
     }
@@ -116,9 +114,8 @@ extension CommentsController: CommentInputAccessoryViewDelegate {
             .child("comments")
             .child(postId)
             .childByAutoId()
-            .updateChildValues(values) { [weak self] error, reference in
-                guard let self = self else { return }
-                
+            .updateChildValues(values) { error, reference in
+               
                 if let error = error {
                     self.alert(message: error.localizedDescription, title: "Failed")
                     return

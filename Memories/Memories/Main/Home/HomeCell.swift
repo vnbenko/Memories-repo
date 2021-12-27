@@ -66,15 +66,15 @@ class HomeCell: UICollectionViewCell {
         return label
     }()
     
-    static let cellIdentifier = "HomeCell"
+    static let cellId = "HomeCell"
     
     var post: Post? {
         didSet {
             guard let imageUrl = post?.imageUrl else { return }
             photoImageView.loadImage(urlString: imageUrl)
             
-            let liked = UIImage(named: "like_selected_red")?.withRenderingMode(.alwaysOriginal)
-            let unliked = UIImage(named: "like_unselected")?.withRenderingMode(.alwaysOriginal)
+            let liked = UIImage(named: "like_selected")?.withRenderingMode(.alwaysOriginal)
+            let unliked = UIImage(named: "activity_unselected")?.withRenderingMode(.alwaysOriginal)
             likeButton.setImage(post?.isLiked == true ? liked : unliked, for: .normal)
             
             userNameLabel.text = post?.user.username

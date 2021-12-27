@@ -124,8 +124,7 @@ class SignUpController: UIViewController {
         
         let auth = Auth.auth()
         
-        auth.createUser(withEmail: email, password: password) { [weak self] (result, error) in
-            guard let self = self else { return }
+        auth.createUser(withEmail: email, password: password) { (result, error) in
             
             if let error = error {
                 self.alert(message: error.localizedDescription, title: "Failed")
@@ -134,7 +133,6 @@ class SignUpController: UIViewController {
             }
             
             print("User created: ", result?.user.uid ?? "")
-            
             
             // MARK: Upload user's photo to the storage
             
@@ -150,7 +148,7 @@ class SignUpController: UIViewController {
             storage
                 .child("profile_images")
                 .child(uid)
-                .putData(uploadData, metadata: metadata) { [weak self] (metadata, error) in
+                .putData(uploadData, metadata: metadata) { [weak self] metadata, error in
                     guard let self = self else { return }
                     
                     if let error = error {
@@ -160,17 +158,15 @@ class SignUpController: UIViewController {
                     
                     print("Profile image is uploaded to storage: ", metadata?.name ?? "")
                     
-                    
                     // MARK: Get a link to a photo's URL
                     
                     storage
                         .child("profile_images")
                         .child(uid)
-                        .downloadURL { [weak self] (url, error) in
-                            guard let self = self else { return }
+                        .downloadURL { url, error in
                             
-                            if let error = error {
-                                self.alert(message: error.localizedDescription, title: "Failed")
+                            if error != nil {
+                                print("Failed to download URL", error!)
                                 return
                             }
                             
@@ -193,9 +189,8 @@ class SignUpController: UIViewController {
                             
                             database
                                 .child("users")
-                                .updateChildValues(values) { [weak self] (error, reference) in
-                                    guard let self = self else { return }
-                                    
+                                .updateChildValues(values) { (error, reference) in
+                                   
                                     if let error = error {
                                         self.alert(message: error.localizedDescription, title: "Failed")
                                         return
